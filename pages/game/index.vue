@@ -22,12 +22,12 @@ onMounted(async () => {
     //@ts-ignore
     new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, 0), sceneBR)
   );
-  await initDevTools(cameras[0]! as BABYLON.Camera);
-  const camera = cameras[0] as BABYLON.Camera;
+  //await initDevTools(cameras[0]! as BABYLON.FreeCamera);
+  const camera = cameras[0] as BABYLON.FreeCamera;
   // Targets the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
   // Attaches the camera to the canvas
-  camera.attachControl(canvas, true);
+  //camera.attachControl(canvas, true);
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
   var light = new BABYLON.HemisphericLight(
@@ -46,8 +46,19 @@ onMounted(async () => {
     scene
   );
 
+  //@ts-ignore
+  /*await BABYLON.SceneLoader.ImportMeshAsync(
+    "myMesh",
+    "/map.obj",
+    scene,
+    (meshes) => {
+      scene.addMesh(meshes[0]);
+    }
+  );*/
+
   // Move the sphere upward at 4 units
-  sphere.position.y = 4;
+  //sphere.position.y = 4;
+  //camera.rotation.x = (Math.PI / 3) * -1;
 
   // Our built-in 'ground' shape.
   var ground = BABYLON.MeshBuilder.CreateGround(
@@ -75,10 +86,10 @@ onMounted(async () => {
   engine.runRenderLoop(() => {
     camera.position.x = sphere.position.x;
     camera.position.y = sphere.position.y + 20;
-    camera.position.z = sphere.position.z;
+    camera.position.z = sphere.position.z + 5;
   });
 
-  scene.onKeyboardObservable.add((kbInfo) => {
+  /*scene.onKeyboardObservable.add((kbInfo) => {
     switch (kbInfo.type) {
       case BABYLON.KeyboardEventTypes.KEYDOWN:
         console.log("KEY DOWN: ", kbInfo.event.key);
@@ -87,9 +98,9 @@ onMounted(async () => {
         console.log("KEY UP: ", kbInfo.event.code);
         break;
     }
-  });
+  });*/
 
-  onKeyStroke(config.public.keybinds.forward, (e: Event) => {
+  onKeyStroke(config.public.keybinds.backward, (e: Event) => {
     e.preventDefault();
 
     sphereAggregate.body.applyForce(
@@ -97,7 +108,7 @@ onMounted(async () => {
       sphere.absolutePosition
     );
   });
-  onKeyStroke(config.public.keybinds.backward, (e: Event) => {
+  onKeyStroke(config.public.keybinds.forward, (e: Event) => {
     e.preventDefault();
 
     sphereAggregate.body.applyForce(
@@ -105,7 +116,7 @@ onMounted(async () => {
       sphere.absolutePosition
     );
   });
-  onKeyStroke(config.public.keybinds.right, (e: Event) => {
+  onKeyStroke(config.public.keybinds.left, (e: Event) => {
     e.preventDefault();
 
     sphereAggregate.body.applyForce(
@@ -113,7 +124,7 @@ onMounted(async () => {
       sphere.absolutePosition
     );
   });
-  onKeyStroke(config.public.keybinds.left, (e: Event) => {
+  onKeyStroke(config.public.keybinds.right, (e: Event) => {
     e.preventDefault();
 
     sphereAggregate.body.applyForce(
@@ -125,7 +136,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-screen h-screen">
+  <div class="size-full">
     <canvas class="size-full" ref="canvas"></canvas>
   </div>
 </template>
