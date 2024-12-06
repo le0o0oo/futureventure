@@ -2,7 +2,7 @@
 import * as BABYLON from "babylonjs";
 import { onKeyStroke } from "@vueuse/core";
 
-const { init: initEngine } = useEngineStore();
+const { init: initEngine, initDevTools } = useEngineStore();
 
 const canvas = ref();
 const config = useRuntimeConfig();
@@ -17,7 +17,13 @@ onMounted(async () => {
 
   const scene = sceneBR as BABYLON.Scene;
 
-  const camera = cameras[0] as BABYLON.FreeCamera;
+  //@ts-ignore
+  cameras.push(
+    //@ts-ignore
+    new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, 0), sceneBR)
+  );
+  await initDevTools(cameras[0]! as BABYLON.Camera);
+  const camera = cameras[0] as BABYLON.Camera;
   // Targets the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
   // Attaches the camera to the canvas
@@ -54,7 +60,7 @@ onMounted(async () => {
   var sphereAggregate = new BABYLON.PhysicsAggregate(
     sphere,
     BABYLON.PhysicsShapeType.SPHERE,
-    { mass: 1, restitution: 0.75 },
+    { mass: 1, restitution: 0.75, friction: 5 },
     scene
   );
 
@@ -66,8 +72,13 @@ onMounted(async () => {
     scene
   );
 
+  engine.runRenderLoop(() => {
+    camera.position.x = sphere.position.x;
+    camera.position.y = sphere.position.y + 20;
+    camera.position.z = sphere.position.z;
+  });
+
   scene.onKeyboardObservable.add((kbInfo) => {
-    console.log(kbInfo);
     switch (kbInfo.type) {
       case BABYLON.KeyboardEventTypes.KEYDOWN:
         console.log("KEY DOWN: ", kbInfo.event.key);

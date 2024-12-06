@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
-import { Engine, Scene, FreeCamera, FlyCamera, HavokPlugin } from "babylonjs";
+import {
+  Engine,
+  Scene,
+  FreeCamera,
+  FlyCamera,
+  HavokPlugin,
+  Camera,
+} from "babylonjs";
 import HavokPhysics from "@babylonjs/havok";
 import { type HavokPhysicsWithBindings } from "@babylonjs/havok";
 
@@ -8,7 +15,7 @@ export const useEngineStore = defineStore({
   state: () => ({
     engine: {} as Engine,
     scene: {} as Scene,
-    cameras: [] as FreeCamera[] | FlyCamera[],
+    cameras: [] as FreeCamera[] | FlyCamera[] | Camera[],
     havokInstance: {} as HavokPhysicsWithBindings,
   }),
   actions: {
@@ -31,23 +38,15 @@ export const useEngineStore = defineStore({
       window.addEventListener("resize", function () {
         currentEngine.resize();
       });
+    },
 
-      // Creates and positions a free camera
-      this.cameras.push(
-        //@ts-ignore
-        new BABYLON.FreeCamera(
-          "camera1",
-          new BABYLON.Vector3(0, 5, -10),
-          //@ts-ignore
-          currentScene
-        )
-      );
-
+    async initDevTools(camera: Camera) {
       if (import.meta.dev) {
         const { Inspector } = await import("@babylonjs/inspector");
         //@ts-ignore
-        Inspector.Show(currentScene, {
-          gizmoCamera: this.cameras[0],
+        Inspector.Show(this.scene, {
+          //@ts-ignore
+          gizmoCamera: camera,
         });
       }
     },
