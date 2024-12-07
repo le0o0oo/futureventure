@@ -7,13 +7,13 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: ["@babylonjs/havok"],
+      exclude: ["@babylonjs/havok", "@babylonjs/loaders", "babylonjs-loaders"],
     },
   },
 
   runtimeConfig: {
     public: {
-      speed: 200,
+      speed: 0.1,
       keybinds: {
         forward: ["w", "W", "ArrowUp"],
         backward: ["s", "S", "ArrowDown"],
