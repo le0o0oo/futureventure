@@ -24,6 +24,7 @@ class Engine {
       stencil: true,
     });
     this.scene = new BABYLON.Scene(this.engine);
+    this.scene.collisionsEnabled = true;
 
     // Skybox
     var skybox = BABYLON.MeshBuilder.CreateBox(

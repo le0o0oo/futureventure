@@ -17,7 +17,7 @@ class Player {
   private keyupAction?: BABYLON.Nullable<BABYLON.IAction>;
 
   mesh: BABYLON.AbstractMesh;
-  aggregate: BABYLON.PhysicsAggregate;
+  aggregate?: BABYLON.PhysicsAggregate;
 
   constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
     this.game = game;
@@ -28,17 +28,20 @@ class Player {
       BABYLON.Space.WORLD
     );
     this.mesh = playerMesh as BABYLON.AbstractMesh;
-    playerMesh?.translate(BABYLON.Axis.Y, 2, BABYLON.Space.WORLD);
-    playerMesh?.scaling.setAll(0.8);
+    playerMesh?.translate(BABYLON.Axis.Y, 0.1, BABYLON.Space.WORLD);
+    playerMesh?.scaling.setAll(0.2);
 
-    var playerAggregate = new BABYLON.PhysicsAggregate(
-      playerMesh!,
-      BABYLON.PhysicsShapeType.SPHERE,
-      { mass: 1, restitution: 0.75, friction: 5 },
-      game.scene
-    );
-    this.aggregate = playerAggregate;
-    playerAggregate.body.disablePreStep = false;
+    if (this.game.scene._physicsEngine) {
+      var playerAggregate = new BABYLON.PhysicsAggregate(
+        playerMesh!,
+        BABYLON.PhysicsShapeType.SPHERE,
+        { mass: 1, restitution: 0.75, friction: 5 },
+        game.scene
+      );
+      this.aggregate = playerAggregate;
+      playerAggregate.body.disablePreStep = false;
+    }
+
     meshLoaderResult.animationGroups.forEach((animation) => {
       animation.start(true);
     });
@@ -55,14 +58,14 @@ class Player {
     this.game.scene.onBeforeRenderObservable.remove(this.sceneObserver);
     this.game.scene.actionManager.unregisterAction(this.keydownAction!);
     this.game.scene.actionManager.unregisterAction(this.keyupAction!);
-    this.aggregate.dispose();
+    this.aggregate?.dispose();
     this.mesh.dispose();
   }
 
   private focusCameraOnPlayer() {
     this.game.getCamera()!.position.x = this.mesh!.position.x;
-    this.game.getCamera()!.position.y = this.mesh!.position.y + 20;
-    this.game.getCamera()!.position.z = this.mesh!.position.z - 20;
+    this.game.getCamera()!.position.y = this.mesh!.position.y + 5;
+    this.game.getCamera()!.position.z = this.mesh!.position.z - 5;
   }
 
   private registerKeybinds() {
