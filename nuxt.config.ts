@@ -13,10 +13,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      speed: 0.1,
+      speed: 0.11,
       keybinds: {
-        forward: ["w", "W", "ArrowUp"],
-        backward: ["s", "S", "ArrowDown"],
+        up: ["w", "W", "ArrowUp"],
+        down: ["s", "S", "ArrowDown"],
         left: ["a", "A", "ArrowLeft"],
         right: ["d", "D", "ArrowRight"],
       },
@@ -33,5 +33,8 @@ export default defineNuxtConfig({
   shadcn: {
     prefix: "",
     componentDir: "./components/ui",
+  },
+  colorMode: {
+    classPrefix: "",
   },
 });

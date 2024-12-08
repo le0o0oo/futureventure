@@ -4,6 +4,8 @@ import * as gameState from "~/stores/engine";
 import funcs from "~/utils/generalFuncs";
 import "babylonjs-loaders";
 
+import Engine from "~/components/gameLogic/Engine";
+
 definePageMeta({
   layout: "game",
 });
@@ -11,18 +13,55 @@ definePageMeta({
 const canvas = ref();
 const config = useRuntimeConfig();
 
+const keyStatus = {
+  up: false,
+  down: false,
+  left: false,
+  right: false,
+};
+
 onMounted(async () => {
   // Load the 3D engine
-  await gameState.init(canvas.value);
-  const scene = gameState.engineState.scenes[0];
-  canvas.value.focus();
+  const game = new Engine(canvas.value);
+  await game.initPhysics();
 
-  // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
-  gameState.engineState.cameras.push(
-    new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 10, 0), scene)
+  const scene = game.scene;
+  scene.actionManager = new BABYLON.ActionManager(scene);
+  scene.actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(
+      BABYLON.ActionManager.OnKeyDownTrigger,
+      (ev) => {
+        const key = ev.sourceEvent.key;
+
+        if (config.public.keybinds.down.includes(key)) keyStatus.down = true;
+        if (config.public.keybinds.up.includes(key)) keyStatus.up = true;
+        if (config.public.keybinds.left.includes(key)) keyStatus.left = true;
+        if (config.public.keybinds.right.includes(key)) keyStatus.right = true;
+      }
+    )
+  );
+  scene.actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(
+      BABYLON.ActionManager.OnKeyUpTrigger,
+      (ev) => {
+        const key = ev.sourceEvent.key;
+
+        if (config.public.keybinds.down.includes(key)) keyStatus.down = false;
+        if (config.public.keybinds.up.includes(key)) keyStatus.up = false;
+        if (config.public.keybinds.left.includes(key)) keyStatus.left = false;
+        if (config.public.keybinds.right.includes(key)) keyStatus.right = false;
+      }
+    )
   );
 
-  const camera = gameState.engineState.cameras[0] as BABYLON.FreeCamera;
+  const camera = new BABYLON.FreeCamera(
+    "camera1",
+    new BABYLON.Vector3(0, 10, 0),
+    scene
+  ) as BABYLON.FreeCamera;
+
+  // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
+  game.addCamera(camera);
   // Target the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
 
@@ -33,15 +72,10 @@ onMounted(async () => {
     new BABYLON.Vector3(0, 1, 0),
     scene
   );
-  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  // var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {
-  //   diameter: 2,
-  //   segments: 32,
-  //   updatable: true,
-  // });
+
   var ground = BABYLON.MeshBuilder.CreateGround(
     "ground",
-    { width: 10, height: 10 },
+    { width: 30, height: 30 },
     scene
   );
 
@@ -56,16 +90,13 @@ onMounted(async () => {
     "robot.glb",
     scene
   );
-  const importedMesh = result.meshes[0];
-  importedMesh!.rotate(
-    BABYLON.Axis.Y,
-    funcs.degToRad(-90),
-    BABYLON.Space.WORLD
-  );
-  importedMesh?.translate(BABYLON.Axis.Y, 2, BABYLON.Space.WORLD);
+  const playerMesh = result.meshes[0];
+  playerMesh!.rotate(BABYLON.Axis.Y, funcs.degToRad(-90), BABYLON.Space.WORLD);
+  playerMesh?.translate(BABYLON.Axis.Y, 2, BABYLON.Space.WORLD);
+  playerMesh?.scaling.setAll(0.8);
 
   var sphereAggregate = new BABYLON.PhysicsAggregate(
-    importedMesh!,
+    playerMesh!,
     BABYLON.PhysicsShapeType.SPHERE,
     { mass: 1, restitution: 0.75, friction: 5 },
     scene
@@ -81,46 +112,45 @@ onMounted(async () => {
   );
 
   // Set camera angle
-  camera.rotation.x = funcs.degToRad(120);
+  camera.rotation.x = funcs.degToRad(140);
 
-  engineState.engine.runRenderLoop(function () {
-    camera.position.x = importedMesh!.position.x;
-    camera.position.y = importedMesh!.position.y + 15;
-    camera.position.z = importedMesh!.position.z - 10;
-  });
+  // playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(90), 0);
 
-  scene!.onKeyboardObservable.add((kbInfo) => {
-    switch (kbInfo.type) {
-      case BABYLON.KeyboardEventTypes.KEYDOWN:
-        if (config.public.keybinds.forward.includes(kbInfo.event.key)) {
-          console.log("Moving forward");
-          // console.log(sphere.position.z);
-          // // sphere.position.z -= 0.1;
-          // sphere.moveWithCollisions(
-          //   sphere.forward.scaleInPlace(config.public.speed)
-          // );
-          // console.log(sphere.position.z);
-          importedMesh?.translate(BABYLON.Axis.Z, -10, BABYLON.Space.WORLD);
+  game.scene.onBeforeRenderObservable.add(() => {
+    camera.position.x = playerMesh!.position.x;
+    camera.position.y = playerMesh!.position.y + 20;
+    camera.position.z = playerMesh!.position.z - 20;
 
-          //sphereAggregate.body?.
-          //sphere.position.z = 777777;
-          //sphere.translate(BABYLON.Axis.Z, -40, BABYLON.Space.WORLD);
-          // sphereAggregate.body.applyForce(
-          //   new BABYLON.Vector3(0, 0, -10),
-          //   sphere.absolutePosition
-          // );
-          //console.log("applicata forza");
-        }
-        if (config.public.keybinds.backward.includes(kbInfo.event.key)) {
-          console.log("Moving backwards");
-        }
-        if (config.public.keybinds.left.includes(kbInfo.event.key)) {
-          console.log("Moving left");
-        }
-        if (config.public.keybinds.right.includes(kbInfo.event.key)) {
-          console.log("Moving right");
-        }
-        break;
+    const rightVverticalSideSpeedAdd = 0.01;
+    const leftVerticalSideSpeedAdd = 0.022;
+
+    if (keyStatus.up) {
+      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(-90), 0);
+      playerMesh?.moveWithCollisions(
+        playerMesh.right.scaleInPlace(config.public.speed)
+      );
+    }
+    if (keyStatus.down) {
+      playerMesh!.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
+      playerMesh?.moveWithCollisions(
+        playerMesh.right.scaleInPlace(config.public.speed)
+      );
+    }
+    if (keyStatus.left) {
+      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(90 + 40), 0);
+      playerMesh?.movePOV(
+        config.public.speed * -1,
+        0,
+        config.public.speed + leftVerticalSideSpeedAdd
+      );
+    }
+    if (keyStatus.right) {
+      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(40), 0);
+      playerMesh?.movePOV(
+        config.public.speed * -1 - rightVverticalSideSpeedAdd,
+        0,
+        config.public.speed * -1 + rightVverticalSideSpeedAdd
+      );
     }
   });
 });
