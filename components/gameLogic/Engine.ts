@@ -49,6 +49,9 @@ class Engine {
     this.cameras.push(camera);
     //this.scene.activeCameras?.push(camera);
   }
+  getCamera(index: number = 0) {
+    return this.cameras[0];
+  }
 }
 
 export default Engine;
