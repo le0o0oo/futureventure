@@ -116,40 +116,64 @@ onMounted(async () => {
 
   // playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(90), 0);
 
+  let movingUP = false;
   game.scene.onBeforeRenderObservable.add(() => {
     camera.position.x = playerMesh!.position.x;
     camera.position.y = playerMesh!.position.y + 20;
     camera.position.z = playerMesh!.position.z - 20;
 
-    const rightVverticalSideSpeedAdd = 0.01;
-    const leftVerticalSideSpeedAdd = 0.022;
+    // Doing all of this because the rotation on left and right is not 90, so when i apply a force forward, i get diagonal movement.
+    // To fix it, I'm applying also horizontal movement
 
+    // Forward: Robot facing away from the camera
     if (keyStatus.up) {
-      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(-90), 0);
+      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(0), 0);
       playerMesh?.moveWithCollisions(
-        playerMesh.right.scaleInPlace(config.public.speed)
+        playerMesh.forward.scaleInPlace(config.public.speed)
       );
-    }
+      movingUP = true;
+    } else movingUP = false;
+
     if (keyStatus.down) {
-      playerMesh!.rotation = new BABYLON.Vector3(0, Math.PI / 2, 0);
+      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(180), 0);
       playerMesh?.moveWithCollisions(
-        playerMesh.right.scaleInPlace(config.public.speed)
+        new BABYLON.Vector3(0, 0, -config.public.speed)
       );
     }
     if (keyStatus.left) {
-      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(90 + 40), 0);
-      playerMesh?.movePOV(
-        config.public.speed * -1,
-        0,
-        config.public.speed + leftVerticalSideSpeedAdd
+      if (!movingUP) {
+        playerMesh!.rotation = new BABYLON.Vector3(
+          0,
+          funcs.degToRad(-90 - 45),
+          0
+        );
+
+        // Apply horizontal force to prevent diagonal movement
+        playerMesh?.movePOV(config.public.speed * -1, 0, 0);
+      } else {
+        playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(-45), 0);
+      }
+
+      playerMesh?.moveWithCollisions(
+        playerMesh.forward.scaleInPlace(config.public.speed)
       );
     }
     if (keyStatus.right) {
-      playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(40), 0);
-      playerMesh?.movePOV(
-        config.public.speed * -1 - rightVverticalSideSpeedAdd,
-        0,
-        config.public.speed * -1 + rightVverticalSideSpeedAdd
+      if (!movingUP) {
+        playerMesh!.rotation = new BABYLON.Vector3(
+          0,
+          funcs.degToRad(90 + 45),
+          0
+        );
+
+        // Apply horizontal force to prevent diagonal movement
+        playerMesh?.movePOV(config.public.speed, 0, 0);
+      } else {
+        playerMesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(45), 0);
+      }
+
+      playerMesh?.moveWithCollisions(
+        playerMesh.forward.scaleInPlace(config.public.speed)
       );
     }
   });
