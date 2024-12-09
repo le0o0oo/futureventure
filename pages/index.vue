@@ -1,11 +1,11 @@
-<script setup lang="ts">
-const route = useRoute();
-</script>
-
 <template>
-  <div class="h-screen w-screen flex justify-center items-center">
+  <div class="w-full h-full flex justify-center items-center p-2">
     <NuxtLink to="/game">
-      <button class="bg-blue-500 rounded-md p-4 px-6">Avvia gioco</button>
+      <Button size="lg">Giooca</Button>
     </NuxtLink>
   </div>
 </template>
+
+<script lang="ts" setup></script>
+
+<style></style>
