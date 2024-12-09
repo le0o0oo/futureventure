@@ -14,8 +14,10 @@ const config = useRuntimeConfig();
 onMounted(async () => {
   // Load the 3D engine
   const game = new Engine(canvas.value);
-  // await game.initPhysics();
+  await game.initPhysics();
+
   const models = new Models(game);
+  await models.LoadMap(false);
 
   const scene = game.scene;
 
@@ -50,8 +52,6 @@ onMounted(async () => {
   //   { mass: 0 },
   //   scene
   // );
-
-  await models.LoadMap();
 
   const robotMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
     "",

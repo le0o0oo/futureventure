@@ -58,7 +58,7 @@ class Engine {
 
   async initPhysics() {
     this.scene.enablePhysics(
-      null,
+      new BABYLON.Vector3(0, -10, 0),
       new BABYLON.HavokPlugin(true, await HavokPhysics())
     );
     this.usingPhysics = true;

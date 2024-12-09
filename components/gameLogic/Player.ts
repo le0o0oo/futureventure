@@ -16,7 +16,7 @@ class Player {
   private keydownAction?: BABYLON.Nullable<BABYLON.IAction>;
   private keyupAction?: BABYLON.Nullable<BABYLON.IAction>;
 
-  mesh: BABYLON.AbstractMesh;
+  mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
   constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
@@ -27,15 +27,17 @@ class Player {
       funcs.degToRad(-90),
       BABYLON.Space.WORLD
     );
-    this.mesh = playerMesh as BABYLON.AbstractMesh;
-    playerMesh?.translate(BABYLON.Axis.Y, 0.1, BABYLON.Space.WORLD);
+    this.mesh = playerMesh as BABYLON.Mesh;
+    //playerMesh?.translate(BABYLON.Axis.Y, 0.1, BABYLON.Space.WORLD);
+    playerMesh!.position.y = 0.2;
     playerMesh?.scaling.setAll(0.2);
+    //playerMesh.applyGravity = true;
 
     if (this.game.scene._physicsEngine) {
       var playerAggregate = new BABYLON.PhysicsAggregate(
         playerMesh!,
         BABYLON.PhysicsShapeType.SPHERE,
-        { mass: 1, restitution: 0.75, friction: 5 },
+        { mass: 1, restitution: 0.75, friction: 5, radius: 0.2 },
         game.scene
       );
       this.aggregate = playerAggregate;
@@ -49,6 +51,9 @@ class Player {
     this.registerKeybinds();
 
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
+      playerAggregate.body.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
+      playerAggregate.body.setAngularDamping(0);
+
       this.focusCameraOnPlayer();
       this.doMovement();
     });
@@ -134,7 +139,10 @@ class Player {
         );
 
         // Apply horizontal force to prevent diagonal movement
-        this.mesh?.movePOV(config.public.speed * -1, 0, 0);
+        //this.mesh?.movePOV(config.public.speed * -1, 0, 0);
+        this.mesh?.moveWithCollisions(
+          this.mesh.right.scaleInPlace(config.public.speed)
+        );
       } else {
         this.mesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(-45), 0);
       }
@@ -153,7 +161,10 @@ class Player {
         );
 
         // Apply horizontal force to prevent diagonal movement
-        this.mesh?.movePOV(config.public.speed, 0, 0);
+        //this.mesh?.movePOV(config.public.speed, 0, 0);
+        this.mesh?.moveWithCollisions(
+          this.mesh.right.scaleInPlace(config.public.speed * -1)
+        );
       } else {
         this.mesh!.rotation = new BABYLON.Vector3(0, funcs.degToRad(45), 0);
       }

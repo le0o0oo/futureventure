@@ -8,7 +8,7 @@ const devtools = {
     scene: BABYLON.Scene
   ) => {
     if (import.meta.dev) {
-      const { Inspector } = await import("@babylonjs/inspector");
+      const { Inspector } = await import("babylonjs-inspector");
       //@ts-ignore
       Inspector.Show(scene, {
         gizmoCamera: camera,
@@ -19,13 +19,13 @@ const devtools = {
   },
   hide: async () => {
     if (import.meta.dev) {
-      const { Inspector } = await import("@babylonjs/inspector");
+      const { Inspector } = await import("babylonjs-inspector");
       Inspector.Hide();
     }
   },
   toggle: async () => {
     if (import.meta.dev) {
-      const { Inspector } = await import("@babylonjs/inspector");
+      const { Inspector } = await import("babylonjs-inspector");
       Inspector.IsVisible
         ? Inspector.Hide()
         : //@ts-ignore
