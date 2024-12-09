@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      speed: 0.11,
+      speed: 0.03,
       keybinds: {
         up: ["w", "W", "ArrowUp"],
         down: ["s", "S", "ArrowDown"],

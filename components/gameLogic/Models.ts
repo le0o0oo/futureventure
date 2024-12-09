@@ -38,15 +38,22 @@ class Models {
     const models = await BABYLON.SceneLoader.ImportMeshAsync(
       "",
       "/models/",
-      "map.glb"
+      "map1.glb"
     );
 
-    consola.info(accurate ? "Using accurate mode" : "Using inaccurate mode");
+    if (import.meta.dev) {
+      consola.info(
+        "MESH LOADER |",
+        accurate ? "Using accurate mode" : "Using inaccurate mode"
+      );
+      consola.info("MESH LOADER |", models.meshes.length + " meshes");
+    }
 
     models.meshes.forEach((mesh, index) => {
       mesh.checkCollisions = true;
+      const doCheck: boolean = index != 0;
 
-      if (this.game.usingPhysics) {
+      if (this.game.usingPhysics && doCheck) {
         if (!accurate) {
           // Create a PhysicsAggregate for each mesh
           new BABYLON.PhysicsAggregate(

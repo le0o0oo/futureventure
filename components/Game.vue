@@ -17,7 +17,7 @@ onMounted(async () => {
   await game.initPhysics();
 
   const models = new Models(game);
-  await models.LoadMap(false);
+  await models.LoadMap(true);
 
   const scene = game.scene;
 
