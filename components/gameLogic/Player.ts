@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs";
 import type Engine from "./Engine";
 import funcs from "~/utils/generalFuncs";
+import Models from "./Models";
 const config = useRuntimeConfig();
 
 class Player {
@@ -15,13 +16,24 @@ class Player {
   private sceneObserver: BABYLON.Observer<BABYLON.Scene>;
   private keydownAction?: BABYLON.Nullable<BABYLON.IAction>;
   private keyupAction?: BABYLON.Nullable<BABYLON.IAction>;
-  private targetRotation?: BABYLON.Vector3;
+  private targetRotation: BABYLON.Vector3 = new BABYLON.Vector3(
+    0,
+    funcs.degToRad(180),
+    0
+  );
+  private targetZRotation: number = 0; // In degrees
+  private models: Models;
+
+  private raycastYOffset = 0.3;
+  private raycastXOffset = 0;
+  private raycastXLength = 0.3;
 
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
   constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
     this.game = game;
+    this.models = new Models(game);
     const playerMesh = meshLoaderResult.meshes[0];
     playerMesh!.rotate(
       BABYLON.Axis.Y,
@@ -50,8 +62,8 @@ class Player {
     });
 
     this.registerKeybinds();
-
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
+      this.updateRaycastRotation();
       playerAggregate.body.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
       playerAggregate.body.setAngularDamping(0);
       if (this.targetRotation) {
@@ -71,6 +83,41 @@ class Player {
     this.game.scene.actionManager.unregisterAction(this.keyupAction!);
     this.aggregate?.dispose();
     this.mesh.dispose();
+  }
+
+  private updateRaycastRotation() {
+    // Create a forward vector pointing along the z-axis (local space)
+    const forwardDirection = new BABYLON.Vector3(0, 0, 1);
+
+    // Create a rotation matrix from the mesh's rotation along the Y-axis
+    const rotationMatrix = BABYLON.Matrix.RotationYawPitchRoll(
+      this.mesh.rotation.y,
+      0,
+      0
+    );
+
+    // Apply the rotation matrix to the forward vector to get the world-space direction
+    const worldForwardDirection = BABYLON.Vector3.TransformCoordinates(
+      forwardDirection,
+      rotationMatrix
+    );
+
+    // Now use this world-forward direction for the raycast
+    const hasHit = this.models.ProjectRaycast({
+      start: new BABYLON.Vector3(
+        this.mesh.position.x + this.raycastXOffset,
+        this.mesh.position.y + this.raycastYOffset,
+        this.mesh.position.z
+      ),
+      end: new BABYLON.Vector3(
+        this.mesh.position.x + worldForwardDirection.x * this.raycastXLength,
+        this.mesh.position.y + this.raycastYOffset,
+        this.mesh.position.z + worldForwardDirection.z * this.raycastXLength
+      ),
+      debugDraw: true,
+      debugTimeout: 20,
+    });
+    //console.log(hasHit);
   }
 
   private focusCameraOnPlayer() {
@@ -122,7 +169,12 @@ class Player {
 
     // Forward: Robot facing away from the camera
     if (this.keyStatus.up) {
-      this.targetRotation = new BABYLON.Vector3(0, funcs.degToRad(0), 0);
+      this.targetZRotation = 0;
+      this.targetRotation = new BABYLON.Vector3(
+        0,
+        funcs.degToRad(this.targetZRotation),
+        0
+      );
       this.mesh!.rotation = this.targetRotation;
       this.mesh.movePOV(0, 0, config.public.speed * -1);
       // this.mesh?.moveWithCollisions(
@@ -132,7 +184,12 @@ class Player {
     } else this.movingUp = false;
 
     if (this.keyStatus.down) {
-      this.targetRotation = new BABYLON.Vector3(0, funcs.degToRad(180), 0);
+      this.targetZRotation = 180;
+      this.targetRotation = new BABYLON.Vector3(
+        0,
+        funcs.degToRad(this.targetZRotation),
+        0
+      );
       this.mesh!.rotation = this.targetRotation;
       this.mesh.movePOV(0, 0, config.public.speed * -1);
 
@@ -143,11 +200,8 @@ class Player {
 
     if (this.keyStatus.left) {
       if (!this.movingUp) {
-        this.targetRotation = new BABYLON.Vector3(
-          0,
-          funcs.degToRad(-90 - 45),
-          0
-        );
+        this.targetZRotation = funcs.degToRad(-90 - 45);
+        this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
@@ -156,7 +210,8 @@ class Player {
         //   this.mesh.right.scaleInPlace(config.public.speed)
         // );
       } else {
-        this.targetRotation = new BABYLON.Vector3(0, funcs.degToRad(-45), 0);
+        this.targetZRotation = funcs.degToRad(-45);
+        this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
       }
 
@@ -168,11 +223,8 @@ class Player {
 
     if (this.keyStatus.right) {
       if (!this.movingUp) {
-        this.targetRotation = new BABYLON.Vector3(
-          0,
-          funcs.degToRad(90 + 45),
-          0
-        );
+        this.targetZRotation = funcs.degToRad(90 + 45);
+        this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
@@ -181,7 +233,8 @@ class Player {
         //   this.mesh.right.scaleInPlace(config.public.speed * -1)
         // );
       } else {
-        this.targetRotation = new BABYLON.Vector3(0, funcs.degToRad(45), 0);
+        this.targetZRotation = funcs.degToRad(45);
+        this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
       }
 

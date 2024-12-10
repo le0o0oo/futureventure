@@ -79,6 +79,38 @@ class Models {
       }
     });
   }
+
+  ProjectRaycast(
+    options = {
+      start: new BABYLON.Vector3(1, 20, 2),
+      end: new BABYLON.Vector3(1, -20, 2),
+      debugDraw: false,
+      debugTimeout: 1000,
+    }
+  ) {
+    const raycastRes = new BABYLON.PhysicsRaycastResult();
+    var start = options.start;
+    var end = options.end;
+    this.game.scene
+      .getPhysicsEngine()!
+      //@ts-ignore
+      .raycastToRef(start, end, raycastRes);
+
+    if (options.debugDraw) {
+      const points = [start, end];
+      const rayLine = BABYLON.MeshBuilder.CreateLines(
+        "ray",
+        { points: points },
+        this.game.scene
+      );
+      rayLine.color = BABYLON.Color3.Red(); // Set the line color to red
+      setTimeout(() => {
+        rayLine.dispose();
+      }, options.debugTimeout); // Dispose after 1 second (you can adjust as needed)
+    }
+
+    return raycastRes.hasHit;
+  }
 }
 
 export default Models;
