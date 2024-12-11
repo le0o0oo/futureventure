@@ -3,6 +3,8 @@ import type Engine from "./Engine";
 import { consola } from "consola";
 
 class Models {
+  private mapModels?: BABYLON.ISceneLoaderAsyncResult;
+
   constructor(private game: Engine) {
     this.game = game;
   }
@@ -38,8 +40,9 @@ class Models {
     const models = await BABYLON.SceneLoader.ImportMeshAsync(
       "",
       "/models/",
-      "map1.glb"
+      "map.glb"
     );
+    this.mapModels = models;
 
     if (import.meta.dev) {
       consola.info(
@@ -78,6 +81,14 @@ class Models {
         }
       }
     });
+  }
+
+  LoadMapFromBase64(base64: string) {
+    if (this.mapModels) {
+      this.mapModels.meshes.forEach((mesh) => {
+        mesh.dispose();
+      });
+    }
   }
 
   ProjectRaycast(

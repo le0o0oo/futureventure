@@ -4,11 +4,22 @@ definePageMeta({
 });
 
 const showGame = ref(false);
+const loading = useLoadingStore();
 
-if (import.meta.dev) showGame.value = true;
+if (import.meta.dev) {
+  loading.isLoading = true;
+  showGame.value = true;
+}
 </script>
 
 <template>
-  <Button @click="showGame = true" v-if="!showGame">Avvia</Button>
+  <Button
+    @click="
+      loading.isLoading = true;
+      showGame = true;
+    "
+    v-if="!showGame"
+    >Avvia</Button
+  >
   <Game v-else />
 </template>

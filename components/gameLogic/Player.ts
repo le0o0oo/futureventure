@@ -27,6 +27,7 @@ class Player {
   private raycastYOffset = 0.3;
   private raycastXOffset = 0;
   private raycastXLength = 0.3;
+  private raycastHit = false;
 
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
@@ -103,7 +104,7 @@ class Player {
     );
 
     // Now use this world-forward direction for the raycast
-    const hasHit = this.models.ProjectRaycast({
+    this.raycastHit = this.models.ProjectRaycast({
       start: new BABYLON.Vector3(
         this.mesh.position.x + this.raycastXOffset,
         this.mesh.position.y + this.raycastYOffset,
@@ -114,7 +115,7 @@ class Player {
         this.mesh.position.y + this.raycastYOffset,
         this.mesh.position.z + worldForwardDirection.z * this.raycastXLength
       ),
-      debugDraw: true,
+      debugDraw: false,
       debugTimeout: 20,
     });
     //console.log(hasHit);
@@ -176,7 +177,7 @@ class Player {
         0
       );
       this.mesh!.rotation = this.targetRotation;
-      this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );
@@ -191,7 +192,7 @@ class Player {
         0
       );
       this.mesh!.rotation = this.targetRotation;
-      this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
 
       // this.mesh?.moveWithCollisions(
       //   new BABYLON.Vector3(0, 0, -config.public.speed)
@@ -205,7 +206,8 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
-        this.mesh?.movePOV(config.public.speed * -1, 0, 0);
+        if (!this.raycastHit)
+          this.mesh?.movePOV(config.public.speed * -1, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed)
         // );
@@ -228,7 +230,7 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
-        this.mesh?.movePOV(config.public.speed, 0, 0);
+        if (!this.raycastHit) this.mesh?.movePOV(config.public.speed, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed * -1)
         // );
@@ -238,7 +240,7 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
       }
 
-      this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
 
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)

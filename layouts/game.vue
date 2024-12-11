@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 
 const isDev = ref(import.meta.dev);
+const config = useRuntimeConfig();
 </script>
 
 <template>
@@ -9,9 +10,8 @@ const isDev = ref(import.meta.dev);
     class="w-screen"
     :class="cn(isDev ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
   >
-    <DevOnly>
-      <DevToolsNav />
-    </DevOnly>
+    <DevToolsNav v-if="config.public.inDev" />
+
     <slot />
   </div>
 </template>

@@ -10,10 +10,13 @@ export default defineNuxtConfig({
       exclude: ["@babylonjs/havok", "@babylonjs/loaders", "babylonjs-loaders"],
     },
   },
+  css: ["~/assets/css/tailwind.css", "~/assets/css/styles.css"],
 
   runtimeConfig: {
     public: {
-      speed: 0.03,
+      inDev: true, // Different from import.meta.dev
+
+      speed: 0.02,
       keybinds: {
         up: ["w", "W", "ArrowUp"],
         down: ["s", "S", "ArrowDown"],
@@ -35,6 +38,6 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   colorMode: {
-    classPrefix: "",
+    classSuffix: "",
   },
 });

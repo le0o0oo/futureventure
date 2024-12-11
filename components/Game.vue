@@ -3,6 +3,7 @@ import * as BABYLON from "babylonjs";
 import * as gameState from "~/stores/engine";
 import funcs from "~/utils/generalFuncs";
 import "babylonjs-loaders";
+import { eventBus } from "~/event-bus";
 
 import Engine from "~/components/gameLogic/Engine";
 import Player from "~/components/gameLogic/Player";
@@ -10,6 +11,8 @@ import Models from "~/components/gameLogic/Models";
 
 const canvas = ref();
 const config = useRuntimeConfig();
+const loading = useLoadingStore();
+//const sharedData = useSharedData();
 
 onMounted(async () => {
   // Load the 3D engine
@@ -40,6 +43,13 @@ onMounted(async () => {
     scene
   );
 
+  eventBus.addEventListener("loadGLB", (event: CustomEventInit) => {
+    console.log(event.detail);
+    loading.isLoading = true;
+    models.LoadMapFromBase64(event.detail.base64);
+    loading.isLoading = false;
+  });
+
   // var ground = BABYLON.MeshBuilder.CreateGround(
   //   "ground",
   //   { width: 30, height: 30 },
@@ -64,6 +74,8 @@ onMounted(async () => {
 
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);
+
+  loading.isLoading = false;
 });
 </script>
 
