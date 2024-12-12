@@ -78,7 +78,7 @@ class Player {
     });
   }
 
-  dispose() {
+  public dispose() {
     this.game.scene.onBeforeRenderObservable.remove(this.sceneObserver);
     this.game.scene.actionManager.unregisterAction(this.keydownAction!);
     this.game.scene.actionManager.unregisterAction(this.keyupAction!);

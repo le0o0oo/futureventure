@@ -4,6 +4,8 @@ import { consola } from "consola";
 
 class Models {
   private mapModels?: BABYLON.ISceneLoaderAsyncResult;
+  private accurate: boolean = false;
+  private physicsAggregates: BABYLON.PhysicsAggregate[] = []; // Store references to physics aggregates
 
   constructor(private game: Engine) {
     this.game = game;
@@ -43,6 +45,7 @@ class Models {
       "map.glb"
     );
     this.mapModels = models;
+    this.accurate = accurate;
 
     if (import.meta.dev) {
       consola.info(
@@ -52,43 +55,30 @@ class Models {
       consola.info("MESH LOADER |", models.meshes.length + " meshes");
     }
 
-    models.meshes.forEach((mesh, index) => {
-      mesh.checkCollisions = true;
-      const doCheck: boolean = index != 0;
-
-      if (this.game.usingPhysics && doCheck) {
-        if (!accurate) {
-          // Create a PhysicsAggregate for each mesh
-          new BABYLON.PhysicsAggregate(
-            mesh, // The mesh to apply the physics to
-            BABYLON.PhysicsShapeType.BOX, // Use a BOX shape (you can adjust this based on your needs)
-            { mass: 0 }, // No mass for static objects, adjust as needed
-            this.game.scene // Pass the scene object
-          );
-        } else {
-          try {
-            // Create a PhysicsAggregate for each mesh with a more accurate hitbox (MESH shape type)
-            new BABYLON.PhysicsAggregate(
-              mesh, // The mesh to apply the physics to
-              BABYLON.PhysicsShapeType.MESH, // Use the MESH shape to match the mesh geometry exactly
-              { mass: 0 }, // No mass for static objects, adjust as needed
-              this.game.scene // Pass the scene object
-            );
-          } catch (err) {
-            consola.error("Error loading mesh at index " + index, err);
-            //console.error("Error loading mesh at index " + index, err);
-          }
-        }
-      }
-    });
+    this.applyPhysicsAggregates(accurate);
   }
 
-  LoadMapFromBase64(base64: string) {
+  async LoadMapFromBase64(base64: string) {
+    // Dispose previous meshes and physics aggregates if they exist
     if (this.mapModels) {
       this.mapModels.meshes.forEach((mesh) => {
         mesh.dispose();
       });
+
+      // Dispose all physics aggregates
+      this.physicsAggregates.forEach((aggregate) => aggregate.dispose());
+      this.physicsAggregates = []; // Clear the array after disposing
     }
+
+    const models = await BABYLON.SceneLoader.ImportMeshAsync(
+      "",
+      "",
+      base64,
+      this.game.scene
+    );
+    this.mapModels = models;
+
+    this.applyPhysicsAggregates(this.accurate);
   }
 
   ProjectRaycast(
@@ -121,6 +111,41 @@ class Models {
     }
 
     return raycastRes.hasHit;
+  }
+
+  private applyPhysicsAggregates(accurate = false) {
+    if (!this.mapModels) return;
+
+    this.mapModels.meshes.forEach((mesh, index) => {
+      mesh.checkCollisions = true;
+      const doCheck: boolean = index != 0;
+
+      if (this.game.usingPhysics && doCheck) {
+        if (!accurate) {
+          // Create a PhysicsAggregate for each mesh
+          const aggregate = new BABYLON.PhysicsAggregate(
+            mesh, // The mesh to apply the physics to
+            BABYLON.PhysicsShapeType.BOX, // Use a BOX shape (you can adjust this based on your needs)
+            { mass: 0 }, // No mass for static objects, adjust as needed
+            this.game.scene // Pass the scene object
+          );
+          this.physicsAggregates.push(aggregate); // Store the reference to the aggregate
+        } else {
+          try {
+            // Create a PhysicsAggregate for each mesh with a more accurate hitbox (MESH shape type)
+            const aggregate = new BABYLON.PhysicsAggregate(
+              mesh, // The mesh to apply the physics to
+              BABYLON.PhysicsShapeType.MESH, // Use the MESH shape to match the mesh geometry exactly
+              { mass: 0 }, // No mass for static objects, adjust as needed
+              this.game.scene // Pass the scene object
+            );
+            this.physicsAggregates.push(aggregate); // Store the reference to the aggregate
+          } catch (err) {
+            consola.error("Error loading mesh at index " + index, err);
+          }
+        }
+      }
+    });
   }
 }
 

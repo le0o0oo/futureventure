@@ -43,10 +43,25 @@ onMounted(async () => {
     scene
   );
 
+  const robotMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
+    "",
+    "/models/",
+    "robot.glb",
+    scene
+  );
+  let robot = new Player(robotMeshesResult, game);
+
   eventBus.addEventListener("loadGLB", (event: CustomEventInit) => {
-    console.log(event.detail);
+    const dataStream = event.detail.replace(
+      "data:application/octet-stream;",
+      "data:model/gltf-binary;"
+    );
+    console.log(dataStream);
     loading.isLoading = true;
-    models.LoadMapFromBase64(event.detail.base64);
+    models.LoadMapFromBase64(dataStream);
+    robot.mesh.position.y = 0.2;
+    robot.mesh.position.x = 0;
+    robot.mesh.position.z = 0;
     loading.isLoading = false;
   });
 
@@ -62,15 +77,6 @@ onMounted(async () => {
   //   { mass: 0 },
   //   scene
   // );
-
-  const robotMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
-    "",
-    "/models/",
-    "robot.glb",
-    scene
-  );
-
-  const robot = new Player(robotMeshesResult, game);
 
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);
