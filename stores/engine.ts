@@ -1,6 +1,8 @@
 import * as BABYLON from "babylonjs";
 import { Inspector } from "babylonjs-inspector";
 
+const config = useRuntimeConfig();
+
 const devtools = {
   cScene: {} as BABYLON.Scene,
   cCamera: {} as BABYLON.Camera,
@@ -8,7 +10,7 @@ const devtools = {
     camera: BABYLON.Camera | BABYLON.FreeCamera,
     scene: BABYLON.Scene
   ) => {
-    if (import.meta.dev) {
+    if (config.public.inDev) {
       //@ts-ignore
       Inspector.Show(scene, {
         gizmoCamera: camera,
@@ -18,12 +20,12 @@ const devtools = {
     }
   },
   hide: async () => {
-    if (import.meta.dev) {
+    if (config.public.inDev) {
       Inspector.Hide();
     }
   },
   toggle: async () => {
-    if (import.meta.dev) {
+    if (config.public.inDev) {
       Inspector.IsVisible
         ? Inspector.Hide()
         : //@ts-ignore

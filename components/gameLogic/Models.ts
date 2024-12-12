@@ -2,6 +2,8 @@ import * as BABYLON from "babylonjs";
 import type Engine from "./Engine";
 import { consola } from "consola";
 
+const config = useRuntimeConfig();
+
 class Models {
   private mapModels?: BABYLON.ISceneLoaderAsyncResult;
   private accurate: boolean = false;
@@ -47,7 +49,7 @@ class Models {
     this.mapModels = models;
     this.accurate = accurate;
 
-    if (import.meta.dev) {
+    if (config.public.inDev) {
       consola.info(
         "MESH LOADER |",
         accurate ? "Using accurate mode" : "Using inaccurate mode"

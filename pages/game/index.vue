@@ -5,8 +5,9 @@ definePageMeta({
 
 const showGame = ref(false);
 const loading = useLoadingStore();
+const config = useRuntimeConfig();
 
-if (import.meta.dev) {
+if (config.public.inDev) {
   loading.isLoading = true;
   showGame.value = true;
 }
