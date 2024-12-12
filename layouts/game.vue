@@ -8,7 +8,7 @@ const config = useRuntimeConfig();
 <template>
   <div
     class="w-screen"
-    :class="cn(isDev ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
+    :class="cn(config.public.inDev ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
   >
     <DevToolsNav v-if="config.public.inDev" />
 
