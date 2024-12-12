@@ -37,11 +37,27 @@ onMounted(async () => {
 
   await gameState.devtools.init(camera, scene!);
 
-  var light = new BABYLON.HemisphericLight(
-    "light1",
-    new BABYLON.Vector3(0, 1, 0),
+  // const light = new BABYLON.HemisphericLight(
+  //   "light1",
+  //   new BABYLON.Vector3(0, 1, 0),
+  //   scene
+  // );
+
+  var light = new BABYLON.DirectionalLight(
+    "dir01",
+    new BABYLON.Vector3(-1, -2, -1),
     scene
   );
+  light.position = new BABYLON.Vector3(20, 40, 20);
+
+  // https://doc.babylonjs.com/features/featuresDeepDive/lights/shadows/
+  // var light = new BABYLON.DirectionalLight(
+  //   "dir01",
+  //   new BABYLON.Vector3(0, -5, 0),
+  //   scene
+  // );
+  // light.position = new BABYLON.Vector3(20, 40, 20);
+  // light.intensity = 1;
 
   const robotMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -56,7 +72,7 @@ onMounted(async () => {
       "data:application/octet-stream;",
       "data:model/gltf-binary;"
     );
-    console.log(dataStream);
+    //console.log(dataStream);
     loading.isLoading = true;
 
     setTimeout(() => {
@@ -65,7 +81,7 @@ onMounted(async () => {
       robot.mesh.position.x = 0;
       robot.mesh.position.z = 0;
       loading.isLoading = false;
-    }, 10);
+    }, 100);
   });
 
   // var ground = BABYLON.MeshBuilder.CreateGround(
