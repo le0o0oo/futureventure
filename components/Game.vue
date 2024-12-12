@@ -58,11 +58,14 @@ onMounted(async () => {
     );
     console.log(dataStream);
     loading.isLoading = true;
-    models.LoadMapFromBase64(dataStream);
-    robot.mesh.position.y = 0.2;
-    robot.mesh.position.x = 0;
-    robot.mesh.position.z = 0;
-    loading.isLoading = false;
+
+    setTimeout(() => {
+      models.LoadMapFromBase64(dataStream);
+      robot.mesh.position.y = 0.2;
+      robot.mesh.position.x = 0;
+      robot.mesh.position.z = 0;
+      loading.isLoading = false;
+    }, 10);
   });
 
   // var ground = BABYLON.MeshBuilder.CreateGround(

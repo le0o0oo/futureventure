@@ -36,7 +36,7 @@ function openGlbFile() {
   <div class="flex gap-1 p-2">
     <Button @click="devtools.toggle()">Toggle inspector</Button>
     <Button @click="fixDevtools()">Fix devtools</Button>
-    <Button @click="openGlbFile()">Carica mappa</Button>
+    <Button @click="openGlbFile()">Carica mappa (.glb)</Button>
   </div>
 </template>
 
