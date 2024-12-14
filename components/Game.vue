@@ -37,18 +37,26 @@ onMounted(async () => {
 
   await gameState.devtools.init(camera, scene!);
 
-  // const light = new BABYLON.HemisphericLight(
-  //   "light1",
-  //   new BABYLON.Vector3(0, 1, 0),
-  //   scene
-  // );
+  const ssr = new BABYLON.SSRRenderingPipeline(
+    "ssr", // The name of the pipeline
+    scene, // The scene to which the pipeline belongs
+    [camera], // The list of cameras to attach the pipeline to
+    false, // Whether or not to use the geometry buffer renderer (default: false, use the pre-pass renderer)
+    BABYLON.Constants.TEXTURETYPE_UNSIGNED_BYTE // The texture type used by the SSR effect (default: TEXTURETYPE_UNSIGNED_BYTE)
+  );
 
-  var light = new BABYLON.DirectionalLight(
-    "dir01",
-    new BABYLON.Vector3(-1, -2, -1),
+  const light = new BABYLON.HemisphericLight(
+    "light1",
+    new BABYLON.Vector3(0, 1, 0),
     scene
   );
-  light.position = new BABYLON.Vector3(20, 40, 20);
+
+  // var light = new BABYLON.DirectionalLight(
+  //   "dir01",
+  //   new BABYLON.Vector3(-1, -2, -1),
+  //   scene
+  // );
+  // light.position = new BABYLON.Vector3(20, 40, 20);
 
   // https://doc.babylonjs.com/features/featuresDeepDive/lights/shadows/
   // var light = new BABYLON.DirectionalLight(
