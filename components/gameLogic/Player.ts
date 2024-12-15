@@ -73,14 +73,13 @@ class Player {
           this.mesh.position.z
         ),
         end: new BABYLON.Vector3(
-          this.game.getCamera()!.position.x,
-          this.game.getCamera()!.position.y,
-          this.game.getCamera()!.position.z
+          this.mesh!.position.x,
+          this.mesh!.position.y + 5,
+          this.mesh!.position.z - 5
         ),
         debugDraw: false,
         debugTimeout: 50,
       }).hasHit;
-      console.log("In sight: ", this.inSight);
 
       this.updateRaycastRotation();
       playerAggregate.body.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
@@ -163,21 +162,31 @@ class Player {
   }
 
   private focusCameraOnPlayer() {
-    if (this.inSight) {
-      // Camera in the default position when the player is in sight
-      this.game.getCamera()!.position.x = this.mesh!.position.x;
-      this.game.getCamera()!.position.y = this.mesh!.position.y + 5;
-      this.game.getCamera()!.position.z = this.mesh!.position.z - 5;
+    const camera = this.game.getCamera()!;
+    const targetPosition = new BABYLON.Vector3(
+      this.mesh.position.x,
+      this.mesh.position.y + (this.inSight ? 5 : 1),
+      this.mesh.position.z + (this.inSight ? -5 : -2)
+    );
+    const currentCameraPosition = camera.position;
 
-      this.game.getCamera()!.rotation.x = funcs.degToRad(140);
-    } else {
-      // If the player is not in sight, move the camera closer
-      this.game.getCamera()!.position.x = this.mesh!.position.x;
-      this.game.getCamera()!.position.y = this.mesh!.position.y + 1; // Closer on Y-axis
-      this.game.getCamera()!.position.z = this.mesh!.position.z - 2; // Closer on Z-axis
+    camera.position = BABYLON.Vector3.Lerp(
+      currentCameraPosition,
+      targetPosition,
+      0.1
+    );
 
-      this.game.getCamera()!.rotation.x = funcs.degToRad(150);
-    }
+    const targetRotation = this.inSight
+      ? funcs.degToRad(140) // Target rotation when in sight
+      : funcs.degToRad(160); // Target rotation when out of sight
+
+    //@ts-ignore
+    camera.rotation.x = BABYLON.Scalar.Lerp(
+      //@ts-ignore
+      camera.rotation.x,
+      targetRotation,
+      0.1
+    );
   }
 
   private registerKeybinds() {
