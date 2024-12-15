@@ -7,6 +7,7 @@ class Engine {
   scene: BABYLON.Scene;
   // If physics is enabled in the current engine
   usingPhysics: boolean = false;
+  usingPostProcess: boolean = false;
 
   shadowGenerator?: BABYLON.ShadowGenerator;
   light?: BABYLON.DirectionalLight;
@@ -82,6 +83,8 @@ class Engine {
     this.shadowGenerator.filter =
       BABYLON.ShadowGenerator.FILTER_BLURCLOSEEXPONENTIALSHADOWMAP;
     this.shadowGenerator.transparencyShadow = true;
+
+    this.usingPostProcess = true;
 
     // const hemisphericLight = new BABYLON.HemisphericLight(
     //   "light1",

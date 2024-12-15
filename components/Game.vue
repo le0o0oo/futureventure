@@ -19,6 +19,11 @@ onMounted(async () => {
   const game = new Engine(canvas.value);
   await game.initPhysics();
   game.initLighting();
+  // new BABYLON.HemisphericLight(
+  //   "light1",
+  //   new BABYLON.Vector3(0, 1, 0),
+  //   game.scene
+  // );
 
   const models = new Models(game);
   await models.LoadMap(true);

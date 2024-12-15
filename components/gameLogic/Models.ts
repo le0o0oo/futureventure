@@ -149,7 +149,7 @@ class Models {
               this.game.scene // Pass the scene object
             );
             this.physicsAggregates.push(aggregate); // Store the reference to the aggregate
-            console.log(mesh);
+            //console.log(mesh);
           } catch (err) {
             consola.error("Error loading mesh at index " + index, err);
           }
@@ -166,7 +166,8 @@ class Models {
         }
       }
 
-      this.game.shadowGenerator!.addShadowCaster(mesh);
+      if (this.game.usingPostProcess)
+        this.game.shadowGenerator!.addShadowCaster(mesh);
     });
   }
 }
