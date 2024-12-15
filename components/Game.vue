@@ -20,7 +20,6 @@ onMounted(async () => {
   await game.initPhysics();
   game.initLighting();
 
-
   const models = new Models(game);
   await models.LoadMap(true);
 
@@ -36,7 +35,6 @@ onMounted(async () => {
   game.addCamera(camera);
   // Target the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
-
 
   await gameState.devtools.init(camera, scene!);
 

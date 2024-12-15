@@ -112,7 +112,7 @@ class Models {
       }, options.debugTimeout);
     }
 
-    return raycastRes.hasHit;
+    return raycastRes;
   }
 
   private applyPhysicsAggregates(accurate = false) {

@@ -29,6 +29,8 @@ class Player {
   private raycastXLength = 0.3;
   private raycastHit = false;
 
+  private inSight: boolean = false;
+
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
@@ -64,6 +66,22 @@ class Player {
 
     this.registerKeybinds();
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
+      this.inSight = !this.models.ProjectRaycast({
+        start: new BABYLON.Vector3(
+          this.mesh.position.x + this.raycastXOffset,
+          this.mesh.position.y + this.raycastYOffset,
+          this.mesh.position.z
+        ),
+        end: new BABYLON.Vector3(
+          this.game.getCamera()!.position.x,
+          this.game.getCamera()!.position.y,
+          this.game.getCamera()!.position.z
+        ),
+        debugDraw: false,
+        debugTimeout: 50,
+      }).hasHit;
+      console.log("In sight: ", this.inSight);
+
       this.updateRaycastRotation();
       playerAggregate.body.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
       playerAggregate.body.setAngularDamping(0);
@@ -123,14 +141,43 @@ class Player {
       ),
       debugDraw: false,
       debugTimeout: 20,
-    });
+    }).hasHit;
+
+    // console.log(
+    //   this.models.ProjectRaycast({
+    //     start: new BABYLON.Vector3(
+    //       this.mesh.position.x + this.raycastXOffset,
+    //       this.mesh.position.y + this.raycastYOffset,
+    //       this.mesh.position.z
+    //     ),
+    //     end: new BABYLON.Vector3(
+    //       this.mesh.position.x,
+    //       this.mesh.position.y,
+    //       this.mesh.position.z
+    //     ),
+    //     debugDraw: true,
+    //     debugTimeout: 20,
+    //   }).body?.transformNode.id !== "__root__"
+    // );
     //console.log(hasHit);
   }
 
   private focusCameraOnPlayer() {
-    this.game.getCamera()!.position.x = this.mesh!.position.x;
-    this.game.getCamera()!.position.y = this.mesh!.position.y + 5;
-    this.game.getCamera()!.position.z = this.mesh!.position.z - 5;
+    if (this.inSight) {
+      // Camera in the default position when the player is in sight
+      this.game.getCamera()!.position.x = this.mesh!.position.x;
+      this.game.getCamera()!.position.y = this.mesh!.position.y + 5;
+      this.game.getCamera()!.position.z = this.mesh!.position.z - 5;
+
+      this.game.getCamera()!.rotation.x = funcs.degToRad(140);
+    } else {
+      // If the player is not in sight, move the camera closer
+      this.game.getCamera()!.position.x = this.mesh!.position.x;
+      this.game.getCamera()!.position.y = this.mesh!.position.y + 1; // Closer on Y-axis
+      this.game.getCamera()!.position.z = this.mesh!.position.z - 2; // Closer on Z-axis
+
+      this.game.getCamera()!.rotation.x = funcs.degToRad(150);
+    }
   }
 
   private registerKeybinds() {
