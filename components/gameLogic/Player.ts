@@ -75,6 +75,12 @@ class Player {
 
       this.focusCameraOnPlayer();
       this.doMovement();
+
+      // if (this.game.light) {
+      //   this.game.light.position.x = this.mesh!.position.x;
+      //   this.game.light.position.y = this.mesh!.position.y + 5;
+      //   this.game.light.position.z = this.mesh!.position.z;
+      // }
     });
   }
 

@@ -109,7 +109,7 @@ class Models {
       rayLine.color = BABYLON.Color3.Red(); // Set the line color to red
       setTimeout(() => {
         rayLine.dispose();
-      }, options.debugTimeout); // Dispose after 1 second (you can adjust as needed)
+      }, options.debugTimeout);
     }
 
     return raycastRes.hasHit;
@@ -117,10 +117,17 @@ class Models {
 
   private applyPhysicsAggregates(accurate = false) {
     if (!this.mapModels) return;
+    if (this.game.shadowGenerator)
+      this.game.shadowGenerator!.getShadowMap()!.renderList = [];
 
     this.mapModels.meshes.forEach((mesh, index) => {
+      mesh.isPickable = true;
       mesh.checkCollisions = true;
+      mesh.receiveShadows = true;
       const doCheck: boolean = index != 0;
+
+      if (this.game.shadowGenerator)
+        this.game.shadowGenerator!.getShadowMap()!.renderList!.push(mesh);
 
       if (this.game.usingPhysics && doCheck) {
         if (!accurate) {
@@ -142,11 +149,24 @@ class Models {
               this.game.scene // Pass the scene object
             );
             this.physicsAggregates.push(aggregate); // Store the reference to the aggregate
+            console.log(mesh);
           } catch (err) {
             consola.error("Error loading mesh at index " + index, err);
           }
         }
       }
+
+      if (mesh.material) {
+        if (
+          mesh.material instanceof BABYLON.PBRMaterial ||
+          mesh.material instanceof BABYLON.StandardMaterial
+        ) {
+          mesh.material.ambientColor = new BABYLON.Color3(1, 1, 1);
+          mesh.material.backFaceCulling = true;
+        }
+      }
+
+      this.game.shadowGenerator!.addShadowCaster(mesh);
     });
   }
 }

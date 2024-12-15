@@ -18,6 +18,8 @@ onMounted(async () => {
   // Load the 3D engine
   const game = new Engine(canvas.value);
   await game.initPhysics();
+  game.initLighting();
+
 
   const models = new Models(game);
   await models.LoadMap(true);
@@ -35,21 +37,15 @@ onMounted(async () => {
   // Target the camera to scene origin
   camera.setTarget(BABYLON.Vector3.Zero());
 
+
   await gameState.devtools.init(camera, scene!);
 
-  const ssr = new BABYLON.SSRRenderingPipeline(
-    "ssr", // The name of the pipeline
-    scene, // The scene to which the pipeline belongs
-    [camera], // The list of cameras to attach the pipeline to
-    false, // Whether or not to use the geometry buffer renderer (default: false, use the pre-pass renderer)
-    BABYLON.Constants.TEXTURETYPE_UNSIGNED_BYTE // The texture type used by the SSR effect (default: TEXTURETYPE_UNSIGNED_BYTE)
-  );
-
-  const light = new BABYLON.HemisphericLight(
-    "light1",
-    new BABYLON.Vector3(0, 1, 0),
-    scene
-  );
+  // const light = new BABYLON.HemisphericLight(
+  //   "light1",
+  //   new BABYLON.Vector3(0, 1, 0),
+  //   scene
+  // );
+  // light.intensity = 0.7;
 
   // var light = new BABYLON.DirectionalLight(
   //   "dir01",
