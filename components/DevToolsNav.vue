@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { devtools } from "~/stores/engine";
 import { eventBus } from "~/event-bus";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "./ui/button";
 
 const colorMode = useColorMode();
 
@@ -37,6 +39,19 @@ function openGlbFile() {
     <Button @click="devtools.toggle()">Toggle inspector</Button>
     <Button @click="fixDevtools()">Fix devtools</Button>
     <Button @click="openGlbFile()">Carica mappa (.glb)</Button>
+    <Dialog>
+      <DialogTrigger :class="buttonVariants({ variant: 'default' })">
+        Sequenze
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sequenze</DialogTitle>
+          <DialogDescription>
+            <Button>Intro</Button>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 

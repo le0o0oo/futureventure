@@ -156,12 +156,12 @@ class Engine {
   addCamera(camera: BABYLON.Camera | BABYLON.FreeCamera) {
     //@ts-ignore
     this.cameras.push(camera);
-    var postProcess = new BABYLON.ColorCorrectionPostProcess(
-      "color_correction",
-      "/color_grading_saturated.png",
-      1.0,
-      camera
-    );
+    // var postProcess = new BABYLON.ColorCorrectionPostProcess(
+    //   "color_correction",
+    //   "/color_grading_saturated.png",
+    //   1.0,
+    //   camera
+    // );
     //this.scene.activeCameras?.push(camera);
   }
   getCamera(index: number = 0) {
