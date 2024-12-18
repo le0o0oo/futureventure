@@ -8,6 +8,7 @@ import { eventBus } from "~/event-bus";
 import Engine from "~/components/gameLogic/Engine";
 import Player from "~/components/gameLogic/Player";
 import Models from "~/components/gameLogic/Models";
+import Sequences from "./gameLogic/sequences";
 
 const canvas = ref();
 const config = useRuntimeConfig();
@@ -19,6 +20,8 @@ onMounted(async () => {
   const game = new Engine(canvas.value);
   await game.initPhysics();
   game.initLighting();
+
+  const sequences = new Sequences(game);
   // new BABYLON.HemisphericLight(
   //   "light1",
   //   new BABYLON.Vector3(0, 1, 0),
@@ -42,29 +45,6 @@ onMounted(async () => {
   camera.setTarget(BABYLON.Vector3.Zero());
 
   await gameState.devtools.init(camera, scene!);
-
-  // const light = new BABYLON.HemisphericLight(
-  //   "light1",
-  //   new BABYLON.Vector3(0, 1, 0),
-  //   scene
-  // );
-  // light.intensity = 0.7;
-
-  // var light = new BABYLON.DirectionalLight(
-  //   "dir01",
-  //   new BABYLON.Vector3(-1, -2, -1),
-  //   scene
-  // );
-  // light.position = new BABYLON.Vector3(20, 40, 20);
-
-  // https://doc.babylonjs.com/features/featuresDeepDive/lights/shadows/
-  // var light = new BABYLON.DirectionalLight(
-  //   "dir01",
-  //   new BABYLON.Vector3(0, -5, 0),
-  //   scene
-  // );
-  // light.position = new BABYLON.Vector3(20, 40, 20);
-  // light.intensity = 1;
 
   const robotMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
@@ -90,20 +70,10 @@ onMounted(async () => {
       loading.isLoading = false;
     }, 100);
   });
-
-  // var ground = BABYLON.MeshBuilder.CreateGround(
-  //   "ground",
-  //   { width: 30, height: 30 },
-  //   scene
-  // );
-  // Create a static box shape.
-  // var groundAggregate = new BABYLON.PhysicsAggregate(
-  //   ground,
-  //   BABYLON.PhysicsShapeType.BOX,
-  //   { mass: 0 },
-  //   scene
-  // );
-
+  eventBus.addEventListener("runScene", (event: CustomEventInit) => {
+    //@ts-ignore
+    sequences[event.detail]();
+  });
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);
 

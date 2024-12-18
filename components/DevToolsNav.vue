@@ -6,6 +6,8 @@ import { buttonVariants } from "./ui/button";
 
 const colorMode = useColorMode();
 
+const openedModal = ref(false);
+
 colorMode.preference = "dark";
 
 function fixDevtools() {
@@ -32,6 +34,13 @@ function openGlbFile() {
   };
   input.click();
 }
+
+function runSequence(seq: string) {
+  openedModal.value = false;
+  eventBus.dispatchEvent(
+    new CustomEvent("runScene", { detail: seq } as CustomEventInit)
+  );
+}
 </script>
 
 <template>
@@ -39,7 +48,7 @@ function openGlbFile() {
     <Button @click="devtools.toggle()">Toggle inspector</Button>
     <Button @click="fixDevtools()">Fix devtools</Button>
     <Button @click="openGlbFile()">Carica mappa (.glb)</Button>
-    <Dialog>
+    <Dialog v-model:open="openedModal">
       <DialogTrigger :class="buttonVariants({ variant: 'default' })">
         Sequenze
       </DialogTrigger>
@@ -47,7 +56,7 @@ function openGlbFile() {
         <DialogHeader>
           <DialogTitle>Sequenze</DialogTitle>
           <DialogDescription>
-            <Button>Intro</Button>
+            <Button @click="runSequence('intro')">Intro</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -1,5 +1,7 @@
 import type Engine from "../Engine";
 
+import introSequence from "./intro";
+
 class Sequences {
   engine: Engine;
 
@@ -7,7 +9,9 @@ class Sequences {
     this.engine = engine;
   }
 
-  intro() {}
+  intro() {
+    introSequence(this.engine);
+  }
 }
 
 export default Sequences;

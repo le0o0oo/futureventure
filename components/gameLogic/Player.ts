@@ -90,7 +90,9 @@ class Player {
       }
       if (this.targetRotation) this.mesh!.rotation = this.targetRotation;
 
-      this.focusCameraOnPlayer();
+      const generalData = useGeneralStore();
+
+      if (generalData.cameraFollow) this.focusCameraOnPlayer();
       this.doMovement();
 
       // if (this.game.light) {
