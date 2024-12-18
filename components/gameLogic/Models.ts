@@ -121,6 +121,7 @@ class Models {
       this.game.shadowGenerator!.getShadowMap()!.renderList = [];
 
     this.mapModels.meshes.forEach((mesh, index) => {
+      console.log(mesh.name, mesh.id);
       mesh.isPickable = true;
       mesh.checkCollisions = true;
       mesh.receiveShadows = true;
