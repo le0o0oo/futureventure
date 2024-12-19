@@ -71,8 +71,11 @@ onMounted(async () => {
     }, 100);
   });
   eventBus.addEventListener("runScene", (event: CustomEventInit) => {
-    //@ts-ignore
-    sequences[event.detail]();
+    setTimeout(async () => {
+      //@ts-ignore
+      await sequences[event.detail]();
+      console.log("sequence completed");
+    }, 500);
   });
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);

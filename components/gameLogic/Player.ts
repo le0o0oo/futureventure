@@ -45,7 +45,7 @@ class Player {
     );
     this.mesh = playerMesh as BABYLON.Mesh;
     //playerMesh?.translate(BABYLON.Axis.Y, 0.1, BABYLON.Space.WORLD);
-    playerMesh!.position.y = 0.2;
+    //playerMesh!.position.y = 0.2;
     playerMesh?.scaling.setAll(0.2);
     //playerMesh.applyGravity = true;
 

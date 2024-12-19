@@ -4,6 +4,7 @@ const loading = useLoadingStore();
 
 <template>
   <div class="w-screen h-screen">
+    <Toaster position="top-left" />
     <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />
@@ -15,7 +16,8 @@ const loading = useLoadingStore();
       v-if="loading.isLoading"
       class="absolute inset-0 z-50 flex flex-col items-center justify-center w-full h-full gap-10 bg-background"
     >
-      <p class="animate-pulse text-3xl font-bold">Caricamento</p>
+      <!-- <p class="text-3xl font-bold animate-pulse">Caricamento</p> -->
+      <img class="animate-pulse size-60" src="/icon.png" />
       <!-- <div
         class="flex items-center justify-center w-full"
         v-if="loading.progress.show"

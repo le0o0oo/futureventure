@@ -37,6 +37,7 @@ function openGlbFile() {
 
 function runSequence(seq: string) {
   openedModal.value = false;
+  devtools.hide();
   eventBus.dispatchEvent(
     new CustomEvent("runScene", { detail: seq } as CustomEventInit)
   );

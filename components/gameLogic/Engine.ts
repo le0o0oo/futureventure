@@ -181,6 +181,8 @@ class Engine {
     );
     defaultPipeline.fxaaEnabled = true;
     defaultPipeline.glowLayerEnabled = true;
+    if (defaultPipeline.glowLayerEnabled)
+      defaultPipeline.glowLayer!.blurKernelSize = 40;
 
     if (BABYLON.SSAO2RenderingPipeline.IsSupported) {
       const ssao = new BABYLON.SSAO2RenderingPipeline("ssao", this.scene, 0.5, [

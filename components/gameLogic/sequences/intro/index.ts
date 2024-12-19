@@ -1,8 +1,9 @@
 import type Engine from "../../Engine";
 import { Observer, Scene, Vector3, type FreeCamera } from "babylonjs";
 import funcs from "~/utils/generalFuncs";
+import assistant from "~/utils/assistant";
 
-export default (game: Engine) => {
+export default async (game: Engine) => {
   const camera = game.getCamera() as FreeCamera;
 
   const generalData = useGeneralStore();
@@ -23,38 +24,51 @@ export default (game: Engine) => {
 
   let observer: Observer<Scene>;
 
-  setTimeout(() => {
-    const animSpeed = 0.1; // Speed factor, adjust this for faster/slower movement
-    const targetDirection = targetPosition
-      .subtract(camera.position)
-      .normalize(); // Direction to move in
-    const distanceToTarget = camera.position.subtract(targetPosition).length(); // Distance to the target position
+  await funcs.moveCamera({
+    camera,
+    game,
+    targetPosition,
+    targetRotation,
+    speed: 0.1,
+  });
 
-    observer = game.scene.onBeforeRenderObservable.add(() => {
-      // Move the camera at a constant speed
-      const distanceThisFrame =
-        animSpeed * game.scene.getEngine().getDeltaTime(); // Speed is multiplied by time delta
-      const newDistanceToTarget = camera.position
-        .subtract(targetPosition)
-        .length();
+  assistant.say(
+    "Benvenuto, Operatore. Io sono Telly, la tua assistente per questa esperienza.",
+    {
+      duration: 4000,
+    }
+  );
 
-      if (newDistanceToTarget > distanceThisFrame) {
-        camera.position = camera.position.add(
-          targetDirection.scale(distanceThisFrame)
-        ); // Move the camera towards the target
-      } else {
-        camera.position = targetPosition; // Snap to target once we are close enough
-        game.scene.onBeforeRenderObservable.remove(observer);
-        console.log("Animation end");
-      }
+  await funcs.delay(2500);
 
-      // Rotate the camera at a constant speed
-      const rotationSpeed = 0.05; // Adjust rotation speed
-      camera.rotation = camera.rotation.add(
-        targetRotation.subtract(camera.rotation).scale(rotationSpeed)
-      );
-    });
-  }, 1000);
+  assistant.say("Farai tante cose, ma per ora sarai un robot", {
+    duration: 5000,
+  });
 
-  camera.attachControl();
+  camera.rotation.y = funcs.degToRad(180);
+  generalData.cameraFollow = true;
+
+  await funcs.delay(4000);
+
+  assistant.say("Muoviti con WASD o con le freccette ↑ → ↓ ← sulla tastiera", {
+    duration: 5000,
+  });
+
+  await funcs.delay(7000);
+
+  assistant.say("Per adesso sarai un robot tuttofare", {
+    duration: 4000,
+  });
+
+  await funcs.delay(2900);
+
+  assistant.say("A breve ti verranno assegnate diverse task da completare...", {
+    duration: 4000,
+  });
+
+  await funcs.delay(3000);
+
+  assistant.say("Non ti preoccupare, nulla di troppo complicato ;)", {
+    duration: 4000,
+  });
 };
