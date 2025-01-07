@@ -2,6 +2,8 @@ import * as BABYLON from "babylonjs";
 import type Engine from "./Engine";
 import funcs from "~/utils/generalFuncs";
 import Models from "./Models";
+import interactionManager from "~/utils/interactionManager";
+
 const config = useRuntimeConfig();
 
 class Player {
@@ -34,6 +36,8 @@ class Player {
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
+  private tasksStore = useTasksStore();
+
   constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
     this.game = game;
     this.models = new Models(game);
@@ -44,11 +48,11 @@ class Player {
       BABYLON.Space.WORLD
     );
     this.mesh = playerMesh as BABYLON.Mesh;
-    //playerMesh?.translate(BABYLON.Axis.Y, 0.1, BABYLON.Space.WORLD);
-    //playerMesh!.position.y = 0.2;
-    playerMesh?.scaling.setAll(0.2);
-    //playerMesh.applyGravity = true;
 
+    // Player mesh setup
+    playerMesh?.scaling.setAll(0.2);
+
+    // Player physics setup
     if (this.game.scene._physicsEngine) {
       var playerAggregate = new BABYLON.PhysicsAggregate(
         playerMesh!,
@@ -94,12 +98,7 @@ class Player {
 
       if (generalData.cameraFollow) this.focusCameraOnPlayer();
       this.doMovement();
-
-      // if (this.game.light) {
-      //   this.game.light.position.x = this.mesh!.position.x;
-      //   this.game.light.position.y = this.mesh!.position.y + 5;
-      //   this.game.light.position.z = this.mesh!.position.z;
-      // }
+      this.detectInteractable();
     });
   }
 
@@ -129,6 +128,7 @@ class Player {
     );
 
     // Now use this world-forward direction for the raycast
+
     this.raycastHit = this.models.ProjectRaycast({
       start: new BABYLON.Vector3(
         this.mesh.position.x + this.raycastXOffset,
@@ -143,24 +143,112 @@ class Player {
       debugDraw: false,
       debugTimeout: 20,
     }).hasHit;
+  }
 
-    // console.log(
-    //   this.models.ProjectRaycast({
-    //     start: new BABYLON.Vector3(
-    //       this.mesh.position.x + this.raycastXOffset,
-    //       this.mesh.position.y + this.raycastYOffset,
-    //       this.mesh.position.z
-    //     ),
-    //     end: new BABYLON.Vector3(
-    //       this.mesh.position.x,
-    //       this.mesh.position.y,
-    //       this.mesh.position.z
-    //     ),
-    //     debugDraw: true,
-    //     debugTimeout: 20,
-    //   }).body?.transformNode.id !== "__root__"
-    // );
-    //console.log(hasHit);
+  private detectInteractable() {
+    // Projects a "box" made with raycasts like this
+    /* 
+    --------------
+    |            |
+    |            |
+    |      o     | <- This is the player
+    |            |
+    |            |
+    --------------
+    */
+    const boxOffset = 0.6;
+    const deeBug = false;
+
+    const startTopPos = new BABYLON.Vector3(
+      this.mesh.position.x + boxOffset,
+      this.mesh.position.y + 0.1,
+      this.mesh.position.z + boxOffset
+    );
+
+    var rayRight = new BABYLON.Ray(
+      startTopPos,
+      new BABYLON.Vector3(0, 0, -1),
+      boxOffset * 2
+    );
+
+    var rightHit = this.game.scene.pickWithRay(rayRight);
+
+    // ------------ TOP ----------------
+
+    var rayTop = new BABYLON.Ray(
+      startTopPos,
+      new BABYLON.Vector3(-1, 0, 0),
+      boxOffset * 2
+    );
+
+    var topHit = this.game.scene.pickWithRay(rayTop);
+
+    // ------------ BOTTOM ----------------
+
+    const startBottomPos = new BABYLON.Vector3(
+      this.mesh.position.x - boxOffset,
+      this.mesh.position.y + 0.1,
+      this.mesh.position.z - boxOffset
+    );
+
+    var rayBottom = new BABYLON.Ray(
+      startBottomPos,
+      new BABYLON.Vector3(1, 0, 0),
+      boxOffset * 2
+    );
+
+    var bottomHit = this.game.scene.pickWithRay(rayBottom);
+
+    // ------------ LEFT ----------------
+
+    var rayLeft = new BABYLON.Ray(
+      startBottomPos,
+      new BABYLON.Vector3(0, 0, 1),
+      boxOffset * 2
+    );
+
+    var leftHit = this.game.scene.pickWithRay(rayLeft);
+
+    if (leftHit?.pickedMesh) {
+      if (interactionManager.isSpecialMesh(leftHit.pickedMesh.name))
+        interactionManager.handleMesh(leftHit.pickedMesh);
+    } else if (rightHit?.pickedMesh) {
+      if (interactionManager.isSpecialMesh(rightHit.pickedMesh.name))
+        interactionManager.handleMesh(rightHit.pickedMesh);
+    } else if (bottomHit?.pickedMesh) {
+      if (interactionManager.isSpecialMesh(bottomHit.pickedMesh.name))
+        interactionManager.handleMesh(bottomHit.pickedMesh);
+    } else if (topHit?.pickedMesh) {
+      if (interactionManager.isSpecialMesh(topHit.pickedMesh.name))
+        interactionManager.handleMesh(topHit.pickedMesh);
+    } else this.tasksStore.showMessage = false;
+
+    if (deeBug) {
+      let rayTopHelper = new BABYLON.RayHelper(rayTop);
+      rayTopHelper.show(this.game.scene);
+
+      let rayRightHelper = new BABYLON.RayHelper(rayRight);
+      rayRightHelper.show(this.game.scene);
+
+      let rayBottomHelper = new BABYLON.RayHelper(rayBottom);
+      rayBottomHelper.show(this.game.scene);
+
+      let rayLeftHelper = new BABYLON.RayHelper(rayLeft);
+      rayLeftHelper.show(this.game.scene);
+      this.game.scene.onAfterRenderObservable.addOnce(() => {
+        rayRightHelper.hide();
+        rayRightHelper.dispose();
+
+        rayTopHelper.hide();
+        rayTopHelper.dispose();
+
+        rayBottomHelper.hide();
+        rayBottomHelper.dispose();
+
+        rayLeftHelper.hide();
+        rayLeftHelper.dispose();
+      });
+    }
   }
 
   private focusCameraOnPlayer() {

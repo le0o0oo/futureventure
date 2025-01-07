@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@nuxtjs/color-mode",
     "shadcn-nuxt",
+    "nuxt-svgo",
   ],
   shadcn: {
     prefix: "",

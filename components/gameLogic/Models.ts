@@ -121,7 +121,8 @@ class Models {
       this.game.shadowGenerator!.getShadowMap()!.renderList = [];
 
     this.mapModels.meshes.forEach((mesh, index) => {
-      console.log(mesh.name, mesh.id);
+      //console.log(mesh.name, mesh.id);
+      //if (mesh.name == "traffic_light") consola.info("trovato semaforfo");
       mesh.isPickable = true;
       mesh.checkCollisions = true;
       mesh.receiveShadows = true;
@@ -152,7 +153,10 @@ class Models {
             this.physicsAggregates.push(aggregate); // Store the reference to the aggregate
             //console.log(mesh);
           } catch (err) {
-            consola.error("Error loading mesh at index " + index, err);
+            consola.error(
+              "MESH LOADER | Error loading mesh at index " + index,
+              err
+            );
           }
         }
       }
@@ -170,6 +174,9 @@ class Models {
       if (this.game.usingPostProcess)
         this.game.shadowGenerator!.addShadowCaster(mesh);
     });
+    consola.info(
+      "MESH LOADER | Loaded " + this.mapModels.meshes.length + " meshes"
+    );
   }
 }
 

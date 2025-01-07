@@ -1,6 +1,6 @@
 // This script simply deletes the .nuxt folder, preventing annoying issues (like NuxtImg not loading)
 import { existsSync, rm } from "fs";
-const deleteFolder = true; // If you want to turn off the script, set this to false
+const deleteFolder = false; // If you want to turn off the script, set this to false
 
 function doAction() {
   if (!deleteFolder)

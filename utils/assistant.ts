@@ -10,7 +10,6 @@ function say(
 ) {
   toast.info(name, {
     description: text,
-
     duration: options?.duration,
   });
 }

@@ -6,7 +6,7 @@ import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
 
 import Engine from "~/components/gameLogic/Engine";
-import Player from "~/components/gameLogic/Player";
+import Player from "~/components/gameLogic/Robot";
 import Models from "~/components/gameLogic/Models";
 import Sequences from "./gameLogic/sequences";
 
