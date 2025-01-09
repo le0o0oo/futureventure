@@ -55,4 +55,22 @@ export default async (game: Engine) => {
   });
 
   await funcs.delay(7000);
+
+  assistant.say("Per adesso sarai un robot tuttofare", {
+    duration: 4000,
+  });
+
+  await funcs.delay(2900);
+
+  assistant.say("A breve ti verranno assegnate diverse task da completare...", {
+    duration: 4000,
+  });
+
+  await funcs.delay(3000);
+
+  assistant.say("Non ti preoccupare, nulla di troppo complicato ;)", {
+    duration: 4000,
+  });
+
+  await funcs.delay(5000);
 };

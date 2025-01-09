@@ -17,6 +17,12 @@ importers:
       '@babylonjs/loaders':
         specifier: ^7.42.0
         version: 7.42.0(@babylonjs/core@7.42.0)(babylonjs-gltf2interface@7.42.0)
+      '@blockly/theme-dark':
+        specifier: ^7.0.10
+        version: 7.0.10(blockly@11.2.0)
+      '@formkit/auto-animate':
+        specifier: ^0.8.2
+        version: 0.8.2
       babylonjs:
         specifier: ^7.42.0
         version: 7.42.0
@@ -38,6 +44,9 @@ importers:
       howler:
         specifier: ^2.2.4
         version: 2.2.4
+      js-confetti:
+        specifier: ^0.12.0
+        version: 0.12.0
       lucide-vue-next:
         specifier: ^0.468.0
         version: 0.468.0(vue@3.5.13(typescript@5.7.2))
@@ -316,6 +325,12 @@ packages:
     peerDependencies:
       '@babylonjs/core': ^7.0.0
       babylonjs-gltf2interface: ^7.0.0
+
+  '@blockly/theme-dark@7.0.10':
+    resolution: {integrity: sha512-Wc6n115vt9alxzPkEwYtvBBGoPUV3gaYE00dvSKhqXTNoy1Xioujj9kT9VkGmdMO2mhgnJNczSpvxG8tcd4zLQ==}
+    engines: {node: '>=8.17.0'}
+    peerDependencies:
+      blockly: ^11.0.0
 
   '@cloudflare/kv-asset-handler@0.3.4':
     resolution: {integrity: sha512-YLPHc8yASwjNkmcDMQMY35yiWjoKAKnhUbPRszBRS0YgH+IXtsMp61j+yTcnCE3oO2DgP0U3iejLC8FTtKDC8Q==}
@@ -632,6 +647,9 @@ packages:
 
   '@floating-ui/vue@1.1.6':
     resolution: {integrity: sha512-XFlUzGHGv12zbgHNk5FN2mUB7ROul3oG2ENdTpWdE+qMFxyNxWSRmsoyhiEnpmabNm6WnUvR1OvJfUfN4ojC1A==}
+
+  '@formkit/auto-animate@0.8.2':
+    resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
 
   '@fortawesome/fontawesome-common-types@6.7.2':
     resolution: {integrity: sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==}
@@ -2292,6 +2310,9 @@ packages:
   jiti@2.4.2:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
+
+  js-confetti@0.12.0:
+    resolution: {integrity: sha512-1R0Akxn3Zn82pMqW65N1V2NwKkZJ75bvBN/VAb36Ya0YHwbaSiAJZVRr/19HBxH/O8x2x01UFAbYI18VqlDN6g==}
 
   js-levenshtein@1.1.6:
     resolution: {integrity: sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==}
@@ -4233,6 +4254,10 @@ snapshots:
       '@babylonjs/core': 7.42.0
       babylonjs-gltf2interface: 7.42.0
 
+  '@blockly/theme-dark@7.0.10(blockly@11.2.0)':
+    dependencies:
+      blockly: 11.2.0
+
   '@cloudflare/kv-asset-handler@0.3.4':
     dependencies:
       mime: 3.0.0
@@ -4408,6 +4433,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@formkit/auto-animate@0.8.2': {}
 
   '@fortawesome/fontawesome-common-types@6.7.2': {}
 
@@ -6339,6 +6366,8 @@ snapshots:
   jiti@1.21.7: {}
 
   jiti@2.4.2: {}
+
+  js-confetti@0.12.0: {}
 
   js-levenshtein@1.1.6: {}
 

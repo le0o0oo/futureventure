@@ -60,6 +60,7 @@ function runSequence(seq: string) {
             <Button @click="runSequence('all')">All</Button>
             <Button @click="runSequence('intro')">Intro</Button>
             <Button @click="runSequence('firstTask')">First task</Button>
+            <Button @click="runSequence('traffic_light')">First task</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -7,15 +7,14 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: [
-        "@babylonjs/havok",
-        "@babylonjs/loaders",
-        "babylonjs-loaders",
-        "@vueuse/nuxt",
-      ],
+      exclude: ["@babylonjs/havok", "@babylonjs/loaders", "babylonjs-loaders"],
     },
   },
-  css: ["~/assets/css/tailwind.css", "~/assets/css/styles.css"],
+  css: [
+    "~/assets/css/tailwind.css",
+    "~/assets/css/styles.css",
+    "~/assets/css/blockly_styles.css",
+  ],
 
   runtimeConfig: {
     public: {
@@ -38,6 +37,8 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "shadcn-nuxt",
     "nuxt-svgo",
+    "@vueuse/nuxt",
+    "@formkit/auto-animate",
   ],
   shadcn: {
     prefix: "",
