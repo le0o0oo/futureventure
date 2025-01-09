@@ -5,13 +5,7 @@ import type Engine from "~/components/gameLogic/Engine";
 export const useSharedData = defineStore({
   id: "sharedDataStore",
   state: () => ({
-    models: null as Models | null,
+    cameraInSight: false,
   }),
-  actions: {
-    initModels(game: Engine): Models {
-      this.models = new Models(game);
-
-      return this.models;
-    },
-  },
+  actions: {},
 });

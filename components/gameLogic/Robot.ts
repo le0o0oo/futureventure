@@ -3,6 +3,7 @@ import type Engine from "./Engine";
 import funcs from "~/utils/generalFuncs";
 import Models from "./Models";
 import interactionManager from "~/utils/interactionManager";
+import utilsMeshes from "~/utils/utilsMeshes";
 
 const config = useRuntimeConfig();
 
@@ -41,6 +42,8 @@ class Player {
   constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
     this.game = game;
     this.models = new Models(game);
+
+    const sharedData = useSharedData();
     const playerMesh = meshLoaderResult.meshes[0];
     playerMesh!.rotate(
       BABYLON.Axis.Y,
@@ -48,6 +51,8 @@ class Player {
       BABYLON.Space.WORLD
     );
     this.mesh = playerMesh as BABYLON.Mesh;
+    //@ts-ignore
+    utilsMeshes.currentPlayer = this.mesh;
 
     // Player mesh setup
     playerMesh?.scaling.setAll(0.2);
@@ -84,6 +89,8 @@ class Player {
         debugDraw: false,
         debugTimeout: 50,
       }).hasHit;
+      if (sharedData.cameraInSight != this.inSight)
+        sharedData.cameraInSight = this.inSight;
 
       this.updateRaycastRotation();
       playerAggregate.body.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
@@ -148,13 +155,13 @@ class Player {
   private detectInteractable() {
     // Projects a "box" made with raycasts like this
     /* 
-    --------------
-    |            |
-    |            |
-    |      o     | <- This is the player
-    |            |
-    |            |
-    --------------
+    ---------------
+    |             |
+    |             |
+    |      o      | <- This is the player
+    |             |
+    |             |
+    ---------------
     */
     const boxOffset = 0.6;
     const deeBug = false;
@@ -221,7 +228,11 @@ class Player {
     } else if (topHit?.pickedMesh) {
       if (interactionManager.isSpecialMesh(topHit.pickedMesh.name))
         interactionManager.handleMesh(topHit.pickedMesh);
-    } else this.tasksStore.showMessage = false;
+    } else {
+      if (this.tasksStore.showMessage) this.tasksStore.showMessage = false;
+      if (this.tasksStore.doingTask) this.tasksStore.doingTask = false;
+      if (this.tasksStore.showMinigame) this.tasksStore.showMinigame = false;
+    }
 
     if (deeBug) {
       let rayTopHelper = new BABYLON.RayHelper(rayTop);
@@ -369,7 +380,7 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
       }
 
-      this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );

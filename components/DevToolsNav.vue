@@ -56,8 +56,10 @@ function runSequence(seq: string) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Sequenze</DialogTitle>
-          <DialogDescription>
+          <DialogDescription class="flex gap-2">
+            <Button @click="runSequence('all')">All</Button>
             <Button @click="runSequence('intro')">Intro</Button>
+            <Button @click="runSequence('firstTask')">First task</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

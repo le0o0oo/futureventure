@@ -56,4 +56,8 @@ async function moveCamera(data: {
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export default { degToRad, radToDeg, moveCamera, delay };
+function atan2FromPoint(x0: number, y0: number, x: number, y: number) {
+  return Math.atan2(y - y0, x - x0);
+}
+
+export default { degToRad, radToDeg, moveCamera, delay, atan2FromPoint };

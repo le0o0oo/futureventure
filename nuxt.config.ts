@@ -7,7 +7,12 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: ["@babylonjs/havok", "@babylonjs/loaders", "babylonjs-loaders"],
+      exclude: [
+        "@babylonjs/havok",
+        "@babylonjs/loaders",
+        "babylonjs-loaders",
+        "@vueuse/nuxt",
+      ],
     },
   },
   css: ["~/assets/css/tailwind.css", "~/assets/css/styles.css"],

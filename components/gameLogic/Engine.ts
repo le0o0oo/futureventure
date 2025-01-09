@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs";
 import HavokPhysics from "@babylonjs/havok";
 import { type HavokPhysicsWithBindings } from "@babylonjs/havok";
+import type Models from "./Models";
 
 class Engine {
   engine: BABYLON.Engine;
@@ -11,6 +12,8 @@ class Engine {
 
   shadowGenerator?: BABYLON.ShadowGenerator;
   light?: BABYLON.DirectionalLight;
+
+  models?: Models;
 
   private cameras: BABYLON.Camera[] | BABYLON.FreeCamera[] = [];
 
@@ -23,6 +26,8 @@ class Engine {
   }
 
   constructor(private canvas: HTMLCanvasElement) {
+    const tasksStore = useTasksStore();
+
     this.engine = new BABYLON.Engine(this.canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
@@ -55,6 +60,7 @@ class Engine {
     window.addEventListener("resize", () => this.handleResize());
     canvas.focus();
     canvas.onblur = () => {
+      if (tasksStore.showMinigame) return;
       console.log("Focus is lost");
       canvas.focus();
     };

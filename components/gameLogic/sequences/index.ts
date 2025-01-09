@@ -1,6 +1,7 @@
 import type Engine from "../Engine";
 
 import introSequence from "./intro";
+import firstTask from "./intro/firstTask";
 
 class Sequences {
   engine: Engine;
@@ -9,8 +10,16 @@ class Sequences {
     this.engine = engine;
   }
 
-  intro() {
-    introSequence(this.engine);
+  async all() {
+    await this.intro();
+    await this.firstTask();
+  }
+
+  async intro() {
+    await introSequence(this.engine);
+  }
+  async firstTask() {
+    await firstTask(this.engine);
   }
 }
 

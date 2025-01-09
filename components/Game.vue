@@ -4,6 +4,7 @@ import * as gameState from "~/stores/engine";
 import funcs from "~/utils/generalFuncs";
 import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
+import utilsMeshes from "~/utils/utilsMeshes";
 
 import Engine from "~/components/gameLogic/Engine";
 import Player from "~/components/gameLogic/Robot";
@@ -20,6 +21,7 @@ onMounted(async () => {
   const game = new Engine(canvas.value);
   await game.initPhysics();
   game.initLighting();
+  utilsMeshes.initGame(game);
 
   const sequences = new Sequences(game);
   // new BABYLON.HemisphericLight(
@@ -30,6 +32,8 @@ onMounted(async () => {
 
   const models = new Models(game);
   await models.LoadMap(true);
+
+  game.models = models;
 
   const scene = game.scene;
 

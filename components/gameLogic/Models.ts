@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs";
 import type Engine from "./Engine";
 import { consola } from "consola";
+import * as specialMeshes from "~/utils/specialMeshes";
 
 const config = useRuntimeConfig();
 
@@ -120,6 +121,8 @@ class Models {
     if (this.game.shadowGenerator)
       this.game.shadowGenerator!.getShadowMap()!.renderList = [];
 
+    specialMeshes.reset();
+
     this.mapModels.meshes.forEach((mesh, index) => {
       //console.log(mesh.name, mesh.id);
       //if (mesh.name == "traffic_light") consola.info("trovato semaforfo");
@@ -128,8 +131,12 @@ class Models {
       mesh.receiveShadows = true;
       const doCheck: boolean = index != 0;
 
+      mesh.id += "_" + index;
+
       if (this.game.shadowGenerator)
         this.game.shadowGenerator!.getShadowMap()!.renderList!.push(mesh);
+
+      specialMeshes.addSpecialMesh(mesh.name, mesh);
 
       if (this.game.usingPhysics && doCheck) {
         if (!accurate) {
