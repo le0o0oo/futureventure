@@ -73,7 +73,7 @@ onMounted(() => {
               >
               <TableCell class="font-bold text-lg"
                 >+{{
-                  gameState.minigames.traffic_light.implemented_updates.status
+                  gameState.minigames.traffic_light.fixed_microprocessor.status
                     ? gameState.minigames.traffic_light.fixed_microprocessor
                         .reward
                     : 0
@@ -104,7 +104,7 @@ onMounted(() => {
               >
               <TableCell class="font-bold text-lg"
                 >+{{
-                  gameState.minigames.traffic_light.implemented_updates.status
+                  gameState.minigames.traffic_light.fixed_code.status
                     ? gameState.minigames.traffic_light.fixed_code.reward
                     : 0
                 }}</TableCell
