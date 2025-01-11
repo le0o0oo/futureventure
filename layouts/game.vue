@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 //@ts-ignore
 import IconTrafficLight from "~/assets/icons/icon-traffic-light.svg";
-import { Wrench, ClipboardList, Clock } from "lucide-vue-next";
+import { Wrench, ClipboardList, Clock, Check } from "lucide-vue-next";
 import { ref, onMounted, onUnmounted } from "vue";
 
 const isDev = ref(import.meta.dev);
@@ -89,12 +89,18 @@ function doTask() {
             <div class="flex items-center mb-2">
               <IconTrafficLight class="text-5xl" />
               <div class="relative ml-2 leading-none text-left">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2" v-auto-animate>
                   <Badge variant="outline" class="p-1 px-2"
                     ><ClipboardList class="size-4 mr-1" />Task</Badge
                   >
-                  <Badge variant="secondary">
+                  <Badge
+                    variant="secondary"
+                    v-if="!tasksStore.taskTracker.completed"
+                  >
                     <Clock class="size-4 mr-2" />In attesa
+                  </Badge>
+                  <Badge class="bg-green-700 text-white" v-else>
+                    <Check class="size-4 mr-2" />Completato
                   </Badge>
                 </div>
                 <p class="text-xl">Ripara semaforo</p>

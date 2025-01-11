@@ -6,8 +6,13 @@ import utilsMeshes from "~/utils/utilsMeshes";
 type minigameType = "" | "traffic_light";
 
 // https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-success.oga?ref_type=heads
-const taskTrackerSound = new Howl({
-  src: ["/sounds/notification.mp3"],
+const taskTracker_leave = new Howl({
+  src: ["/sounds/task-tracker_leave.oga"],
+});
+
+// https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-partial.oga?ref_type=head
+const taskTracker_enter = new Howl({
+  src: ["/sounds/task-tracker_enter.mp3"],
 });
 
 export const useTasksStore = defineStore({
@@ -24,6 +29,7 @@ export const useTasksStore = defineStore({
 
     taskTracker: {
       show: false,
+      completed: false,
       type: "" as minigameType,
     },
   }),
@@ -35,7 +41,7 @@ export const useTasksStore = defineStore({
       this.taskTracker.type = type;
       this.taskTracker.show = true;
 
-      taskTrackerSound.play();
+      taskTracker_enter.play();
 
       if (type == "traffic_light") {
         const randomIndex = Math.floor(
@@ -64,11 +70,17 @@ export const useTasksStore = defineStore({
         specialMeshes.meshes.target = null;
       }
 
-      this.inProgress = true;
-      this.type = "";
+      taskTracker_leave.play();
+      this.taskTracker.completed = true;
 
-      this.taskTracker.type = this.type;
-      this.taskTracker.show = false;
+      setTimeout(() => {
+        this.inProgress = false;
+        this.type = "";
+
+        this.taskTracker.type = this.type;
+        this.taskTracker.show = false;
+        this.taskTracker.completed = false;
+      }, 1800);
     },
   },
 });
