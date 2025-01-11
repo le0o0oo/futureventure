@@ -328,6 +328,7 @@ class Player {
   }
 
   private doMovement() {
+    const delta = this.game.engine.getDeltaTime() / 10;
     // Doing all of this because the rotation on left and right is not 90, so when i apply a force forward, i get diagonal movement.
     // To fix it, I'm applying also horizontal movement
 
@@ -340,7 +341,8 @@ class Player {
         0
       );
       this.mesh!.rotation = this.targetRotation;
-      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit)
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );
@@ -355,7 +357,8 @@ class Player {
         0
       );
       this.mesh!.rotation = this.targetRotation;
-      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit)
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
 
       // this.mesh?.moveWithCollisions(
       //   new BABYLON.Vector3(0, 0, -config.public.speed)
@@ -370,7 +373,7 @@ class Player {
 
         // Apply horizontal force to prevent diagonal movement
         if (!this.raycastHit)
-          this.mesh?.movePOV(config.public.speed * -1, 0, 0);
+          this.mesh?.movePOV(config.public.speed * -1 * delta, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed)
         // );
@@ -380,7 +383,8 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
       }
 
-      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit)
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );
@@ -393,7 +397,8 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
-        if (!this.raycastHit) this.mesh?.movePOV(config.public.speed, 0, 0);
+        if (!this.raycastHit)
+          this.mesh?.movePOV(config.public.speed * delta, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed * -1)
         // );
@@ -403,7 +408,8 @@ class Player {
         this.mesh!.rotation = this.targetRotation;
       }
 
-      if (!this.raycastHit) this.mesh.movePOV(0, 0, config.public.speed * -1);
+      if (!this.raycastHit)
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
 
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
