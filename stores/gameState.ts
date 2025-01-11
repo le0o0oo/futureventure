@@ -1,9 +1,15 @@
 import { defineStore } from "pinia";
 
+/* PROGRESS
+ 0 - Player completely new, never done a task
+ 1 - Player has done the first task
+*/
+
 export const useGameStateStore = defineStore({
   id: "gameStateStore",
   state: () => ({
     xp: 0,
+    progress: 0,
     minigames: {
       traffic_light: {
         fixed_microprocessor: {

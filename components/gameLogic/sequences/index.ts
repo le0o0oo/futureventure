@@ -4,6 +4,7 @@ import introSequence from "./intro";
 import firstTask from "./intro/firstTask";
 
 import traffic_light from "./traffic_light";
+import second_task from "./second_task";
 
 class Sequences {
   engine: Engine;
@@ -25,6 +26,10 @@ class Sequences {
   }
   async traffic_light() {
     traffic_light(this.engine);
+  }
+
+  async second_task() {
+    await second_task(this.engine);
   }
 }
 
