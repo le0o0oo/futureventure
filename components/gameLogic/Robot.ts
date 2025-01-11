@@ -34,6 +34,8 @@ class Player {
 
   private inSight: boolean = false;
 
+  private delta: number = 0;
+
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
@@ -75,6 +77,8 @@ class Player {
 
     this.registerKeybinds();
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
+      this.delta = this.game.engine.getDeltaTime() / 10 / 2;
+
       this.inSight = !this.models.ProjectRaycast({
         start: new BABYLON.Vector3(
           this.mesh.position.x + this.raycastXOffset,
@@ -274,7 +278,7 @@ class Player {
     camera.position = BABYLON.Vector3.Lerp(
       currentCameraPosition,
       targetPosition,
-      0.1
+      0.1 * this.delta
     );
 
     const targetRotation = this.inSight
@@ -286,7 +290,7 @@ class Player {
       //@ts-ignore
       camera.rotation.x,
       targetRotation,
-      0.1
+      0.1 * this.delta
     );
   }
 
@@ -328,7 +332,6 @@ class Player {
   }
 
   private doMovement() {
-    const delta = this.game.engine.getDeltaTime() / 10;
     // Doing all of this because the rotation on left and right is not 90, so when i apply a force forward, i get diagonal movement.
     // To fix it, I'm applying also horizontal movement
 
@@ -342,7 +345,7 @@ class Player {
       );
       this.mesh!.rotation = this.targetRotation;
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );
@@ -358,7 +361,7 @@ class Player {
       );
       this.mesh!.rotation = this.targetRotation;
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
 
       // this.mesh?.moveWithCollisions(
       //   new BABYLON.Vector3(0, 0, -config.public.speed)
@@ -373,7 +376,7 @@ class Player {
 
         // Apply horizontal force to prevent diagonal movement
         if (!this.raycastHit)
-          this.mesh?.movePOV(config.public.speed * -1 * delta, 0, 0);
+          this.mesh?.movePOV(config.public.speed * -1 * this.delta, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed)
         // );
@@ -384,7 +387,7 @@ class Player {
       }
 
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
       // );
@@ -398,7 +401,7 @@ class Player {
 
         // Apply horizontal force to prevent diagonal movement
         if (!this.raycastHit)
-          this.mesh?.movePOV(config.public.speed * delta, 0, 0);
+          this.mesh?.movePOV(config.public.speed * this.delta, 0, 0);
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace(config.public.speed * -1)
         // );
@@ -409,7 +412,7 @@ class Player {
       }
 
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * delta);
+        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
 
       // this.mesh?.moveWithCollisions(
       //   this.mesh.forward.scaleInPlace(config.public.speed)
