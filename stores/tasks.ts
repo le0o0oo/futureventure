@@ -42,7 +42,6 @@ export const useTasksStore = defineStore({
           Math.random() * specialMeshes.meshes.traffic_light.length
         );
 
-        console.log(specialMeshes.meshes.traffic_light);
         const mesh = specialMeshes.meshes.traffic_light[randomIndex];
 
         specialMeshes.meshes.target = mesh!;
@@ -56,6 +55,20 @@ export const useTasksStore = defineStore({
 
         await utilsMeshes.arrow.spawn();
       }
+    },
+
+    clearTasks() {
+      if (specialMeshes.meshes.target) {
+        utilsMeshes.arrow.despawn();
+        specialMeshes.meshes.target.renderOverlay = false;
+        specialMeshes.meshes.target = null;
+      }
+
+      this.inProgress = true;
+      this.type = "";
+
+      this.taskTracker.type = this.type;
+      this.taskTracker.show = false;
     },
   },
 });

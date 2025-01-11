@@ -4,6 +4,7 @@ import JSConfetti from "js-confetti";
 import assistant from "~/utils/assistant";
 
 const gameState = useGameStateStore();
+const tasksStore = useTasksStore();
 
 const total_xp = ref(0);
 
@@ -26,6 +27,10 @@ onMounted(() => {
   });
 
   assistant.say("Congratulazioni, operatore!");
+});
+
+onBeforeUnmount(() => {
+  tasksStore.clearTasks();
 });
 </script>
 

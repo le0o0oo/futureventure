@@ -6,6 +6,8 @@ import { buttonVariants } from "~/components/ui/button";
 const tasksStore = useTasksStore();
 const gameState = useGameStateStore();
 
+const mainDiv = ref<HTMLDivElement>();
+
 const showModal = ref(false);
 
 const cStep = ref(0);
@@ -14,6 +16,7 @@ const showQuitModal = ref(false);
 
 onMounted(() => {
   showModal.value = true;
+  mainDiv.value?.focus();
 
   eventBus.dispatchEvent(
     new CustomEvent("runScene", { detail: "traffic_light" } as CustomEventInit)
@@ -31,6 +34,7 @@ function finished() {}
 <template>
   <div
     class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-background/80 z-50"
+    ref="mainDiv"
     v-auto-animate
   >
     <Card class="max-w-7xl h-[80vh] w-full" v-if="showModal">

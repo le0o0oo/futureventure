@@ -15,6 +15,8 @@ class Engine {
 
   models?: Models;
 
+  canvasElement: HTMLCanvasElement;
+
   private cameras: BABYLON.Camera[] | BABYLON.FreeCamera[] = [];
 
   private renderScene() {
@@ -34,6 +36,8 @@ class Engine {
     });
     this.scene = new BABYLON.Scene(this.engine);
     this.scene.collisionsEnabled = true;
+
+    this.canvasElement = canvas;
 
     // Skybox
     var skybox = BABYLON.MeshBuilder.CreateBox(

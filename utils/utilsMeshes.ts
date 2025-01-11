@@ -26,25 +26,37 @@ const meshes = {
         )
       ).meshes[0];
 
-      arrowMeshResult!.isPickable = true;
-      arrowMeshResult!.receiveShadows = true;
+      arrowMeshResult!.isPickable = false;
+      arrowMeshResult!.receiveShadows = false;
 
       meshes.arrow.model = arrowMeshResult!;
 
-      meshes.game!.scene.onBeforeRenderObservable.add(() => {
-        arrowMeshResult!.position = meshes.currentPlayer!.position.clone();
-        if (sharedData.cameraInSight) arrowMeshResult!.position.y += 2;
-        else arrowMeshResult!.position.y += 0.8;
+      meshes.arrow.observer = meshes.game!.scene.onBeforeRenderObservable.add(
+        () => {
+          arrowMeshResult!.position = meshes.currentPlayer!.position.clone();
+          if (sharedData.cameraInSight) arrowMeshResult!.position.y += 2;
+          else arrowMeshResult!.position.y += 0.8;
 
-        const targetPosition = new BABYLON.Vector3(
-          specialMeshes.meshes.target!.position.x * -1,
-          arrowMeshResult!.position.y,
-          specialMeshes.meshes.target!.position.z
-        );
+          const targetPosition = new BABYLON.Vector3(
+            specialMeshes.meshes.target!.position.x * -1,
+            arrowMeshResult!.position.y,
+            specialMeshes.meshes.target!.position.z
+          );
 
-        arrowMeshResult?.lookAt(targetPosition);
-      });
+          arrowMeshResult?.lookAt(targetPosition);
+        }
+      );
     },
+
+    despawn() {
+      meshes.game!.scene.onBeforeRenderObservable.remove(meshes.arrow.observer);
+      if (meshes.arrow.model) {
+        meshes.arrow.model.dispose();
+        meshes.arrow.model = null;
+      }
+    },
+
+    observer: null as BABYLON.Observer<BABYLON.Scene> | null,
     model: null as BABYLON.AbstractMesh | null,
   },
 

@@ -26,7 +26,8 @@ function doTask() {
   tasksStore.showMessage = false;
   console.log("task");
 
-  tasksStore.currentMinigame = "traffic_light";
+  if (tasksStore.type == "traffic_light")
+    tasksStore.currentMinigame = "traffic_light";
   tasksStore.showMinigame = true;
 }
 </script>
