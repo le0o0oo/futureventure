@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     public: {
       inDev: true, // Different from import.meta.dev
 
-      speed: 0.02,
+      speed: 0.035,
       keybinds: {
         up: ["w", "W", "ArrowUp"],
         down: ["s", "S", "ArrowDown"],

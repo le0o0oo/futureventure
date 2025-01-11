@@ -139,6 +139,7 @@ class Models {
       mesh.isPickable = true;
       mesh.checkCollisions = true;
       mesh.receiveShadows = true;
+
       const doCheck: boolean = index != 0;
 
       mesh.id += "_" + index;
