@@ -10,8 +10,18 @@ class Models {
   private accurate: boolean = false;
   private physicsAggregates: BABYLON.PhysicsAggregate[] = []; // Store references to physics aggregates
 
+  private invisibleBaterial: BABYLON.StandardMaterial;
+
   constructor(private game: Engine) {
     this.game = game;
+
+    this.invisibleBaterial = new BABYLON.StandardMaterial(
+      "invisible_material",
+      game.scene
+    );
+    this.invisibleBaterial.diffuseColor.set(0, 0, 0); // Black color
+    this.invisibleBaterial.specularColor.set(0, 0, 0); // No specular highlight
+    this.invisibleBaterial.alpha = 0; // Fully transparent
   }
 
   CreateGround(props = { size: { width: 100, height: 100 } }) {

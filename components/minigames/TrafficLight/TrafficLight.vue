@@ -91,7 +91,9 @@ function finished() {}
           <AlertDialogDescription> Perderai XP </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Annulla</AlertDialogCancel>
+          <AlertDialogCancel @click="showQuitModal = false"
+            >Annulla</AlertDialogCancel
+          >
           <AlertDialogAction
             :class="buttonVariants({ variant: 'destructive' })"
             @click="

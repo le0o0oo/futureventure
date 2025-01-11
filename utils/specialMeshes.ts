@@ -1,4 +1,9 @@
-import { type AbstractMesh } from "babylonjs";
+import {
+  type AbstractMesh,
+  type StandardMaterial,
+  type Material,
+} from "babylonjs";
+import utilsMeshes from "./utilsMeshes";
 
 const meshes = {
   target: null as AbstractMesh | null,
@@ -6,9 +11,24 @@ const meshes = {
   traffic_light: [] as AbstractMesh[],
 };
 
+let invis_material_cache = null as StandardMaterial | null;
+
+function getInvisibleMaterial(): StandardMaterial {
+  if (invis_material_cache) {
+    return invis_material_cache;
+  } else {
+    //@ts-ignore
+    invis_material_cache =
+      utilsMeshes.game!.scene.getMaterialByName("invisible_material")!;
+
+    return invis_material_cache!;
+  }
+}
+
 function addSpecialMesh(name: string, mesh: AbstractMesh) {
   if (name == "traffic_light") {
     meshes.traffic_light.push(mesh);
+    mesh.material = getInvisibleMaterial();
   }
 }
 
