@@ -77,7 +77,7 @@ class Player {
 
     this.registerKeybinds();
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
-      this.delta = this.game.engine.getDeltaTime() / 10 / 2;
+      this.delta = this.game.engine.getDeltaTime() / 20;
 
       this.inSight = !this.models.ProjectRaycast({
         start: new BABYLON.Vector3(

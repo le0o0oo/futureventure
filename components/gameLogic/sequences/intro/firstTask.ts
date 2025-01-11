@@ -12,11 +12,13 @@ export default async (game: Engine) => {
 
   assistant.say("Ecco il tuo primo incarico!", {
     duration: 4000,
+    icon: "normal",
   });
 
   await funcs.delay(3000);
 
   assistant.say("Vai nella direzione della freccia e ripara quel semaforo!", {
     duration: 4000,
+    icon: "normal",
   });
 };

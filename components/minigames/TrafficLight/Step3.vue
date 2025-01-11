@@ -26,7 +26,9 @@ onMounted(() => {
     emojis: ["🎉", "⚡️", "💥", "✨", "💫"],
   });
 
-  assistant.say("Congratulazioni, operatore!");
+  assistant.say("Congratulazioni, operatore!", {
+    icon: "happy",
+  });
 });
 
 onBeforeUnmount(() => {

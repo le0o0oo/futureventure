@@ -1,6 +1,8 @@
 import { toast } from "vue-sonner";
 import { Howl, Howler } from "howler";
 
+import ToastSkeleton from "~/components/ToastSkeleton.vue";
+
 const name = "Telly";
 
 // https://pixabay.com/sound-effects/notification-alert-269289/
@@ -11,14 +13,30 @@ const sound = new Howl({
 function say(
   text: string,
   options?: {
-    duration: number;
+    duration?: number;
+    icon?: "normal" | "greet" | "happy" | "none";
   }
 ) {
   sound.play();
-  toast.info(name, {
-    description: text,
-    duration: options?.duration,
-  });
+
+  if (!options) options = {};
+  if (!options.icon) options.icon = "none";
+
+  toast.custom(
+    markRaw(
+      h(ToastSkeleton, {
+        description: text, // Pass the description as a prop
+        assistantState: options.icon, // Pass the icon state as a prop
+      })
+    ),
+    {
+      duration: options?.duration,
+    }
+  );
+  // toast.info(name, {
+  //   description: text,
+  //   duration: options?.duration,
+  // });
 }
 
 export default { say };

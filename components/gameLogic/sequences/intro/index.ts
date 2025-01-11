@@ -36,6 +36,7 @@ export default async (game: Engine) => {
     "Benvenuto, Operatore. Io sono Telly, la tua assistente per questa esperienza.",
     {
       duration: 12000,
+      icon: "greet",
     }
   );
 
@@ -43,6 +44,7 @@ export default async (game: Engine) => {
 
   assistant.say("Farai tante cose, ma per ora sarai un robot", {
     duration: 5000,
+    icon: "normal",
   });
 
   camera.rotation.y = funcs.degToRad(180);
@@ -52,24 +54,28 @@ export default async (game: Engine) => {
 
   assistant.say("Muoviti con WASD o con le freccette ↑ → ↓ ← sulla tastiera", {
     duration: 5000,
+    icon: "normal",
   });
 
   await funcs.delay(7000);
 
   assistant.say("Per adesso sarai un robot tuttofare", {
     duration: 4000,
+    icon: "normal",
   });
 
   await funcs.delay(2900);
 
   assistant.say("A breve ti verranno assegnate diverse task da completare...", {
     duration: 4000,
+    icon: "normal",
   });
 
   await funcs.delay(3000);
 
   assistant.say("Non ti preoccupare, nulla di troppo complicato ;)", {
     duration: 4000,
+    icon: "normal",
   });
 
   await funcs.delay(5000);
