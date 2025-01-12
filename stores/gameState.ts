@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 /* PROGRESS
  0 - Player completely new, never done a task
  1 - Player has done the first task
+ 2 - Player has done the second task
 */
 
 export const useGameStateStore = defineStore({

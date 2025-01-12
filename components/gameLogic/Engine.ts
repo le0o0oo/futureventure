@@ -84,7 +84,7 @@ class Engine {
       new BABYLON.Vector3(0, 0, 0),
       this.scene
     );
-    skySun.direction = new BABYLON.Vector3(-0.797, -0.604, 0);
+    skySun.direction = new BABYLON.Vector3(0, -0.604, 0);
     skySun.intensity = 6;
     skySun.shadowEnabled = true;
     skySun.autoCalcShadowZBounds = true;

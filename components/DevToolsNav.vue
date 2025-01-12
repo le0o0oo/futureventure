@@ -68,6 +68,8 @@ function runSequence(seq: string) {
             <Button @click="runSequence('intro')">Intro</Button>
             <Button @click="runSequence('firstTask')">First task</Button>
             <Button @click="runSequence('second_task')">Second task</Button>
+            <span>-</span>
+            <Button @click="runSequence('basic_done')">Basic done</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -27,14 +27,15 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   tasksStore.clearTasks();
+  gameState.progress++;
 
   if (sharedData.runAllScenes)
     setTimeout(() => {
-      // eventBus.dispatchEvent(
-      //   new CustomEvent("runScene", {
-      //     detail: "second_task",
-      //   } as CustomEventInit)
-      // );
+      eventBus.dispatchEvent(
+        new CustomEvent("runScene", {
+          detail: "basic_done",
+        } as CustomEventInit)
+      );
     }, 3000);
 });
 </script>

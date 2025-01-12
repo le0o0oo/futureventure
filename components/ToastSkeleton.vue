@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="border-border border-2 p-5 bg-background rounded-lg">
+  <div class="border-border border-2 p-5 bg-background rounded-lg w-[356px]">
     <div class="flex items-center gap-3 w-full">
       <div class="w-full">
         <h3 class="font-bold text-xl">Telly</h3>
