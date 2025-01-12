@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Cable } from "lucide-vue-next";
+import { Cable, SatelliteDish } from "lucide-vue-next";
 
 const tasksStore = useTasksStore();
 </script>
@@ -11,6 +11,10 @@ const tasksStore = useTasksStore();
       v-if="tasksStore.type == 'traffic_light'"
     />
     <Cable class="w-full h-full" v-else-if="tasksStore.type == 'cables_fix'" />
+    <SatelliteDish
+      class="w-full h-full"
+      v-else-if="tasksStore.type == 'broken_antenna'"
+    />
   </div>
 </template>
 

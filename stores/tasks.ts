@@ -3,7 +3,7 @@ import { Howl } from "howler";
 import * as specialMeshes from "~/utils/specialMeshes";
 import utilsMeshes from "~/utils/utilsMeshes";
 
-type minigameType = "" | "traffic_light" | "cables_fix";
+type minigameType = "" | "traffic_light" | "cables_fix" | "broken_antenna";
 
 // https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-success.oga?ref_type=heads
 const taskTracker_leave = new Howl({
@@ -77,6 +77,7 @@ export const useTasksStore = defineStore({
         mesh!.overlayColor = new BABYLON.Color3(0, 1, 0);
 
         await utilsMeshes.arrow.spawn();
+      } else if (type == "broken_antenna") {
       }
     },
 
@@ -117,6 +118,12 @@ export const useTasksStore = defineStore({
             tracker_text: "Vai nella direzione della freccia",
             button_text: "Ripara",
             title_text: "Riparazione circuito",
+          };
+        case "broken_antenna":
+          return {
+            tracker_text: "Trova il drone e ripara l'antenna",
+            button_text: "Ripara",
+            title_text: "Antenna fuori uso",
           };
         default:
           return {

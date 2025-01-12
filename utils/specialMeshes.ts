@@ -10,6 +10,11 @@ const meshes = {
 
   traffic_light: [] as AbstractMesh[],
   cables_fix: [] as AbstractMesh[],
+
+  // there is only 1
+  drone_antenna: [] as AbstractMesh[],
+  // there is only 1
+  drone_spawn: [] as AbstractMesh[],
 };
 
 let invis_material_cache = null as StandardMaterial | null;
@@ -26,13 +31,20 @@ function getInvisibleMaterial(): StandardMaterial {
   }
 }
 
-function addSpecialMesh(name: string, mesh: AbstractMesh) {
-  if (name == "traffic_light") {
+function addSpecialMesh(name: string, mesh: AbstractMesh): boolean {
+  if (
+    name == "traffic_light" ||
+    name == "cables_fix" ||
+    name == "drone_antenna" ||
+    name == "drone_spawn"
+  ) {
     meshes[name].push(mesh);
     mesh.material = getInvisibleMaterial();
-  } else if (name == "cables_fix") {
-    meshes[name].push(mesh);
+
+    return true;
   }
+
+  return false;
 }
 
 function reset() {

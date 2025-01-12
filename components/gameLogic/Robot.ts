@@ -6,6 +6,7 @@ import interactionManager from "~/utils/interactionManager";
 import utilsMeshes from "~/utils/utilsMeshes";
 
 const config = useRuntimeConfig();
+const generalData = useGeneralStore();
 
 class Player {
   private game: Engine;
@@ -108,7 +109,7 @@ class Player {
       const generalData = useGeneralStore();
 
       if (generalData.cameraFollow) this.focusCameraOnPlayer();
-      this.doMovement();
+      if (generalData.activeControls) this.doMovement();
       this.detectInteractable();
     });
   }

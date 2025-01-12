@@ -39,6 +39,7 @@ export default defineNuxtConfig({
     "nuxt-svgo",
     "@vueuse/nuxt",
     "@formkit/auto-animate",
+    "@nuxt/icon",
   ],
   shadcn: {
     prefix: "",

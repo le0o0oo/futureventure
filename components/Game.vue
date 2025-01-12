@@ -5,9 +5,10 @@ import funcs from "~/utils/generalFuncs";
 import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
 import utilsMeshes from "~/utils/utilsMeshes";
+import { meshes as specialMeshes } from "~/utils/specialMeshes";
 
 import Engine from "~/components/gameLogic/Engine";
-import Player from "~/components/gameLogic/Robot";
+// import Player from "~/components/gameLogic/Robot";
 import Models from "~/components/gameLogic/Models";
 import Sequences from "./gameLogic/sequences";
 
@@ -17,6 +18,7 @@ const loading = useLoadingStore();
 //const sharedData = useSharedData();
 
 onMounted(async () => {
+  const Player = (await import("~/components/gameLogic/Robot")).default;
   // Load the 3D engine
   const game = new Engine(canvas.value);
   await game.initPhysics();
@@ -42,6 +44,8 @@ onMounted(async () => {
     new BABYLON.Vector3(0, 10, 0),
     scene
   ) as BABYLON.FreeCamera;
+
+  camera.attachControl(canvas.value, true);
 
   // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
   game.addCamera(camera);

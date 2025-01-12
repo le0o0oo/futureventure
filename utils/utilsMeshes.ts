@@ -60,6 +60,33 @@ const meshes = {
     model: null as BABYLON.AbstractMesh | null,
   },
 
+  drone: {
+    spawn: async (): Promise<BABYLON.AbstractMesh> => {
+      const sharedData = useSharedData();
+      const meshResult = (
+        await BABYLON.SceneLoader.ImportMeshAsync(
+          "",
+          "/models/",
+          "drone.glb",
+          game!.scene
+        )
+      ).meshes[0];
+
+      meshResult!.isPickable = true;
+      meshResult!.receiveShadows = true;
+
+      meshes.arrow.model = meshResult!;
+
+      if (game!.shadowGenerator)
+        game!.shadowGenerator!.getShadowMap()!.renderList!.push(meshResult!);
+
+      return meshResult!;
+    },
+    despawn: () => {},
+
+    model: null as BABYLON.AbstractMesh | null,
+  },
+
   currentPlayer: null as BABYLON.AbstractMesh | null,
 };
 

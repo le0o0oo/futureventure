@@ -136,18 +136,19 @@ class Models {
     this.mapModels.meshes.forEach((mesh, index) => {
       //console.log(mesh.name, mesh.id);
       //if (mesh.name == "traffic_light") consola.info("trovato semaforfo");
+
+      const isSpecial = specialMeshes.addSpecialMesh(mesh.name, mesh);
+
       mesh.isPickable = true;
       mesh.checkCollisions = true;
-      mesh.receiveShadows = true;
+      if (!isSpecial) mesh.receiveShadows = true;
 
       const doCheck: boolean = index != 0;
 
       mesh.id += "_" + index;
 
-      if (this.game.shadowGenerator)
+      if (this.game.shadowGenerator && !isSpecial)
         this.game.shadowGenerator!.getShadowMap()!.renderList!.push(mesh);
-
-      specialMeshes.addSpecialMesh(mesh.name, mesh);
 
       if (this.game.usingPhysics && doCheck) {
         if (!accurate) {
@@ -179,7 +180,7 @@ class Models {
         }
       }
 
-      if (mesh.material) {
+      if (mesh.material && !isSpecial) {
         if (
           mesh.material instanceof BABYLON.PBRMaterial ||
           mesh.material instanceof BABYLON.StandardMaterial
@@ -189,7 +190,7 @@ class Models {
         }
       }
 
-      if (this.game.usingPostProcess)
+      if (this.game.usingPostProcess && !isSpecial)
         this.game.shadowGenerator!.addShadowCaster(mesh);
     });
     consola.info(

@@ -6,6 +6,7 @@ import { buttonVariants } from "./ui/button";
 
 const colorMode = useColorMode();
 const sharedDataStore = useSharedData();
+const generalData = useGeneralStore();
 
 const openedModal = ref(false);
 
@@ -50,6 +51,9 @@ function runSequence(seq: string) {
     <Button @click="devtools.toggle()">Toggle inspector</Button>
     <Button @click="fixDevtools()">Fix devtools</Button>
     <Button @click="openGlbFile()">Carica mappa (.glb)</Button>
+    <Button @click="generalData.cameraFollow = !generalData.cameraFollow"
+      >Toggle camera follow</Button
+    >
     <Dialog v-model:open="openedModal">
       <DialogTrigger :class="buttonVariants({ variant: 'default' })">
         Sequenze
