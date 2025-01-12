@@ -118,10 +118,10 @@ class Player_robot {
       const generalData = useGeneralStore();
 
       if (generalData.cameraFollow) this.focusCameraOnPlayer();
-      //if (generalData.activeControls) this.doMovement();
+      if (generalData.activeControls) this.doMovement();
       this.detectInteractable();
 
-      playerMesh!.rotation.x = funcs.degToRad(10);
+      playerMesh!.rotation.x = funcs.degToRad(-25);
     });
   }
 
@@ -411,17 +411,17 @@ class Player_robot {
 
     if (this.keyStatus.left) {
       if (!this.movingUp) {
-        this.targetZRotation = funcs.degToRad(-90 - 45);
+        this.targetZRotation = funcs.degToRad(-90);
         this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
-        if (!this.raycastHit)
-          this.mesh?.movePOV(
-            (config.public.speed + this.droneSpeedAdd) * -1 * this.delta,
-            0,
-            0
-          );
+        // if (!this.raycastHit)
+        //   this.mesh?.movePOV(
+        //     (config.public.speed + this.droneSpeedAdd) * -1 * this.delta,
+        //     0,
+        //     0
+        //   );
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace((config.public.speed + this.droneSpeedAdd))
         // );
@@ -444,17 +444,17 @@ class Player_robot {
 
     if (this.keyStatus.right) {
       if (!this.movingUp) {
-        this.targetZRotation = funcs.degToRad(90 + 45);
+        this.targetZRotation = funcs.degToRad(90);
         this.targetRotation = new BABYLON.Vector3(0, this.targetZRotation, 0);
         this.mesh!.rotation = this.targetRotation;
 
         // Apply horizontal force to prevent diagonal movement
-        if (!this.raycastHit)
-          this.mesh?.movePOV(
-            (config.public.speed + this.droneSpeedAdd) * this.delta,
-            0,
-            0
-          );
+        // if (!this.raycastHit)
+        //   this.mesh?.movePOV(
+        //     (config.public.speed + this.droneSpeedAdd) * this.delta,
+        //     0,
+        //     0
+        //   );
         // this.mesh?.moveWithCollisions(
         //   this.mesh.right.scaleInPlace((config.public.speed + this.droneSpeedAdd) * -1)
         // );
