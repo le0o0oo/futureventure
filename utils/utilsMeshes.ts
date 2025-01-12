@@ -13,7 +13,7 @@ const meshes = {
   game: game,
 
   arrow: {
-    spawn: async () => {
+    spawn: async (inverted?: boolean) => {
       if (meshes.arrow.model) return;
 
       const sharedData = useSharedData();
@@ -38,7 +38,7 @@ const meshes = {
           else arrowMeshResult!.position.y += 0.8;
 
           const targetPosition = new BABYLON.Vector3(
-            specialMeshes.meshes.target!.position.x * -1,
+            specialMeshes.meshes.target!.position.x * (inverted ? 1 : -1),
             arrowMeshResult!.position.y,
             specialMeshes.meshes.target!.position.z
           );
@@ -74,8 +74,6 @@ const meshes = {
 
       meshResult!.isPickable = true;
       meshResult!.receiveShadows = true;
-
-      meshes.arrow.model = meshResult!;
 
       if (game!.shadowGenerator)
         game!.shadowGenerator!.getShadowMap()!.renderList!.push(meshResult!);

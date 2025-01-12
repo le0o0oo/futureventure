@@ -8,12 +8,15 @@ const tasksStore = useTasksStore();
   <div class="w-[48px] h-full">
     <SvgoIconTrafficLight
       class="text-5xl"
-      v-if="tasksStore.type == 'traffic_light'"
+      v-if="tasksStore.taskTracker.type == 'traffic_light'"
     />
-    <Cable class="w-full h-full" v-else-if="tasksStore.type == 'cables_fix'" />
+    <Cable
+      class="w-full h-full"
+      v-else-if="tasksStore.taskTracker.type == 'cables_fix'"
+    />
     <SatelliteDish
       class="w-full h-full"
-      v-else-if="tasksStore.type == 'broken_antenna'"
+      v-else-if="tasksStore.taskTracker.type == 'broken_antenna'"
     />
   </div>
 </template>

@@ -82,9 +82,4 @@ export default async (game: Engine) => {
   await funcs.delay(4000);
 
   tasksStore.setTaskTracker("broken_antenna");
-
-  assistant.say("...eeee si è rotta", {
-    duration: 3000,
-    icon: "normal",
-  });
 };

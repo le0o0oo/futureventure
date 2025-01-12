@@ -5,6 +5,7 @@ import funcs from "~/utils/generalFuncs";
 import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
 import utilsMeshes from "~/utils/utilsMeshes";
+import { Howl } from "howler";
 import { meshes as specialMeshes } from "~/utils/specialMeshes";
 
 import Engine from "~/components/gameLogic/Engine";
@@ -16,6 +17,11 @@ const canvas = ref();
 const config = useRuntimeConfig();
 const loading = useLoadingStore();
 //const sharedData = useSharedData();
+
+const music = new Howl({
+  src: ["/sounds/music.mpeg"],
+  volume: 0.3,
+});
 
 onMounted(async () => {
   const Player = (await import("~/components/gameLogic/Robot")).default;
@@ -89,6 +95,7 @@ onMounted(async () => {
   camera.rotation.x = funcs.degToRad(140);
 
   loading.isLoading = false;
+  //music.play();
 });
 </script>
 

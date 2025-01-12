@@ -24,7 +24,6 @@ onUnmounted(() => {
 function doTask() {
   tasksStore.doingTask = true;
   tasksStore.showMessage = false;
-  console.log("task");
 
   switch (tasksStore.type) {
     case "traffic_light":
@@ -32,9 +31,11 @@ function doTask() {
       break;
     case "cables_fix":
       tasksStore.currentMinigame = "cables_fix";
+      break;
+    case "drone_spawn":
   }
 
-  tasksStore.showMinigame = true;
+  if (tasksStore.type != "drone_spawn") tasksStore.showMinigame = true;
 }
 </script>
 
@@ -68,7 +69,10 @@ function doTask() {
                   ><ClipboardList class="size-4 mr-1" />Task</Badge
                 >
                 <p>
-                  {{ tasksStore.getTaskText(tasksStore.type)?.title_text }}
+                  {{
+                    tasksStore.getTaskText(tasksStore.taskTracker.type)
+                      ?.title_text
+                  }}
                 </p>
               </div>
             </div>
@@ -76,7 +80,7 @@ function doTask() {
           <CardDescription>
             <Button class="w-full" @click="doTask"
               ><Wrench class="size-5" />{{
-                tasksStore.getTaskText(tasksStore.type)?.button_text
+                tasksStore.getTaskText(tasksStore.taskTracker.type)?.button_text
               }}
               <kbd
                 class="border-[1px] rounded-md px-2 shadow-2xl bg-secondary/30"
@@ -114,13 +118,18 @@ function doTask() {
                   </Badge>
                 </div>
                 <p class="text-xl">
-                  {{ tasksStore.getTaskText(tasksStore.type)?.title_text }}
+                  {{
+                    tasksStore.getTaskText(tasksStore.taskTracker.type)
+                      ?.title_text
+                  }}
                 </p>
               </div>
             </div>
           </CardTitle>
           <CardDescription class="text-left font-bold text-lg">
-            {{ tasksStore.getTaskText(tasksStore.type)?.tracker_text }}
+            {{
+              tasksStore.getTaskText(tasksStore.taskTracker.type)?.tracker_text
+            }}
           </CardDescription>
         </CardHeader>
       </Card>

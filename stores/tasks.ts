@@ -2,8 +2,14 @@ import { defineStore } from "pinia";
 import { Howl } from "howler";
 import * as specialMeshes from "~/utils/specialMeshes";
 import utilsMeshes from "~/utils/utilsMeshes";
+import funcs from "~/utils/generalFuncs";
 
-type minigameType = "" | "traffic_light" | "cables_fix" | "broken_antenna";
+type minigameType =
+  | ""
+  | "traffic_light"
+  | "cables_fix"
+  | "broken_antenna"
+  | "drone_spawn";
 
 // https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-success.oga?ref_type=heads
 const taskTracker_leave = new Howl({
@@ -78,6 +84,52 @@ export const useTasksStore = defineStore({
 
         await utilsMeshes.arrow.spawn();
       } else if (type == "broken_antenna") {
+        const generalData = useGeneralStore();
+
+        await funcs.delay(2000);
+
+        assistant.say("...eeee si è rotta", {
+          duration: 3000,
+          icon: "normal",
+        });
+
+        await funcs.delay(2000);
+
+        const drone = await utilsMeshes.drone.spawn();
+        drone.position = specialMeshes.meshes.drone_spawn[0]!.position.clone();
+        drone.position.x = drone.position.x * -1;
+
+        //specialMeshes.meshes.drone_spawn[0]!.dispose();
+        specialMeshes.meshes.target = drone;
+        specialMeshes.meshes.target.id = drone.id;
+
+        assistant.say("Sarà tuo compito ripararla", {
+          duration: 3000,
+          icon: "normal",
+        });
+
+        await funcs.delay(2000);
+
+        //@ts-ignore
+        utilsMeshes.game!.getCamera()!.rotation.y = funcs.degToRad(180);
+
+        generalData.activeControls = true;
+        generalData.cameraFollow = true;
+
+        specialMeshes.meshes.drone_spawn[0]!.renderOverlay = true;
+        specialMeshes.meshes.drone_spawn[0]!.overlayColor = new BABYLON.Color3(
+          0,
+          1,
+          0
+        );
+        await utilsMeshes.arrow.spawn(true);
+        assistant.say(
+          "Ho trovato un drone specializzato per le riparazioni giusto lì vicino",
+          {
+            duration: 5000,
+            icon: "normal",
+          }
+        );
       }
     },
 
@@ -120,11 +172,20 @@ export const useTasksStore = defineStore({
             title_text: "Riparazione circuito",
           };
         case "broken_antenna":
-          return {
-            tracker_text: "Trova il drone e ripara l'antenna",
-            button_text: "Ripara",
-            title_text: "Antenna fuori uso",
-          };
+          if (this.type == "drone_spawn") {
+            return {
+              tracker_text: "Vai al drone",
+              button_text: "Usa",
+              title_text: "Antenna fuori uso",
+            };
+          } else {
+            return {
+              tracker_text: "Ripara l'antenna",
+              button_text: "Ripara",
+              title_text: "Antenna fuori uso",
+            };
+          }
+
         default:
           return {
             tracker_text: "-",
