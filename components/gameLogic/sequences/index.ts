@@ -7,6 +7,7 @@ import traffic_light from "./traffic_light";
 import second_task from "./second_task";
 
 import basic_done from "./basic_done";
+import to_drone from "./to_drone";
 
 class Sequences {
   engine: Engine;
@@ -36,6 +37,10 @@ class Sequences {
 
   async basic_done() {
     await basic_done(this.engine);
+  }
+
+  async to_drone() {
+    await to_drone(this.engine);
   }
 }
 

@@ -24,7 +24,13 @@ const music = new Howl({
 });
 
 onMounted(async () => {
-  const Player = (await import("~/components/gameLogic/Robot")).default;
+  const { default: Player_Robot } = await import(
+    "~/components/gameLogic/Robot"
+  );
+  const { default: Player_Drone } = await import(
+    "~/components/gameLogic/Drone"
+  );
+
   // Load the 3D engine
   const game = new Engine(canvas.value);
   await game.initPhysics();
@@ -66,7 +72,8 @@ onMounted(async () => {
     "robot.glb",
     scene
   );
-  let robot = new Player(robotMeshesResult, game);
+  let robot = new Player_Robot(robotMeshesResult, game);
+  let drone: typeof Player_Drone | null = null;
 
   eventBus.addEventListener("loadGLB", (event: CustomEventInit) => {
     const dataStream = event.detail.replace(
@@ -90,6 +97,21 @@ onMounted(async () => {
       await sequences[event.detail]();
       console.log("sequence completed");
     }, 500);
+  });
+
+  eventBus.addEventListener("to_drone", async (event: CustomEventInit) => {
+    //loading.isLoading = true
+    const playerCoords = robot.mesh.position.clone();
+    robot.dispose();
+    const droneMeshesResult = await BABYLON.SceneLoader.ImportMeshAsync(
+      "",
+      "/models/",
+      "drone.glb",
+      scene
+    );
+
+    //@ts-ignore
+    drone = new Player_Drone(droneMeshesResult, game, playerCoords);
   });
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);

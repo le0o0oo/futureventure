@@ -44,6 +44,11 @@ function runSequence(seq: string) {
     new CustomEvent("runScene", { detail: seq } as CustomEventInit)
   );
 }
+
+function toDrone() {
+  eventBus.dispatchEvent(new CustomEvent("to_drone"));
+  openedModal.value = false;
+}
 </script>
 
 <template>
@@ -61,7 +66,7 @@ function runSequence(seq: string) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Sequenze</DialogTitle>
-          <DialogDescription class="flex gap-2">
+          <DialogDescription class="flex gap-2 flex-wrap">
             <Button
               @click="
                 sharedDataStore.runAllScenes = true;
@@ -74,6 +79,7 @@ function runSequence(seq: string) {
             <Button @click="runSequence('second_task')">Second task</Button>
             <span>-</span>
             <Button @click="runSequence('basic_done')">Basic done</Button>
+            <Button @click="toDrone">To drone</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

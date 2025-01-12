@@ -4,11 +4,20 @@ import { cn } from "@/lib/utils";
 
 import { Wrench, ClipboardList, Clock, Check } from "lucide-vue-next";
 import { ref, onMounted, onUnmounted } from "vue";
+import { eventBus } from "~/event-bus";
 
 const isDev = ref(import.meta.dev);
 const config = useRuntimeConfig();
 
+const showdevtools = ref(config.public.inDev);
+
 const tasksStore = useTasksStore();
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "j" || event.key === "J") {
+    showdevtools.value = !showdevtools.value;
+  }
+});
 
 const handleKeyPress = (event: KeyboardEvent) => {
   if (event.key.toLowerCase() === "x" && tasksStore.showMessage) doTask();
@@ -33,6 +42,8 @@ function doTask() {
       tasksStore.currentMinigame = "cables_fix";
       break;
     case "drone_spawn":
+      eventBus.dispatchEvent(new CustomEvent("to_drone"));
+      break;
   }
 
   if (tasksStore.type != "drone_spawn") tasksStore.showMinigame = true;
@@ -42,9 +53,9 @@ function doTask() {
 <template>
   <div
     class="w-screen"
-    :class="cn(config.public.inDev ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
+    :class="cn(showdevtools ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
   >
-    <DevToolsNav v-if="config.public.inDev" />
+    <DevToolsNav v-if="showdevtools" />
 
     <slot />
 

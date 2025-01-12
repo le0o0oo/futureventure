@@ -15,6 +15,9 @@ class Player_robot {
     down: false,
     left: false,
     right: false,
+
+    space: false,
+    shift: false,
   };
   private movingUp = false;
   private sceneObserver: BABYLON.Observer<BABYLON.Scene>;
@@ -36,47 +39,51 @@ class Player_robot {
   private inSight: boolean = false;
 
   private delta: number = 0;
+  private droneSpeedAdd = 0.02;
 
-  public type = "robot";
+  public type = "drone";
 
   mesh: BABYLON.Mesh;
   aggregate?: BABYLON.PhysicsAggregate;
 
   private tasksStore = useTasksStore();
 
-  constructor(meshLoaderResult: BABYLON.ISceneLoaderAsyncResult, game: Engine) {
+  constructor(
+    meshLoaderResult: BABYLON.ISceneLoaderAsyncResult,
+    game: Engine,
+    coords: BABYLON.Vector3
+  ) {
     this.game = game;
     this.models = new Models(game);
 
     const sharedData = useSharedData();
     const playerMesh = meshLoaderResult.meshes[0];
-    playerMesh!.rotate(
-      BABYLON.Axis.Y,
-      funcs.degToRad(-90),
-      BABYLON.Space.WORLD
-    );
+    // playerMesh!.rotate(
+    //   BABYLON.Axis.Y,
+    //   funcs.degToRad(-90),
+    //   BABYLON.Space.WORLD
+    // );
+    playerMesh!.position = coords;
+
     this.mesh = playerMesh as BABYLON.Mesh;
     //@ts-ignore
     utilsMeshes.currentPlayer = this.mesh;
 
     // Player mesh setup
-    playerMesh?.scaling.setAll(0.2);
+    // playerMesh?.scaling.setAll(0.2);
+    playerMesh!.rotation.x = funcs.degToRad(45);
 
     // Player physics setup
     if (this.game.scene._physicsEngine) {
       var playerAggregate = new BABYLON.PhysicsAggregate(
         playerMesh!,
         BABYLON.PhysicsShapeType.CAPSULE,
-        { mass: 1, restitution: 0.75, friction: 5, radius: 0.2 },
+        { mass: 0, restitution: 0.75, friction: 5, radius: 0.2 },
         game.scene
       );
       this.aggregate = playerAggregate;
       playerAggregate.body.disablePreStep = false;
     }
-
-    meshLoaderResult.animationGroups.forEach((animation) => {
-      animation.start(true);
-    });
 
     this.registerKeybinds();
     this.sceneObserver = game.scene.onBeforeRenderObservable.add(() => {
@@ -111,8 +118,10 @@ class Player_robot {
       const generalData = useGeneralStore();
 
       if (generalData.cameraFollow) this.focusCameraOnPlayer();
-      if (generalData.activeControls) this.doMovement();
+      //if (generalData.activeControls) this.doMovement();
       this.detectInteractable();
+
+      playerMesh!.rotation.x = funcs.degToRad(10);
     });
   }
 
@@ -312,6 +321,9 @@ class Player_robot {
             this.keyStatus.left = true;
           if (config.public.keybinds.right.includes(key))
             this.keyStatus.right = true;
+
+          if (key == " ") this.keyStatus.space = true;
+          if (key == "Shift") this.keyStatus.shift = true;
         }
       )
     );
@@ -329,6 +341,9 @@ class Player_robot {
             this.keyStatus.left = false;
           if (config.public.keybinds.right.includes(key))
             this.keyStatus.right = false;
+
+          if (key == " ") this.keyStatus.space = false;
+          if (key == "Shift") this.keyStatus.shift = false;
         }
       )
     );
@@ -338,7 +353,22 @@ class Player_robot {
     // Doing all of this because the rotation on left and right is not 90, so when i apply a force forward, i get diagonal movement.
     // To fix it, I'm applying also horizontal movement
 
-    // Forward: Robot facing away from the camera
+    if (this.keyStatus.space) {
+      this.mesh.movePOV(
+        0,
+        (config.public.speed + this.droneSpeedAdd) * this.delta,
+        0
+      );
+    }
+
+    if (this.keyStatus.shift) {
+      this.mesh.movePOV(
+        0,
+        (config.public.speed + this.droneSpeedAdd) * -1 * this.delta,
+        0
+      );
+    }
+
     if (this.keyStatus.up) {
       this.targetZRotation = 0;
       this.targetRotation = new BABYLON.Vector3(
@@ -348,9 +378,13 @@ class Player_robot {
       );
       this.mesh!.rotation = this.targetRotation;
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
+        this.mesh.movePOV(
+          0,
+          0,
+          (config.public.speed + this.droneSpeedAdd) * -1 * this.delta
+        );
       // this.mesh?.moveWithCollisions(
-      //   this.mesh.forward.scaleInPlace(config.public.speed)
+      //   this.mesh.forward.scaleInPlace((config.public.speed + this.droneSpeedAdd))
       // );
       this.movingUp = true;
     } else this.movingUp = false;
@@ -364,10 +398,14 @@ class Player_robot {
       );
       this.mesh!.rotation = this.targetRotation;
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
+        this.mesh.movePOV(
+          0,
+          0,
+          (config.public.speed + this.droneSpeedAdd) * -1 * this.delta
+        );
 
       // this.mesh?.moveWithCollisions(
-      //   new BABYLON.Vector3(0, 0, -config.public.speed)
+      //   new BABYLON.Vector3(0, 0, -(config.public.speed + this.droneSpeedAdd))
       // );
     }
 
@@ -379,9 +417,13 @@ class Player_robot {
 
         // Apply horizontal force to prevent diagonal movement
         if (!this.raycastHit)
-          this.mesh?.movePOV(config.public.speed * -1 * this.delta, 0, 0);
+          this.mesh?.movePOV(
+            (config.public.speed + this.droneSpeedAdd) * -1 * this.delta,
+            0,
+            0
+          );
         // this.mesh?.moveWithCollisions(
-        //   this.mesh.right.scaleInPlace(config.public.speed)
+        //   this.mesh.right.scaleInPlace((config.public.speed + this.droneSpeedAdd))
         // );
       } else {
         this.targetZRotation = funcs.degToRad(-45);
@@ -390,9 +432,13 @@ class Player_robot {
       }
 
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
+        this.mesh.movePOV(
+          0,
+          0,
+          (config.public.speed + this.droneSpeedAdd) * -1 * this.delta
+        );
       // this.mesh?.moveWithCollisions(
-      //   this.mesh.forward.scaleInPlace(config.public.speed)
+      //   this.mesh.forward.scaleInPlace((config.public.speed + this.droneSpeedAdd))
       // );
     }
 
@@ -404,9 +450,13 @@ class Player_robot {
 
         // Apply horizontal force to prevent diagonal movement
         if (!this.raycastHit)
-          this.mesh?.movePOV(config.public.speed * this.delta, 0, 0);
+          this.mesh?.movePOV(
+            (config.public.speed + this.droneSpeedAdd) * this.delta,
+            0,
+            0
+          );
         // this.mesh?.moveWithCollisions(
-        //   this.mesh.right.scaleInPlace(config.public.speed * -1)
+        //   this.mesh.right.scaleInPlace((config.public.speed + this.droneSpeedAdd) * -1)
         // );
       } else {
         this.targetZRotation = funcs.degToRad(45);
@@ -415,10 +465,14 @@ class Player_robot {
       }
 
       if (!this.raycastHit)
-        this.mesh.movePOV(0, 0, config.public.speed * -1 * this.delta);
+        this.mesh.movePOV(
+          0,
+          0,
+          (config.public.speed + this.droneSpeedAdd) * -1 * this.delta
+        );
 
       // this.mesh?.moveWithCollisions(
-      //   this.mesh.forward.scaleInPlace(config.public.speed)
+      //   this.mesh.forward.scaleInPlace((config.public.speed + this.droneSpeedAdd))
       // );
     }
   }
