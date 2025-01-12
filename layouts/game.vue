@@ -12,6 +12,7 @@ const config = useRuntimeConfig();
 const showdevtools = ref(config.public.inDev);
 
 const tasksStore = useTasksStore();
+const sharedData = useSharedData();
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "j" || event.key === "J") {
@@ -43,6 +44,11 @@ function doTask() {
       break;
     case "drone_spawn":
       eventBus.dispatchEvent(new CustomEvent("to_drone"));
+      if (sharedData.runAllScenes)
+        eventBus.dispatchEvent(
+          new CustomEvent("runScene", { detail: "to_drone" } as CustomEventInit)
+        );
+
       break;
   }
 

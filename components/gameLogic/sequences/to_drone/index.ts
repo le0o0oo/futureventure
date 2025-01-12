@@ -11,4 +11,16 @@ export default async (game: Engine) => {
   const camera = game.getCamera() as FreeCamera;
 
   // await funcs.delay(3000);
+
+  tasksStore.clearTasks();
+
+  await funcs.delay(3000);
+
+  assistant.say(
+    "Per andare su o giù usa rispettivamente il tasto <strong>Spazio</strong> e <strong>Shift</strong>",
+    {
+      duration: 4000,
+      icon: "normal",
+    }
+  );
 };

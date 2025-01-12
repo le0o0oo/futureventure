@@ -21,6 +21,8 @@ const taskTracker_enter = new Howl({
   src: ["/sounds/task-tracker_enter.mp3"],
 });
 
+let tempMesh: BABYLON.AbstractMesh | null = null;
+
 export const useTasksStore = defineStore({
   id: "tasksStore",
   state: () => ({
@@ -96,6 +98,9 @@ export const useTasksStore = defineStore({
         await funcs.delay(2000);
 
         const drone = await utilsMeshes.drone.spawn();
+
+        //@ts-ignore
+        tempMesh = drone;
         drone.position = specialMeshes.meshes.drone_spawn[0]!.position.clone();
         drone.position.x = drone.position.x * -1;
 
@@ -134,6 +139,14 @@ export const useTasksStore = defineStore({
     },
 
     clearTasks() {
+      if (tempMesh) {
+        tempMesh.dispose();
+        tempMesh = null;
+      }
+      if (this.type == "drone_spawn") {
+        specialMeshes.meshes.drone_spawn[0]!.renderOverlay = false;
+        specialMeshes.meshes.drone_spawn[0]!.dispose();
+      }
       if (specialMeshes.meshes.target) {
         utilsMeshes.arrow.despawn();
         specialMeshes.meshes.target.renderOverlay = false;
