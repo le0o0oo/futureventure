@@ -32,10 +32,10 @@ export default async (game: Engine) => {
   generalData.activeControls = false;
   generalData.cameraFollow = false;
 
-  const targetPosition = new Vector3(20, 4.71, 9.81);
+  const targetPosition = new Vector3(-0.53, 5.68, 9.57);
   const targetRotation = new Vector3(
-    funcs.degToRad(-15.02),
-    funcs.degToRad(44.75),
+    funcs.degToRad(-14.5),
+    funcs.degToRad(45.99),
     0
   );
 
