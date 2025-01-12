@@ -80,7 +80,13 @@ function toDrone() {
             <span>-</span>
             <Button @click="runSequence('basic_done')">Basic done</Button>
             <Button @click="toDrone">To drone</Button>
-            <Button @click="runSequence('to_drone')">To drone (after)</Button>
+            <Button
+              @click="
+                toDrone();
+                runSequence('to_drone');
+              "
+              >To drone (after)</Button
+            >
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

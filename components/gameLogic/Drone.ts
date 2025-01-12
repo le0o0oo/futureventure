@@ -179,7 +179,7 @@ class Player_robot {
     |             |
     ---------------
     */
-    const boxOffset = 0.6;
+    const boxOffset = 1;
     const deeBug = false;
 
     const startTopPos = new BABYLON.Vector3(

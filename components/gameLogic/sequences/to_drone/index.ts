@@ -23,4 +23,8 @@ export default async (game: Engine) => {
       icon: "normal",
     }
   );
+
+  await funcs.delay(3000);
+
+  tasksStore.setTaskTracker("broken_antenna_real");
 };

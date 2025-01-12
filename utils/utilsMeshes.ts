@@ -13,7 +13,7 @@ const meshes = {
   game: game,
 
   arrow: {
-    spawn: async (inverted?: boolean) => {
+    spawn: async (inverted?: boolean, free?: boolean) => {
       if (meshes.arrow.model) return;
 
       const sharedData = useSharedData();
@@ -39,7 +39,9 @@ const meshes = {
 
           const targetPosition = new BABYLON.Vector3(
             specialMeshes.meshes.target!.position.x * (inverted ? 1 : -1),
-            arrowMeshResult!.position.y,
+            !free
+              ? arrowMeshResult!.position.y
+              : specialMeshes.meshes.target!.position.y,
             specialMeshes.meshes.target!.position.z
           );
 

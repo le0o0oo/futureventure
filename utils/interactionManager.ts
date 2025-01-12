@@ -1,7 +1,12 @@
 import * as BABYLON from "babylonjs";
 import * as specialMeshesObj from "~/utils/specialMeshes";
 
-const specialMeshes = ["traffic_light", "cables_fix", "drone_spawn"];
+const specialMeshes = [
+  "traffic_light",
+  "cables_fix",
+  "drone_spawn",
+  "drone_antenna",
+];
 
 function isSpecialMesh(mesh_name: string) {
   return specialMeshes.includes(mesh_name);
@@ -19,6 +24,7 @@ function handleMesh(mesh: BABYLON.AbstractMesh) {
   if (mesh.name == "traffic_light") taskStore.type = "traffic_light";
   else if (mesh.name == "cables_fix") taskStore.type = "cables_fix";
   else if (mesh.name == "drone_spawn") taskStore.type = "drone_spawn";
+  else if (mesh.name == "drone_antenna") taskStore.type = "broken_antenna_real";
 
   if (!taskStore.doingTask) taskStore.showMessage = true;
 }

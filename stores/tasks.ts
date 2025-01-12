@@ -9,7 +9,8 @@ type minigameType =
   | "traffic_light"
   | "cables_fix"
   | "broken_antenna"
-  | "drone_spawn";
+  | "drone_spawn"
+  | "broken_antenna_real";
 
 // https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-success.oga?ref_type=heads
 const taskTracker_leave = new Howl({
@@ -135,6 +136,19 @@ export const useTasksStore = defineStore({
             icon: "normal",
           }
         );
+      } else if (type == "broken_antenna_real") {
+        const mesh = specialMeshes.meshes.drone_antenna[0];
+
+        specialMeshes.meshes.target = mesh!;
+
+        // mesh!.renderOutline = true;
+        mesh!.renderOverlay = true;
+        mesh!.outlineColor = new BABYLON.Color3(0, 1, 0);
+        mesh!.outlineWidth = 0.05;
+
+        mesh!.overlayColor = new BABYLON.Color3(0, 1, 0);
+
+        await utilsMeshes.arrow.spawn(false, true);
       }
     },
 
@@ -185,19 +199,19 @@ export const useTasksStore = defineStore({
             title_text: "Riparazione circuito",
           };
         case "broken_antenna":
-          if (this.type == "drone_spawn") {
-            return {
-              tracker_text: "Vai al drone",
-              button_text: "Usa",
-              title_text: "Antenna fuori uso",
-            };
-          } else {
-            return {
-              tracker_text: "Ripara l'antenna",
-              button_text: "Ripara",
-              title_text: "Antenna fuori uso",
-            };
-          }
+          return {
+            tracker_text: "Vai al drone",
+            button_text: "Usa",
+            title_text: "Antenna fuori uso",
+          };
+
+        case "broken_antenna_real": {
+          return {
+            tracker_text: "Vai nella direzione della freccia",
+            button_text: "Ripara",
+            title_text: "Antenna fuori uso",
+          };
+        }
 
         default:
           return {

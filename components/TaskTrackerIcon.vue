@@ -16,7 +16,10 @@ const tasksStore = useTasksStore();
     />
     <SatelliteDish
       class="w-full h-full"
-      v-else-if="tasksStore.taskTracker.type == 'broken_antenna'"
+      v-else-if="
+        tasksStore.taskTracker.type == 'broken_antenna' ||
+        tasksStore.taskTracker.type == 'broken_antenna_real'
+      "
     />
   </div>
 </template>

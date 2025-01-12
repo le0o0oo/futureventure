@@ -48,7 +48,9 @@ function doTask() {
         eventBus.dispatchEvent(
           new CustomEvent("runScene", { detail: "to_drone" } as CustomEventInit)
         );
-
+      break;
+    case "broken_antenna_real":
+      tasksStore.currentMinigame = "broken_antenna";
       break;
   }
 
