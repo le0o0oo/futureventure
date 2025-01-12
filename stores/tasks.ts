@@ -3,7 +3,7 @@ import { Howl } from "howler";
 import * as specialMeshes from "~/utils/specialMeshes";
 import utilsMeshes from "~/utils/utilsMeshes";
 
-type minigameType = "" | "traffic_light";
+type minigameType = "" | "traffic_light" | "cables_fix";
 
 // https://invent.kde.org/plasma/ocean-sound-theme/-/blob/master/ocean/stereo/completion-success.oga?ref_type=heads
 const taskTracker_leave = new Howl({
@@ -60,6 +60,23 @@ export const useTasksStore = defineStore({
         mesh!.overlayColor = new BABYLON.Color3(0, 1, 0);
 
         await utilsMeshes.arrow.spawn();
+      } else if (type === "cables_fix") {
+        const randomIndex = Math.floor(
+          Math.random() * specialMeshes.meshes.traffic_light.length
+        );
+
+        const mesh = specialMeshes.meshes.cables_fix[randomIndex];
+
+        specialMeshes.meshes.target = mesh!;
+
+        // mesh!.renderOutline = true;
+        mesh!.renderOverlay = true;
+        mesh!.outlineColor = new BABYLON.Color3(0, 1, 0);
+        mesh!.outlineWidth = 0.05;
+
+        mesh!.overlayColor = new BABYLON.Color3(0, 1, 0);
+
+        await utilsMeshes.arrow.spawn();
       }
     },
 
@@ -81,6 +98,33 @@ export const useTasksStore = defineStore({
         this.taskTracker.show = false;
         this.taskTracker.completed = false;
       }, 1800);
+    },
+
+    getTaskText(type: minigameType): {
+      tracker_text: string;
+      button_text: string;
+      title_text: string;
+    } {
+      switch (type) {
+        case "traffic_light":
+          return {
+            tracker_text: "Segui la direzione della freccia",
+            button_text: "Ripara",
+            title_text: "Riparazione semaforo",
+          };
+        case "cables_fix":
+          return {
+            tracker_text: "Vai nella direzione della freccia",
+            button_text: "Ripara",
+            title_text: "Riparazione circuito",
+          };
+        default:
+          return {
+            tracker_text: "-",
+            button_text: "-",
+            title_text: "-",
+          };
+      }
     },
   },
 });

@@ -9,6 +9,7 @@ const meshes = {
   target: null as AbstractMesh | null,
 
   traffic_light: [] as AbstractMesh[],
+  cables_fix: [] as AbstractMesh[],
 };
 
 let invis_material_cache = null as StandardMaterial | null;
@@ -27,8 +28,10 @@ function getInvisibleMaterial(): StandardMaterial {
 
 function addSpecialMesh(name: string, mesh: AbstractMesh) {
   if (name == "traffic_light") {
-    meshes.traffic_light.push(mesh);
+    meshes[name].push(mesh);
     mesh.material = getInvisibleMaterial();
+  } else if (name == "cables_fix") {
+    meshes[name].push(mesh);
   }
 }
 

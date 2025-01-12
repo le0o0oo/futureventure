@@ -19,6 +19,7 @@ onBeforeUnmount(() => {
 
 <template>
   <MinigamesTrafficLight v-if="minigame == 'traffic_light' && showgames" />
+  <MinigamesCablesFix v-else-if="minigame == 'cables_fix' && showgames" />
 </template>
 
 <style></style>

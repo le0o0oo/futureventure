@@ -9,6 +9,8 @@ export default async (game: Engine) => {
 
   gameState.progress = 1;
 
+  tasksStore.setTaskTracker("cables_fix");
+
   // await funcs.delay(2500);
 
   // assistant.say("Congratulazioni", {

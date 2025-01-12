@@ -52,7 +52,7 @@ onMounted(async () => {
     });
     await delay(3000);
     assistant.say(
-      'Segui le indicazioni che trovi nella schema in basso "Indicazioni"',
+      'Segui le indicazioni che trovi nella scheda in basso "Indicazioni"',
       {
         duration: 6000,
       }

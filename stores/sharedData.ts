@@ -6,6 +6,7 @@ export const useSharedData = defineStore({
   id: "sharedDataStore",
   state: () => ({
     cameraInSight: false,
+    runAllScenes: false,
   }),
   actions: {},
 });

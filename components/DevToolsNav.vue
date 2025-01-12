@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
 
 const colorMode = useColorMode();
+const sharedDataStore = useSharedData();
 
 const openedModal = ref(false);
 
@@ -57,10 +58,16 @@ function runSequence(seq: string) {
         <DialogHeader>
           <DialogTitle>Sequenze</DialogTitle>
           <DialogDescription class="flex gap-2">
-            <Button @click="runSequence('all')">All</Button>
+            <Button
+              @click="
+                sharedDataStore.runAllScenes = true;
+                runSequence('all');
+              "
+              >All</Button
+            >
             <Button @click="runSequence('intro')">Intro</Button>
             <Button @click="runSequence('firstTask')">First task</Button>
-            <Button @click="runSequence('traffic_light')">First task</Button>
+            <Button @click="runSequence('second_task')">Second task</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

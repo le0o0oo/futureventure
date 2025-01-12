@@ -2,9 +2,11 @@
 import { Check, X } from "lucide-vue-next";
 import JSConfetti from "js-confetti";
 import assistant from "~/utils/assistant";
+import { eventBus } from "~/event-bus";
 
 const gameState = useGameStateStore();
 const tasksStore = useTasksStore();
+const sharedData = useSharedData();
 
 const total_xp = ref(0);
 
@@ -33,6 +35,15 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   tasksStore.clearTasks();
+
+  if (sharedData.runAllScenes)
+    setTimeout(() => {
+      eventBus.dispatchEvent(
+        new CustomEvent("runScene", {
+          detail: "second_task",
+        } as CustomEventInit)
+      );
+    }, 3000);
 });
 </script>
 

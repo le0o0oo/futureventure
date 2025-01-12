@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { cn } from "@/lib/utils";
 //@ts-ignore
-import IconTrafficLight from "~/assets/icons/icon-traffic-light.svg";
+
 import { Wrench, ClipboardList, Clock, Check } from "lucide-vue-next";
 import { ref, onMounted, onUnmounted } from "vue";
 
@@ -26,8 +26,14 @@ function doTask() {
   tasksStore.showMessage = false;
   console.log("task");
 
-  if (tasksStore.type == "traffic_light")
-    tasksStore.currentMinigame = "traffic_light";
+  switch (tasksStore.type) {
+    case "traffic_light":
+      tasksStore.currentMinigame = "traffic_light";
+      break;
+    case "cables_fix":
+      tasksStore.currentMinigame = "cables_fix";
+  }
+
   tasksStore.showMinigame = true;
 }
 </script>
@@ -55,19 +61,23 @@ function doTask() {
       >
         <CardHeader>
           <CardTitle>
-            <div class="flex items-center mb-2">
-              <IconTrafficLight class="text-5xl" />
+            <div class="flex items-center mb-2 h-full gap-3">
+              <div class="h-[48px]"><TaskTrackerIcon /></div>
               <div class="bottom-2 relative ml-2 leading-none text-left">
                 <Badge variant="outline" class="p-1 px-2"
                   ><ClipboardList class="size-4 mr-1" />Task</Badge
                 >
-                <p>Ripara semaforo</p>
+                <p>
+                  {{ tasksStore.getTaskText(tasksStore.type)?.title_text }}
+                </p>
               </div>
             </div>
           </CardTitle>
           <CardDescription>
             <Button class="w-full" @click="doTask"
-              ><Wrench class="size-5" />Ripara
+              ><Wrench class="size-5" />{{
+                tasksStore.getTaskText(tasksStore.type)?.button_text
+              }}
               <kbd
                 class="border-[1px] rounded-md px-2 shadow-2xl bg-secondary/30"
                 >X</kbd
@@ -86,8 +96,8 @@ function doTask() {
       <Card v-if="tasksStore.taskTracker.show" class="w-96 fixed top-4 right-4">
         <CardHeader>
           <CardTitle>
-            <div class="flex items-center mb-2">
-              <IconTrafficLight class="text-5xl" />
+            <div class="flex items-center mb-2 gap-3 h-full">
+              <div class="h-[48px]"><TaskTrackerIcon /></div>
               <div class="relative ml-2 leading-none text-left">
                 <div class="flex items-center gap-2" v-auto-animate>
                   <Badge variant="outline" class="p-1 px-2"
@@ -103,12 +113,14 @@ function doTask() {
                     <Check class="size-4 mr-2" />Completato
                   </Badge>
                 </div>
-                <p class="text-xl">Ripara semaforo</p>
+                <p class="text-xl">
+                  {{ tasksStore.getTaskText(tasksStore.type)?.title_text }}
+                </p>
               </div>
             </div>
           </CardTitle>
           <CardDescription class="text-left font-bold text-lg">
-            Segui la direzione della freccia
+            {{ tasksStore.getTaskText(tasksStore.type)?.tracker_text }}
           </CardDescription>
         </CardHeader>
       </Card>

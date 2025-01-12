@@ -25,6 +25,16 @@ export const useGameStateStore = defineStore({
           reward: 10,
         },
       },
+      cables_fix: {
+        completion: {
+          status: false,
+          reward: 10,
+        },
+        first_try: {
+          status: true,
+          reward: 10,
+        },
+      },
     },
     dialogs: {
       traffic_light: {
