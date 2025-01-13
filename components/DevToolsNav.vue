@@ -9,6 +9,7 @@ const sharedDataStore = useSharedData();
 const generalData = useGeneralStore();
 
 const openedModal = ref(false);
+const infoStore = useInfoStore();
 
 colorMode.preference = "dark";
 
@@ -89,10 +90,18 @@ function toDrone() {
             >
             <span>-</span>
             <Button @click="runSequence('fixed_antenna')">Fixed antenna</Button>
+            <Button @click="runSequence('new_map_first')">Nasa</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>
+    <Button
+      @click="
+        infoStore.showComponent = true;
+        infoStore.show = !infoStore.show;
+      "
+      >toggle info store</Button
+    >
   </div>
 </template>
 

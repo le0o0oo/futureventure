@@ -7,6 +7,7 @@ import { eventBus } from "~/event-bus";
 import utilsMeshes from "~/utils/utilsMeshes";
 import { Howl } from "howler";
 import { meshes as specialMeshes } from "~/utils/specialMeshes";
+//@ts-ignore
 
 import Engine from "~/components/gameLogic/Engine";
 // import Player from "~/components/gameLogic/Robot";
@@ -16,11 +17,32 @@ import Sequences from "./gameLogic/sequences";
 const canvas = ref();
 const config = useRuntimeConfig();
 const loading = useLoadingStore();
+const gameStateStire = useGameStateStore();
 //const sharedData = useSharedData();
 
 const music = new Howl({
   src: ["/sounds/music.mpeg"],
   volume: 0.3,
+});
+
+const images: string[] = [
+  "/satellite_demo/demo_1_1.gif",
+  "/satellite_demo/demo_1.gif",
+  "/satellite_demo/demo_2.gif",
+  "/satellite_demo/demo_3.gif",
+  "/satellite_demo/demo_4.gif",
+  "/satellite_demo/demo_5.gif",
+  "/satellite_demo/demo_6.gif",
+  "/satellite_demo/demo_7.gif",
+  "/satellite_demo/demo_8.gif",
+];
+funcs.preloadImages(images, (loadedImages, errors) => {
+  // console.log("Loaded images:", loadedImages);
+  // if (errors.length > 0) {
+  //   console.log("Failed to load:", errors);
+  // } else {
+  //   console.log("All images loaded successfully!");
+  // }
 });
 
 onMounted(async () => {
@@ -99,6 +121,25 @@ onMounted(async () => {
     }, 500);
   });
 
+  async function to_nasa() {
+    // if (robot) robot.mesh.position = new BABYLON.Vector3(0, 0, 0);
+    // //@ts-ignore
+    // if (drone) drone.mesh.position = new BABYLON.Vector3(0, 0, 0);
+
+    if (robot) robot.dispose();
+    //@ts-ignore
+    if (drone) drone.dispose();
+
+    await models.LoadMap(true, "satellite_control.glb");
+    loading.isLoading = false;
+    gameStateStire.currentMap = "nasa";
+  }
+
+  eventBus.addEventListener("to_nasa", async (event: CustomEventInit) => {
+    await to_nasa();
+    event.detail();
+  });
+
   eventBus.addEventListener("to_drone", async (event: CustomEventInit) => {
     //loading.isLoading = true
     const playerCoords = robot.mesh.position.clone();
@@ -117,12 +158,7 @@ onMounted(async () => {
   eventBus.addEventListener(
     "load-satellite_control",
     async (event: CustomEventInit) => {
-      if (robot) robot.mesh.position = new BABYLON.Vector3(0, 0, 0);
-      //@ts-ignore
-      if (drone) drone.mesh.position = new BABYLON.Vector3(0, 0, 0);
-
-      await models.LoadMap(true, "satellite_control.glb");
-      loading.isLoading = false;
+      await to_nasa();
     }
   );
 

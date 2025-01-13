@@ -10,6 +10,7 @@ import basic_done from "./basic_done";
 import to_drone from "./to_drone";
 import fixed_antenna from "./fixed_antenna";
 
+import new_map_first from "./new_map_first";
 class Sequences {
   engine: Engine;
 
@@ -46,6 +47,10 @@ class Sequences {
 
   async fixed_antenna() {
     await fixed_antenna(this.engine);
+  }
+
+  async new_map_first() {
+    await new_map_first(this.engine);
   }
 }
 

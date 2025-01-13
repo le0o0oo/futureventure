@@ -8,6 +8,7 @@ import { eventBus } from "~/event-bus";
 
 const isDev = ref(import.meta.dev);
 const config = useRuntimeConfig();
+const infoStore = useInfoStore();
 
 const showdevtools = ref(config.public.inDev);
 
@@ -159,6 +160,8 @@ function doTask() {
     <!-- <    <div class="fixed top-20 left-2">
       <ToastSkeleton description="test text" />
     </div>> -->
+
+    <LaserComm v-if="infoStore.showComponent" />
   </div>
 </template>
 

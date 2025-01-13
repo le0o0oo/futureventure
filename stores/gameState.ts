@@ -43,6 +43,7 @@ export const useGameStateStore = defineStore({
         blocks: false,
       },
     },
+    currentMap: "main" as "main" | "nasa",
   }),
   actions: {},
 });

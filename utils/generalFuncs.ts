@@ -60,4 +60,52 @@ function atan2FromPoint(x0: number, y0: number, x: number, y: number) {
   return Math.atan2(y - y0, x - x0);
 }
 
-export default { degToRad, radToDeg, moveCamera, delay, atan2FromPoint };
+type PreloadCallback = (
+  loadedImages: HTMLImageElement[],
+  errors: string[]
+) => void;
+
+function preloadImages(imageUrls: string[], onComplete: PreloadCallback): void {
+  const loadedImages: HTMLImageElement[] = [];
+  let loadedCount = 0;
+  const totalImages = imageUrls.length;
+  const errors: string[] = [];
+
+  if (totalImages === 0) {
+    onComplete([], []);
+    return;
+  }
+
+  imageUrls.forEach((url, index) => {
+    const img = new Image();
+
+    img.onload = () => {
+      loadedImages[index] = img;
+      loadedCount++;
+      checkCompletion();
+    };
+
+    img.onerror = () => {
+      errors.push(url);
+      loadedCount++;
+      checkCompletion();
+    };
+
+    img.src = url;
+  });
+
+  function checkCompletion(): void {
+    if (loadedCount === totalImages) {
+      onComplete(loadedImages, errors);
+    }
+  }
+}
+
+export default {
+  degToRad,
+  radToDeg,
+  moveCamera,
+  delay,
+  atan2FromPoint,
+  preloadImages,
+};
