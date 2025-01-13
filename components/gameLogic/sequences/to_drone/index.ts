@@ -27,4 +27,24 @@ export default async (game: Engine) => {
   await funcs.delay(3000);
 
   tasksStore.setTaskTracker("broken_antenna_real");
+
+  const videos: string[] = [
+    "/satellite_demo/demo_1_1.mp4",
+    "/satellite_demo/demo_1.mp4",
+    "/satellite_demo/demo_2.mp4",
+    "/satellite_demo/demo_3.mp4",
+    "/satellite_demo/demo_4.mp4",
+    "/satellite_demo/demo_5.mp4",
+    "/satellite_demo/demo_6.mp4",
+    "/satellite_demo/demo_7.mp4",
+    "/satellite_demo/demo_8.mp4",
+  ];
+  funcs.preloadVideos(videos, (loadedVideos, errors) => {
+    console.log("Loaded videos:", loadedVideos);
+    if (errors.length > 0) {
+      console.log("Failed to load:", errors);
+    } else {
+      console.log("All videos loaded successfully!");
+    }
+  });
 };

@@ -100,6 +100,50 @@ function preloadImages(imageUrls: string[], onComplete: PreloadCallback): void {
     }
   }
 }
+type PreloadVideoCallback = (
+  loadedVideos: HTMLVideoElement[],
+  errors: string[]
+) => void;
+
+function preloadVideos(
+  videoUrls: string[],
+  onComplete: PreloadVideoCallback
+): void {
+  const loadedVideos: HTMLVideoElement[] = [];
+  let loadedCount = 0;
+  const totalVideos = videoUrls.length;
+  const errors: string[] = [];
+
+  if (totalVideos === 0) {
+    onComplete([], []);
+    return;
+  }
+
+  videoUrls.forEach((url, index) => {
+    const video = document.createElement("video");
+
+    video.onloadeddata = () => {
+      loadedVideos[index] = video;
+      loadedCount++;
+      checkCompletion();
+    };
+
+    video.onerror = () => {
+      errors.push(url);
+      loadedCount++;
+      checkCompletion();
+    };
+
+    video.src = url;
+    video.load(); // Start preloading the video
+  });
+
+  function checkCompletion(): void {
+    if (loadedCount === totalVideos) {
+      onComplete(loadedVideos, errors);
+    }
+  }
+}
 
 export default {
   degToRad,
@@ -108,4 +152,5 @@ export default {
   delay,
   atan2FromPoint,
   preloadImages,
+  preloadVideos,
 };

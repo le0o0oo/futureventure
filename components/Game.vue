@@ -25,26 +25,6 @@ const music = new Howl({
   volume: 0.3,
 });
 
-const images: string[] = [
-  "/satellite_demo/demo_1_1.gif",
-  "/satellite_demo/demo_1.gif",
-  "/satellite_demo/demo_2.gif",
-  "/satellite_demo/demo_3.gif",
-  "/satellite_demo/demo_4.gif",
-  "/satellite_demo/demo_5.gif",
-  "/satellite_demo/demo_6.gif",
-  "/satellite_demo/demo_7.gif",
-  "/satellite_demo/demo_8.gif",
-];
-funcs.preloadImages(images, (loadedImages, errors) => {
-  // console.log("Loaded images:", loadedImages);
-  // if (errors.length > 0) {
-  //   console.log("Failed to load:", errors);
-  // } else {
-  //   console.log("All images loaded successfully!");
-  // }
-});
-
 onMounted(async () => {
   const { default: Player_Robot } = await import(
     "~/components/gameLogic/Robot"
@@ -159,6 +139,7 @@ onMounted(async () => {
     "load-satellite_control",
     async (event: CustomEventInit) => {
       await to_nasa();
+      sequences.new_map_first();
     }
   );
 
