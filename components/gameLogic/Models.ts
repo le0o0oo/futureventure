@@ -51,11 +51,21 @@ class Models {
     return [ground, groundAggregate];
   }
 
-  async LoadMap(accurate = false) {
+  async LoadMap(accurate = false, map = "map.glb") {
+    if (this.mapModels) {
+      this.mapModels.meshes.forEach((mesh) => {
+        mesh.dispose();
+      });
+
+      // Dispose all physics aggregates
+      this.physicsAggregates.forEach((aggregate) => aggregate.dispose());
+      this.physicsAggregates = []; // Clear the array after disposing
+    }
+
     const models = await BABYLON.SceneLoader.ImportMeshAsync(
       "",
       "/models/",
-      "map.glb"
+      map
     );
     this.mapModels = models;
     this.accurate = accurate;

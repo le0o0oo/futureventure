@@ -1,15 +1,33 @@
 <script lang="ts" setup>
 import { X } from "lucide-vue-next";
+import { eventBus } from "~/event-bus";
 
 const cStep = ref(0);
 const showModal = ref(true);
 
 const tasksStore = useTasksStore();
+const sharedData = useSharedData();
 
 function handleClose() {
   showModal.value = false;
   tasksStore.currentMinigame = "";
   tasksStore.showMinigame = false;
+}
+
+function finished() {
+  showModal.value = false;
+  tasksStore.currentMinigame = "";
+  tasksStore.showMinigame = false;
+  tasksStore.clearTasks();
+
+  if (sharedData.runAllScenes)
+    setTimeout(() => {
+      eventBus.dispatchEvent(
+        new CustomEvent("runScene", {
+          detail: "fixed_antenna",
+        } as CustomEventInit)
+      );
+    }, 3000);
 }
 </script>
 
@@ -43,7 +61,7 @@ function handleClose() {
           <h2 class="font-bold text-xl">[WORK IN PROGRESS]</h2>
           <div class="flex w-full justify-center mt-4">
             <Button @click="cStep++" class="w-full max-w-lg">Inizia</Button>
-            <Button @click="cStep++" class="w-full max-w-lg">Completa</Button>
+            <Button @click="finished" class="w-full max-w-lg">Completa</Button>
           </div>
         </template>
       </CardContent>

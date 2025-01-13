@@ -47,6 +47,8 @@ export default async (game: Engine) => {
     speed: 0.01,
   });
 
+  camera.rotation = targetRotation;
+
   assistant.say("Questa è l'antenna che controlla i droni fattorini", {
     duration: 5000,
     icon: "normal",

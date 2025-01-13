@@ -87,6 +87,8 @@ function toDrone() {
               "
               >To drone (after)</Button
             >
+            <span>-</span>
+            <Button @click="runSequence('fixed_antenna')">Fixed antenna</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

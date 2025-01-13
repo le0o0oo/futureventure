@@ -113,6 +113,19 @@ onMounted(async () => {
     //@ts-ignore
     drone = new Player_Drone(droneMeshesResult, game, playerCoords);
   });
+
+  eventBus.addEventListener(
+    "load-satellite_control",
+    async (event: CustomEventInit) => {
+      if (robot) robot.mesh.position = new BABYLON.Vector3(0, 0, 0);
+      //@ts-ignore
+      if (drone) drone.mesh.position = new BABYLON.Vector3(0, 0, 0);
+
+      await models.LoadMap(true, "satellite_control.glb");
+      loading.isLoading = false;
+    }
+  );
+
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);
 
