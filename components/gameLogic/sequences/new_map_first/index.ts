@@ -51,27 +51,27 @@ async function sequence() {
     0
   );
 
-  // await funcs.delay(2000);
+  await funcs.delay(2000);
 
-  // assistant.say(
-  //   "Adesso stiamo nel centro di controllo della agenzia spaziale nazionale",
-  //   {
-  //     duration: 4000,
-  //     icon: "normal",
-  //   }
-  // );
+  assistant.say(
+    "Adesso stiamo nel centro di controllo della agenzia spaziale nazionale",
+    {
+      duration: 4000,
+      icon: "normal",
+    }
+  );
 
-  // await funcs.delay(2500);
+  await funcs.delay(2500);
 
-  // assistant.say(
-  //   "Sembrano voler monitorare un satellitle sperimentale che comunica con i laser invece che le onde radio",
-  //   {
-  //     duration: 4000,
-  //     icon: "normal",
-  //   }
-  // );
+  assistant.say(
+    "Sembrano voler monitorare un satellitle sperimentale che comunica con i laser invece che le onde radio",
+    {
+      duration: 4000,
+      icon: "normal",
+    }
+  );
 
-  // await funcs.delay(1000);
+  await funcs.delay(1000);
 
   // step 1
   infoStore.showComponent = true;

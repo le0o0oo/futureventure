@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { cn } from "@/lib/utils";
+import "video.js/dist/video-js.css";
 //@ts-ignore
 
 import { Wrench, ClipboardList, Clock, Check } from "lucide-vue-next";
