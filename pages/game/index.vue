@@ -3,6 +3,10 @@ definePageMeta({
   layout: "game",
 });
 
+useHead({
+  scripts: [{ src: "https://unpkg.com/focus-visible" }],
+});
+
 const showGame = ref(false);
 const loading = useLoadingStore();
 const config = useRuntimeConfig();

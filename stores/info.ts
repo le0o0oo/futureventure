@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useInfoStore = defineStore({
   id: "infoStore",
   state: () => ({
-    slideState: 1,
+    slideState: 3,
     show: false,
     showComponent: false,
 

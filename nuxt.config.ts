@@ -40,6 +40,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@formkit/auto-animate",
     "@nuxt/icon",
+    "@nuxt/scripts",
   ],
   shadcn: {
     prefix: "",

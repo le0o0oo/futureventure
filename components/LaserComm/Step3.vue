@@ -36,5 +36,7 @@
 </template>
 
 <style>
-/* Add any custom styles here */
+*:focus {
+  outline: none;
+}
 </style>

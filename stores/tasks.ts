@@ -71,7 +71,7 @@ export const useTasksStore = defineStore({
         await utilsMeshes.arrow.spawn();
       } else if (type === "cables_fix") {
         const randomIndex = Math.floor(
-          Math.random() * specialMeshes.meshes.traffic_light.length
+          Math.random() * specialMeshes.meshes.cables_fix.length
         );
 
         const mesh = specialMeshes.meshes.cables_fix[randomIndex];
