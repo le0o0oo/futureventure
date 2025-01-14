@@ -4,13 +4,9 @@ import funcs from "~/utils/generalFuncs";
 import assistant from "~/utils/assistant";
 import utilsMeshes from "~/utils/utilsMeshes";
 import { eventBus } from "~/event-bus";
+import audioManager from "~/utils/audioManager";
 
 let game: Engine;
-
-const music = new Howl({
-  src: ["/sounds/forest_bathing.mp3"],
-  volume: 0.3,
-});
 
 function waitForProg(infoStore: any): Promise<void> {
   return new Promise((resolve) => {
@@ -41,7 +37,7 @@ async function sequence() {
     return;
   }
 
-  music.play();
+  audioManager.playMusic("music2");
   infoStore.slideState = 1;
 
   camera.position = new Vector3(5.267, 3.984, -6.074);
@@ -153,6 +149,14 @@ async function sequence() {
     duration: 4000,
     icon: "normal",
   });
+
+  await funcs.delay(2000);
+
+  eventBus.dispatchEvent(
+    new CustomEvent("runScene", {
+      detail: "final_task",
+    } as CustomEventInit)
+  );
 }
 
 export default async (cGame: Engine) => {

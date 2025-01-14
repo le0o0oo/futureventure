@@ -11,6 +11,7 @@ import to_drone from "./to_drone";
 import fixed_antenna from "./fixed_antenna";
 
 import new_map_first from "./new_map_first";
+import final_task from "./final_task";
 class Sequences {
   engine: Engine;
 
@@ -51,6 +52,10 @@ class Sequences {
 
   async new_map_first() {
     await new_map_first(this.engine);
+  }
+
+  async final_task() {
+    await final_task(this.engine);
   }
 }
 

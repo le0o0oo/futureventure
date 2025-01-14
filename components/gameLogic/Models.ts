@@ -104,6 +104,17 @@ class Models {
     this.applyPhysicsAggregates(this.accurate);
   }
 
+  async ClearMap() {
+    if (this.mapModels) {
+      this.mapModels.meshes.forEach((mesh) => {
+        mesh.dispose();
+      });
+
+      // Dispose all physics aggregates
+      this.physicsAggregates.forEach((aggregate) => aggregate.dispose());
+      this.physicsAggregates = []; // Clear the array after disposing
+    }
+  }
   ProjectRaycast(
     options = {
       start: new BABYLON.Vector3(1, 20, 2),

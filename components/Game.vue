@@ -6,18 +6,22 @@ import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
 import utilsMeshes from "~/utils/utilsMeshes";
 import { Howl } from "howler";
+import { Triangle, StopCircle } from "lucide-vue-next";
 import { meshes as specialMeshes } from "~/utils/specialMeshes";
+
 //@ts-ignore
 
 import Engine from "~/components/gameLogic/Engine";
 // import Player from "~/components/gameLogic/Robot";
 import Models from "~/components/gameLogic/Models";
 import Sequences from "./gameLogic/sequences";
+import { cn } from "@/lib/utils";
 
 const canvas = ref();
 const config = useRuntimeConfig();
 const loading = useLoadingStore();
 const gameStateStire = useGameStateStore();
+const finaltaskStore = useFinalTaskStore();
 //const sharedData = useSharedData();
 
 const music = new Howl({
@@ -100,6 +104,9 @@ onMounted(async () => {
       console.log("sequence completed");
     }, 500);
   });
+  eventBus.addEventListener("destroy_all_meshes", (event: CustomEventInit) => {
+    models.ClearMap();
+  });
 
   async function to_nasa() {
     // if (robot) robot.mesh.position = new BABYLON.Vector3(0, 0, 0);
@@ -152,9 +159,72 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="size-full">
-    <canvas ref="canvas" class="size-full"></canvas>
+  <div
+    class="size-full flex gap-3 overflow-hidden"
+    :class="cn(gameStateStire.smallEngine && 'p-3')"
+  >
+    <div class="w-[50%]" v-if="gameStateStire.smallEngine">
+      <SatelliteFix />
+    </div>
+    <div
+      class="size-full flex flex-col gap-3"
+      :class="cn(gameStateStire.smallEngine && 'w-[50%]')"
+    >
+      <div v-if="gameStateStire.smallEngine">
+        <Button
+          @click="finaltaskStore.running = !finaltaskStore.running"
+          v-if="!finaltaskStore.running"
+          >Avvia <Triangle class="rotate-90"
+        /></Button>
+        <Button @click="finaltaskStore.running = !finaltaskStore.running" v-else
+          >Ferma <StopCircle
+        /></Button>
+      </div>
+      <div :class="cn('size-full')">
+        <canvas
+          ref="canvas"
+          class="size-full"
+          :class="cn(gameStateStire.smallEngine && 'rounded-lg')"
+        ></canvas>
+      </div>
+      <div
+        v-if="gameStateStire.smallEngine"
+        class="w-full grid grid-cols-2 gap-2"
+      >
+        <div></div>
+        <div class="size-full">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Condizione</TableHead>
+                <TableHead>Stato</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Puntando alla terra</TableCell>
+                <TableCell>
+                  <CompletionIndicator
+                    :checked="finaltaskStore.pointingEarth"
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Gestione trasferimento dati</TableCell>
+                <TableCell>
+                  <CompletionIndicator :checked="finaltaskStore.data_tansfer" />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style></style>
+<style>
+body {
+  overflow: hidden;
+}
+</style>

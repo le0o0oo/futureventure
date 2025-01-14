@@ -15,6 +15,10 @@ class Engine {
 
   models?: Models;
 
+  public skySun?: BABYLON.DirectionalLight;
+
+  skyboxMaterial: BABYLON.StandardMaterial;
+
   canvasElement: HTMLCanvasElement;
 
   private cameras: BABYLON.Camera[] | BABYLON.FreeCamera[] = [];
@@ -45,17 +49,17 @@ class Engine {
       { size: 1000.0 },
       this.scene
     );
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this.scene);
-    skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+    this.skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this.scene);
+    this.skyboxMaterial.backFaceCulling = false;
+    this.skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
       "textures/skybox/skybox",
       this.scene
     );
-    skyboxMaterial.reflectionTexture.coordinatesMode =
+    this.skyboxMaterial.reflectionTexture.coordinatesMode =
       BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    skybox.material = skyboxMaterial;
+    this.skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    this.skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = this.skyboxMaterial;
     skybox.infiniteDistance = true;
 
     this.engine.runRenderLoop(() => {
@@ -69,6 +73,12 @@ class Engine {
       canvas.focus();
     };
   }
+  setSkybox(path: string) {
+    this.skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+      `textures/${path}`,
+      this.scene
+    );
+  }
   initLighting() {
     this.scene.shadowsEnabled = true;
     this.scene.imageProcessingConfiguration.toneMappingEnabled = true;
@@ -79,16 +89,16 @@ class Engine {
 
     this._setupPostProcessEffects(this.getCamera()!);
 
-    const skySun = new BABYLON.DirectionalLight(
+    this.skySun = new BABYLON.DirectionalLight(
       "skySun",
       new BABYLON.Vector3(0, 0, 0),
       this.scene
     );
-    skySun.direction = new BABYLON.Vector3(0, -0.604, 0);
-    skySun.intensity = 6;
-    skySun.shadowEnabled = true;
-    skySun.autoCalcShadowZBounds = true;
-    this.shadowGenerator = new BABYLON.ShadowGenerator(1024, skySun);
+    this.skySun.direction = new BABYLON.Vector3(0, -0.604, 0);
+    this.skySun.intensity = 6;
+    this.skySun.shadowEnabled = true;
+    this.skySun.autoCalcShadowZBounds = true;
+    this.shadowGenerator = new BABYLON.ShadowGenerator(1024, this.skySun);
     this.shadowGenerator.setDarkness(0);
     this.shadowGenerator.filter =
       BABYLON.ShadowGenerator.FILTER_BLURCLOSEEXPONENTIALSHADOWMAP;

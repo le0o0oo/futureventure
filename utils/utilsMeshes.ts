@@ -87,6 +87,70 @@ const meshes = {
     model: null as BABYLON.AbstractMesh | null,
   },
 
+  earth: {
+    spawn: async (inverted?: boolean, free?: boolean) => {
+      if (meshes.earth.model) return;
+
+      const sharedData = useSharedData();
+      const earthMeshResult = (
+        await BABYLON.SceneLoader.ImportMeshAsync(
+          "",
+          "/models/",
+          "earth.glb",
+          game!.scene
+        )
+      ).meshes[0];
+
+      earthMeshResult!.isPickable = true;
+      earthMeshResult!.receiveShadows = true;
+
+      meshes.earth.model = earthMeshResult!;
+
+      return earthMeshResult;
+    },
+
+    despawn() {
+      if (meshes.earth.model) {
+        meshes.earth.model.dispose();
+        meshes.earth.model = null;
+      }
+    },
+
+    model: null as BABYLON.AbstractMesh | null,
+  },
+
+  satellite: {
+    spawn: async (inverted?: boolean, free?: boolean) => {
+      if (meshes.satellite.model) return;
+
+      const sharedData = useSharedData();
+      const satelliteMeshResult = (
+        await BABYLON.SceneLoader.ImportMeshAsync(
+          "",
+          "/models/",
+          "satellite.glb",
+          game!.scene
+        )
+      ).meshes[0];
+
+      satelliteMeshResult!.isPickable = true;
+      satelliteMeshResult!.receiveShadows = true;
+
+      meshes.satellite.model = satelliteMeshResult!;
+
+      return satelliteMeshResult;
+    },
+
+    despawn() {
+      if (meshes.satellite.model) {
+        meshes.satellite.model.dispose();
+        meshes.satellite.model = null;
+      }
+    },
+
+    model: null as BABYLON.AbstractMesh | null,
+  },
+
   currentPlayer: null as BABYLON.AbstractMesh | null,
 };
 

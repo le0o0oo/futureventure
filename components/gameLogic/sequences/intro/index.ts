@@ -2,11 +2,14 @@ import type Engine from "../../Engine";
 import { Observer, Scene, Vector3, type FreeCamera } from "babylonjs";
 import funcs from "~/utils/generalFuncs";
 import assistant from "~/utils/assistant";
+import audioManager from "~/utils/audioManager";
 
 import firstTask from "./firstTask";
 
 export default async (game: Engine) => {
   const camera = game.getCamera() as FreeCamera;
+
+  audioManager.playMusic("music1");
 
   const generalData = useGeneralStore();
 

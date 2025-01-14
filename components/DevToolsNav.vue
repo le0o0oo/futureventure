@@ -91,6 +91,7 @@ function toDrone() {
             <span>-</span>
             <Button @click="runSequence('fixed_antenna')">Fixed antenna</Button>
             <Button @click="runSequence('new_map_first')">Nasa</Button>
+            <Button @click="runSequence('final_task')">Final task</Button>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

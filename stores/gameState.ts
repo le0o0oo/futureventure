@@ -11,6 +11,8 @@ export const useGameStateStore = defineStore({
   state: () => ({
     xp: 0,
     progress: 0,
+
+    smallEngine: false,
     minigames: {
       traffic_light: {
         fixed_microprocessor: {
