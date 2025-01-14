@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import "video.js/dist/video-js.css";
+
 const loading = useLoadingStore();
 </script>
 
 <template>
-  <div class="w-screen h-screen">
+  <div class="w-screen h-screen overflow-x-hidden">
     <Toaster position="top-left" />
-    <NuxtLoadingIndicator />
+    <NuxtLoadingIndicator
+      color="linear-gradient(90deg, rgba(31,65,149,1) 0%, rgba(109,40,217,1) 91%)"
+    />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
