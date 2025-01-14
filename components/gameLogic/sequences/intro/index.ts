@@ -27,6 +27,8 @@ export default async (game: Engine) => {
     0
   );
 
+  await funcs.delay(2000);
+
   await funcs.moveCamera({
     camera,
     game,

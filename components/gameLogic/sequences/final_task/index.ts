@@ -18,6 +18,8 @@ async function sequence() {
 
   const camera = game.getCamera() as FreeCamera;
 
+  camera.attachControl(game.canvasElement, true);
+
   // await funcs.delay(3000);
 
   if (gameState.currentMap != "nasa") {

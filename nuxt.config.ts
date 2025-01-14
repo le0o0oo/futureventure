@@ -18,8 +18,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      inDev: true, // Different from import.meta.dev
-
       speed: 0.035,
       keybinds: {
         up: ["w", "W", "ArrowUp"],
@@ -30,7 +28,6 @@ export default defineNuxtConfig({
     },
   },
 
-  ssr: false,
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
@@ -54,5 +51,9 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/png", href: "/icon.png" }],
       title: "FutureVenture",
     },
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "page", mode: "out-in" },
   },
+
+  ssr: false, // Vue video player is the problem
 });

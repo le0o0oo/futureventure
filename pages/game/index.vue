@@ -11,10 +11,8 @@ const showGame = ref(false);
 const loading = useLoadingStore();
 const config = useRuntimeConfig();
 
-if (config.public.inDev) {
-  loading.isLoading = true;
-  showGame.value = true;
-}
+loading.isLoading = true;
+showGame.value = true;
 </script>
 
 <template>

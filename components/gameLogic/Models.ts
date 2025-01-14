@@ -52,6 +52,7 @@ class Models {
   }
 
   async LoadMap(accurate = false, map = "map.glb") {
+    const generalStore = useGeneralStore();
     if (this.mapModels) {
       this.mapModels.meshes.forEach((mesh) => {
         mesh.dispose();
@@ -70,7 +71,7 @@ class Models {
     this.mapModels = models;
     this.accurate = accurate;
 
-    if (config.public.inDev) {
+    if (generalStore.inDev) {
       consola.info(
         "MESH LOADER |",
         accurate ? "Using accurate mode" : "Using inaccurate mode"

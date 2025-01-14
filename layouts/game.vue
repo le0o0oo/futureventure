@@ -2,18 +2,27 @@
 import { cn } from "@/lib/utils";
 //@ts-ignore
 
-import { Wrench, ClipboardList, Clock, Check } from "lucide-vue-next";
+import { Wrench, ClipboardList, Clock, Check, Gamepad2 } from "lucide-vue-next";
 import { ref, onMounted, onUnmounted } from "vue";
 import { eventBus } from "~/event-bus";
+
+const route = useRoute();
+const generalStore = useGeneralStore();
+
+const showAudioContextPrompt = ref(false);
+
+if (route.query.dev == "true") generalStore.inDev = true;
 
 const isDev = ref(import.meta.dev);
 const config = useRuntimeConfig();
 const infoStore = useInfoStore();
 
-const showdevtools = ref(config.public.inDev);
+const showdevtools = ref(generalStore.inDev);
 
 const tasksStore = useTasksStore();
 const sharedData = useSharedData();
+
+sharedData.runAllScenes = true;
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "j" || event.key === "J") {
@@ -31,6 +40,23 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyPress);
 });
+
+//@ts-ignore
+if (window.AudioContext || window.webkitAudioContext) {
+  console.log("AudioContext is available!");
+  // Create an instance of AudioContext
+  //@ts-ignore
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  console.log(audioContext.state);
+
+  if (
+    (audioContext.state == "suspended" || audioContext.state == "closed") &&
+    !generalStore.inDev
+  )
+    showAudioContextPrompt.value = true;
+} else {
+  console.log("AudioContext is not available in this browser.");
+}
 
 function doTask() {
   tasksStore.doingTask = true;
@@ -61,8 +87,17 @@ function doTask() {
 
 <template>
   <div
+    v-if="showAudioContextPrompt"
+    class="size-full flex justify-center items-center"
+  >
+    <CoolBtn @click="showAudioContextPrompt = false"
+      ><Gamepad2 />Avvia gioco</CoolBtn
+    >
+  </div>
+  <div
     class="w-screen"
     :class="cn(showdevtools ? 'h-[calc(100vh-51.99px)]' : 'h-screen')"
+    v-else
   >
     <DevToolsNav v-if="showdevtools" />
 

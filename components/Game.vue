@@ -22,6 +22,7 @@ const config = useRuntimeConfig();
 const loading = useLoadingStore();
 const gameStateStire = useGameStateStore();
 const finaltaskStore = useFinalTaskStore();
+const generalStore = useGeneralStore();
 //const sharedData = useSharedData();
 
 const music = new Howl({
@@ -63,7 +64,7 @@ onMounted(async () => {
     scene
   ) as BABYLON.FreeCamera;
 
-  camera.attachControl(canvas.value, true);
+  //camera.attachControl(canvas.value, true);
 
   // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
   game.addCamera(camera);
@@ -153,8 +154,11 @@ onMounted(async () => {
   // Set camera angle
   camera.rotation.x = funcs.degToRad(140);
 
+  if (generalStore.inDev) await funcs.delay(1500);
+
   loading.isLoading = false;
-  //music.play();
+
+  if (!generalStore.inDev) sequences.all();
 });
 </script>
 

@@ -40,15 +40,29 @@ const disableBtn = ref(isMobileDevice());
             >
           </h1>
           <div class="mt-8">
-            <vue-video-player
-              src="https://dl.dropboxusercontent.com/scl/fi/vi61ntk7y0n765ntxsi5c/Video_FutureVenture.mp4?rlkey=l5o1uaoui6b2etjiwh2uyttk1&st=tp6aldlu&dl=0"
-              class="max-w-[740px] h-[402px] size-full rounded-xl"
-              :controls="true"
-            ></vue-video-player>
+            <ClientOnly>
+              <vue-video-player
+                src="https://dl.dropboxusercontent.com/scl/fi/vi61ntk7y0n765ntxsi5c/Video_FutureVenture.mp4?rlkey=l5o1uaoui6b2etjiwh2uyttk1&st=tp6aldlu&dl=0"
+                class="max-w-[740px] h-[402px] size-full rounded-xl"
+                :controls="true"
+                poster="/thumbnail.png"
+              ></vue-video-player>
+            </ClientOnly>
           </div>
           <div class="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6 p-2">
-            <CoolBtn :disabled="disableBtn"><Gamepad2 />Gioca ora</CoolBtn>
-            <CoolBtn variant="secondary"><Github />Codice sorgente</CoolBtn>
+            <NuxtLink to="/game"
+              ><CoolBtn :disabled="disableBtn"
+                ><Gamepad2 />Gioca ora</CoolBtn
+              ></NuxtLink
+            >
+            <NuxtLink
+              to="https://github.com/lea0o0oo/futureventure"
+              :external="true"
+              target="_blank"
+              ><CoolBtn variant="secondary"
+                ><Github />Codice sorgente</CoolBtn
+              ></NuxtLink
+            >
             <CoolBtn variant="secondary"><NotepadText />Crediti</CoolBtn>
           </div>
           <span class="text-center text-sm" v-if="disableBtn"

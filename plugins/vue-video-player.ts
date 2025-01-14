@@ -1,5 +1,5 @@
 import VueVideoPlayer from "@videojs-player/vue";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueVideoPlayer);
+  if (import.meta.client) nuxtApp.vueApp.use(VueVideoPlayer);
 });

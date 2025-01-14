@@ -9,10 +9,12 @@ export default {
   music1: new Howl({
     src: ["/sounds/music.mpeg"],
     volume: 0.3,
+    loop: true,
   }),
   music2: new Howl({
     src: ["/sounds/forest_bathing.mp3"],
     volume: 0.3,
+    loop: true,
   }),
 
   async playMusic(music: musicTypes) {

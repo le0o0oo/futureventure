@@ -5,6 +5,8 @@ export const useGeneralStore = defineStore({
   state: () => ({
     cameraFollow: true,
     activeControls: true,
+
+    inDev: false,
   }),
   actions: {},
 });

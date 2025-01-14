@@ -10,7 +10,8 @@ const devtools = {
     camera: BABYLON.Camera | BABYLON.FreeCamera,
     scene: BABYLON.Scene
   ) => {
-    if (config.public.inDev) {
+    const generalStore = useGeneralStore();
+    if (generalStore.inDev) {
       //@ts-ignore
       Inspector.Show(scene, {
         gizmoCamera: camera,
@@ -20,12 +21,14 @@ const devtools = {
     }
   },
   hide: async () => {
-    if (config.public.inDev) {
+    const generalStore = useGeneralStore();
+    if (generalStore.inDev) {
       Inspector.Hide();
     }
   },
   toggle: async () => {
-    if (config.public.inDev) {
+    const generalStore = useGeneralStore();
+    if (generalStore.inDev) {
       Inspector.IsVisible
         ? Inspector.Hide()
         : //@ts-ignore
