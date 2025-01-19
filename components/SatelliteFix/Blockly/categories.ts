@@ -2,6 +2,12 @@ export default {
   kind: "categoryToolbox",
   contents: [
     {
+      kind: "search",
+      name: "Cerca",
+      contents: [],
+      colour: "black",
+    },
+    {
       kind: "category",
       name: "Logic",
       categorystyle: "logic_category",
@@ -45,85 +51,85 @@ export default {
         },
       ],
     },
-    {
-      kind: "category",
-      name: "Loops",
-      categorystyle: "loop_category",
-      contents: [
-        {
-          type: "controls_repeat_ext",
-          kind: "block",
-          inputs: {
-            TIMES: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-          },
-        },
-        {
-          type: "controls_whileUntil",
-          kind: "block",
-          fields: {
-            MODE: "WHILE",
-          },
-        },
-        {
-          type: "controls_for",
-          kind: "block",
-          fields: {
-            VAR: {
-              name: "i",
-            },
-          },
-          inputs: {
-            FROM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            TO: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-            BY: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-          },
-        },
-        {
-          type: "controls_forEach",
-          kind: "block",
-          fields: {
-            VAR: {
-              name: "j",
-            },
-          },
-        },
-        {
-          type: "controls_flow_statements",
-          kind: "block",
-          fields: {
-            FLOW: "BREAK",
-          },
-        },
-      ],
-    },
+    // {
+    //   kind: "category",
+    //   name: "Loops",
+    //   categorystyle: "loop_category",
+    //   contents: [
+    //     {
+    //       type: "controls_repeat_ext",
+    //       kind: "block",
+    //       inputs: {
+    //         TIMES: {
+    //           shadow: {
+    //             type: "math_number",
+    //             fields: {
+    //               NUM: 10,
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //     {
+    //       type: "controls_whileUntil",
+    //       kind: "block",
+    //       fields: {
+    //         MODE: "WHILE",
+    //       },
+    //     },
+    //     {
+    //       type: "controls_for",
+    //       kind: "block",
+    //       fields: {
+    //         VAR: {
+    //           name: "i",
+    //         },
+    //       },
+    //       inputs: {
+    //         FROM: {
+    //           shadow: {
+    //             type: "math_number",
+    //             fields: {
+    //               NUM: 1,
+    //             },
+    //           },
+    //         },
+    //         TO: {
+    //           shadow: {
+    //             type: "math_number",
+    //             fields: {
+    //               NUM: 10,
+    //             },
+    //           },
+    //         },
+    //         BY: {
+    //           shadow: {
+    //             type: "math_number",
+    //             fields: {
+    //               NUM: 1,
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //     {
+    //       type: "controls_forEach",
+    //       kind: "block",
+    //       fields: {
+    //         VAR: {
+    //           name: "j",
+    //         },
+    //       },
+    //     },
+    //     {
+    //       type: "controls_flow_statements",
+    //       kind: "block",
+    //       fields: {
+    //         FLOW: "BREAK",
+    //       },
+    //     },
+    //   ],
+    // },
     {
       kind: "category",
       name: "Math",
@@ -356,6 +362,10 @@ export default {
           fields: {
             TEXT: "",
           },
+        },
+        {
+          type: "log",
+          kind: "block",
         },
         {
           type: "text_join",
@@ -755,20 +765,28 @@ export default {
     {
       kind: "sep",
     },
+    // {
+    //   kind: "category",
+    //   name: "Eventi",
+    //   colour: "#00a30b",
+    //   contents: [
+    //     {
+    //       type: "satellite_forever",
+    //       kind: "block",
+    //     },
+    //     {
+    //       type: "on_beam_detect",
+    //       kind: "block",
+    //     },
+    //     { kind: "block", type: "solarstorm_enter" },
+    //     { kind: "block", type: "solarstorm_leave" },
+    //   ],
+    // },
     {
       kind: "category",
-      name: "Inizio",
-      colour: "#00a30b",
-      contents: [
-        {
-          type: "satellite_forever",
-          kind: "block",
-        },
-        {
-          type: "on_beam_detect",
-          kind: "block",
-        },
-      ],
+      name: "Debug",
+      colour: 180,
+      contents: [{ kind: "block", type: "log" }],
     },
     {
       kind: "category",
@@ -783,6 +801,42 @@ export default {
           type: "earth_sensor",
           kind: "block",
         },
+        {
+          kind: "label",
+          text: "Restituisce un vettore con le coordinate del Sole",
+        },
+        {
+          type: "sun_sensor",
+          kind: "block",
+        },
+        { kind: "block", type: "sensors_action" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Vettori",
+      colour: "#0c4f9c",
+      contents: [
+        {
+          kind: "label",
+          text: "Dato un vettore, restituisce il vettore con l'asse orizzontale e laterale invetite",
+        },
+        {
+          kind: "block",
+          type: "invert_coords",
+        },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Dati",
+      colour: "#a84d07",
+      contents: [
+        { kind: "block", type: "in_beam_sight" },
+        { kind: "block", type: "is_beam_connected" },
+        { kind: "block", type: "get_total_packets" },
+        { kind: "block", type: "packet_transfer" },
+        { kind: "block", type: "data_transfer_action" },
       ],
     },
     {
@@ -791,13 +845,18 @@ export default {
       colour: "#8f0414",
       contents: [
         {
-          kind: "label",
           text: "Prende come parametro delle coordinate e farà puntare il satellite a quelle.",
+          kind: "label",
         },
         {
-          type: "motor_lookat",
-          kind: "block",
+          text: "Questo blocco utilizza il giroscopio interno del satellite quindi non viene",
+          kind: "label",
         },
+        {
+          text: "affetto da eventuali sensori disattivati.",
+          kind: "label",
+        },
+        { kind: "block", type: "motor_lookat" },
       ],
     },
     {

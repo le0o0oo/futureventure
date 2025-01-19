@@ -2,13 +2,17 @@ import * as Blockly from "blockly/core";
 import { javascriptGenerator } from "blockly/javascript";
 
 Blockly.common.defineBlocks({
-  satellite_forever: {
+  solarstorm_enter: {
     init: function () {
-      this.appendDummyInput("").appendField("Ripeti per sempre");
+      this.appendDummyInput("").appendField(
+        "Quando entra in una tempesta solare"
+      );
       this.appendStatementInput("actions");
-      this.setTooltip("Ripete per sempre il codice all'interno");
+      this.setTooltip(
+        "Esegue del codice quado il satellite rileva una tempesta solare"
+      );
       this.setHelpUrl("");
-      this.setColour("#00a30b");
+      this.setColour("#d1b502");
 
       this.setDeletable(false);
       this.setEditable(false);
@@ -16,13 +20,10 @@ Blockly.common.defineBlocks({
   },
 });
 
-javascriptGenerator.forBlock["satellite_forever"] = function (
-  block,
-  generator
-) {
+javascriptGenerator.forBlock["solarstorm_enter"] = function (block, generator) {
   const statement_actions = generator.statementToCode(block, "actions");
 
-  const code = `function loop() {
+  const code = `function solarstorm_enter() {
 ${statement_actions}}\n`;
   return code;
 };

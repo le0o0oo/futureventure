@@ -54,4 +54,4 @@ function reset() {
   }
 }
 
-export { meshes, addSpecialMesh, reset };
+export { meshes, addSpecialMesh, reset, getInvisibleMaterial };

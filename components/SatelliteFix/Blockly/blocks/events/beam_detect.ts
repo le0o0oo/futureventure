@@ -8,7 +8,10 @@ Blockly.common.defineBlocks({
       this.appendStatementInput("actions");
       this.setTooltip("Esegue del codice quado un faro viene rilevato");
       this.setHelpUrl("");
-      this.setColour("#00a30b");
+      this.setColour("#47007d");
+
+      this.setDeletable(false);
+      this.setEditable(false);
     },
   },
 });
@@ -16,7 +19,7 @@ Blockly.common.defineBlocks({
 javascriptGenerator.forBlock["on_beam_detect"] = function (block, generator) {
   const statement_actions = generator.statementToCode(block, "actions");
 
-  const code = `!!BEAM_DETECT;
-  ${statement_actions}\n`;
+  const code = `async function on_beam_detect() {
+${statement_actions}}\n`;
   return code;
 };
