@@ -21,6 +21,6 @@ javascriptGenerator.forBlock["motor_lookat"] = function (block, generator) {
   const value_coords = generator.valueToCode(block, "coords", Order.ATOMIC);
 
   // TODO: Assemble javascript into the code variable.
-  const code = `LOOK_AT ${value_coords};\n`;
+  const code = `block_lookAt(${value_coords});\n`;
   return code;
 };

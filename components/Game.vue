@@ -158,10 +158,11 @@ onMounted(async () => {
 
   loading.isLoading = false;
 
-  setTimeout(() => {
-    devtools.hide();
-    sequences.final_task();
-  }, 800);
+  if (generalStore.inDev)
+    setTimeout(() => {
+      devtools.hide();
+      sequences.final_task();
+    }, 800);
 
   if (!generalStore.inDev) sequences.all();
 });

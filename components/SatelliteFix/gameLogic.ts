@@ -6,12 +6,14 @@ import utilsMeshes from "~/utils/utilsMeshes";
 import { eventBus } from "~/event-bus";
 import * as Blockly from "blockly";
 import { javascriptGenerator } from "blockly/javascript";
+import { Jinter } from "jintr";
 
 let blocklyWorkspace: Blockly.WorkspaceSvg;
 
 const genCode = {
   loop: {
-    instructions: [] as string[],
+    code: "",
+    //instructions: [] as string[],
   },
 };
 
@@ -27,6 +29,7 @@ async function run() {
   const gameState = useGameStateStore();
   const tasksStore = useTasksStore();
   const finaltaskStore = useFinalTaskStore();
+  const jinter = new Jinter();
 
   let hasHit = false;
 
@@ -38,6 +41,10 @@ async function run() {
   }
   eventBus.addEventListener("compail", (event: CustomEventInit) => {
     compileCode();
+  });
+
+  eventBus.addEventListener("run_satellite", (event: CustomEventInit) => {
+    runCode(event.detail);
   });
 
   blocklyWorkspace.addChangeListener((event) => {
@@ -67,21 +74,26 @@ async function run() {
         .split(";");
       const blockType = block1.shift();
       if (blockType == "LOOP") {
-        genCode.loop.instructions = block1;
+        genCode.loop.code = block1.join(";\n");
+        //genCode.loop.instructions = block1;
+        console.log(genCode.loop.code);
       }
     });
   }
 
   async function runCode(part: keyof typeof genCode) {
-    const instructions = genCode[part].instructions;
+    //const instructions = genCode[part].instructions;
 
-    for (const line in instructions) {
-      const tokens = instructions[line]!.split(" ");
+    console.log("qua");
+    jinter.evaluate(genCode[part].code);
 
-      if (tokens[0] == "LOOK_AT") {
-        if (tokens[1] == "(EARTH_COORDS)") satellite.lookAt(earth.position);
-      }
-    }
+    // for (const line in instructions) {
+    //   const tokens = instructions[line]!.split(" ");
+
+    //   if (tokens[0] == "LOOK_AT") {
+    //     if (tokens[1] == "(EARTH_COORDS)") satellite.lookAt(earth.position);
+    //   }
+    // }
   }
 
   camera.position = new Vector3(5.267, 3.984, -6.074);
@@ -92,7 +104,7 @@ async function run() {
   );
 
   await game.models?.ClearMap();
-  game.setSkybox("starmap/starmap");
+  game.setSkybox("skybox_space/skybox_space");
 
   const earth = (await utilsMeshes.earth.spawn())!;
   const satellite = (await utilsMeshes.satellite.spawn())!;
@@ -197,4 +209,14 @@ async function run() {
 
     runCode("loop");
   });
+
+  // Custom funcs
+
+  function block_lookAt(obj: string) {
+    if (obj[0] == "EARTH_COORDS") {
+      satellite.lookAt(earth.position);
+    }
+  }
+
+  jinter.defineObject("block_lookAt", block_lookAt);
 }

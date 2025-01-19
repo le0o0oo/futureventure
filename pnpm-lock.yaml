@@ -47,6 +47,9 @@ importers:
       howler:
         specifier: ^2.2.4
         version: 2.2.4
+      jintr:
+        specifier: ^3.2.0
+        version: 3.2.0
       js-confetti:
         specifier: ^0.12.0
         version: 0.12.0
@@ -2940,6 +2943,9 @@ packages:
   jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
+
+  jintr@3.2.0:
+    resolution: {integrity: sha512-psD1yf05kMKDNsUdW1l5YhO59pHScQ6OIHHb8W5SKSM2dCOFPsqolmIuSHgVA8+3Dc47NJR181CXZ4alCAPTkA==}
 
   jiti@1.21.7:
     resolution: {integrity: sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==}
@@ -8106,6 +8112,10 @@ snapshots:
       '@types/node': 22.10.5
       merge-stream: 2.0.0
       supports-color: 8.1.1
+
+  jintr@3.2.0:
+    dependencies:
+      acorn: 8.14.0
 
   jiti@1.21.7: {}
 

@@ -6,6 +6,7 @@ import { eventBus } from "~/event-bus";
 const blockly = ref();
 
 const showTasks = ref(true);
+const generalStore = useGeneralStore();
 
 onMounted(async () => {
   const gameLogic = await import("./gameLogic");
@@ -16,6 +17,10 @@ onMounted(async () => {
 function exportCode() {
   console.log(javascriptGenerator.workspaceToCode(blockly.value.workspace));
   eventBus.dispatchEvent(new Event("compail"));
+}
+
+function runCode(part: string) {
+  eventBus.dispatchEvent(new CustomEvent("run_satellite", { detail: part }));
 }
 </script>
 
@@ -61,6 +66,7 @@ function exportCode() {
       </span>
     </div>
   </div>
-  <Button @click="exportCode()">export code</Button>
+  <Button @click="exportCode()" v-if="generalStore.inDev">export code</Button>
+  <Button @click="runCode('loop')" v-if="generalStore.inDev">run loop</Button>
   <BlocklyComponent id="blockly2" ref="blockly"></BlocklyComponent>
 </template>

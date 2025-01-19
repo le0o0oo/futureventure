@@ -14,7 +14,7 @@ Blockly.common.defineBlocks({
 });
 
 javascriptGenerator.forBlock["earth_sensor"] = function () {
-  const code = "EARTH_COORDS";
+  const code = "'EARTH_COORDS'";
 
   return [code, Order.NONE];
 };
