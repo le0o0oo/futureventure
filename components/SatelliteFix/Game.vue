@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { javascriptGenerator } from "blockly/javascript";
 import BlocklyComponent from "./Blockly/BlocklyComponent.vue";
+import { eventBus } from "~/event-bus";
 
 const blockly = ref();
 
@@ -14,6 +15,7 @@ onMounted(async () => {
 
 function exportCode() {
   console.log(javascriptGenerator.workspaceToCode(blockly.value.workspace));
+  eventBus.dispatchEvent(new Event("compail"));
 }
 </script>
 
@@ -42,9 +44,21 @@ function exportCode() {
       <p class="text-xl font-bold mt-3">> Gestione trasferimento dati</p>
 
       <p class="text-lg mt-2">
-        Fai in modo che il satellite risponda con i dati corretti quando riceve
-        un "faro laser"
+        Fai in modo che il satellite invii tutti i packets alla terra dalla
+        memoria.
       </p>
+
+      <p class="text-xl font-bold mt-3">> Gestione tempeste solari</p>
+
+      <span class="text-lg mt-2">
+        Quando una tempesta solare viene rilevata:
+        <ul class="list-disc">
+          <li>Disattiva sensori non essenziali</li>
+          <li>Disattiva hardware per comunicazione terrestre</li>
+          <li>Interrompi eventuali trasferimenti in corso</li>
+          <li>Fai puntare il satellite nella direzione opposta al sole</li>
+        </ul>
+      </span>
     </div>
   </div>
   <Button @click="exportCode()">export code</Button>

@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import * as funcs from "./generalFuncs";
+import funcs from "./generalFuncs";
 
 type musicTypes = "music1" | "music2";
 let currentlyPlaying = null as musicTypes | null;
@@ -21,12 +21,12 @@ export default {
     if (!this[music]) throw new Error(`Music "${music}" not found.`);
 
     if (currentlyPlaying && currentId) {
-      this[currentlyPlaying as musicTypes].fade(1, 0, 1000, currentId);
+      //this[currentlyPlaying as musicTypes].fade(1, 0, 1000, currentId);
 
       this[currentlyPlaying as musicTypes].stop();
       currentlyPlaying = null;
       currentId = null;
-      await funcs.default.delay(1000);
+      await funcs.delay(1000);
     }
 
     currentId = this[music].play();

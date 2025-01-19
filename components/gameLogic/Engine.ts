@@ -75,7 +75,7 @@ class Engine {
   }
   setSkybox(path: string) {
     this.skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      `textures/${path}`,
+      `/textures/${path}`,
       this.scene
     );
   }

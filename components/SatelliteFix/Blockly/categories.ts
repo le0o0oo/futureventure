@@ -24,7 +24,11 @@ export default {
       colour: "#00a30b",
       contents: [
         {
-          type: "on_poweron_",
+          type: "satellite_forever",
+          kind: "block",
+        },
+        {
+          type: "on_beam_detect",
           kind: "block",
         },
       ],
@@ -56,27 +60,6 @@ export default {
         {
           type: "motor_lookat",
           kind: "block",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Delay",
-      colour: "#80046b",
-      contents: [
-        {
-          type: "delay",
-          kind: "block",
-          inputs: {
-            amount: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-          },
         },
       ],
     },

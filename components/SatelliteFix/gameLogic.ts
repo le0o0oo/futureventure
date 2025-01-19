@@ -9,30 +9,19 @@ import { javascriptGenerator } from "blockly/javascript";
 
 let blocklyWorkspace: Blockly.WorkspaceSvg;
 
-let instructionsCache = [] as any[];
-let generatedCode: string;
-let pureCode: string;
-let recompile = true;
-let instructions: string[];
+const genCode = {
+  loop: {
+    instructions: [] as string[],
+  },
+};
 
 export function setBlocklyWorkspace(workspace: Blockly.WorkspaceSvg) {
   blocklyWorkspace = workspace;
-
-  blocklyWorkspace.addChangeListener((event) => {
-    if (
-      event.type == "viewport_change" ||
-      event.type == "click" ||
-      event.type == "move" ||
-      event.type == "toolbox_item_select" ||
-      event.type == "selected" ||
-      event.type == "drag"
-    )
-      return;
-    recompile = true;
-  });
+  run();
 }
 
 async function run() {
+  if (!blocklyWorkspace) return;
   const game = utilsMeshes.game!;
   const camera = game.getCamera() as FreeCamera;
   const gameState = useGameStateStore();
@@ -47,28 +36,49 @@ async function run() {
     }
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+  eventBus.addEventListener("compail", (event: CustomEventInit) => {
+    compileCode();
+  });
+
+  blocklyWorkspace.addChangeListener((event) => {
+    if (
+      event.type == "viewport_change" ||
+      event.type == "click" ||
+      event.type == "toolbox_item_select" ||
+      event.type == "selected" ||
+      event.type == "drag"
+    )
+      return;
+    compileCode();
+  });
+
   async function compileCode() {
     if (!blocklyWorkspace) return;
-    if (recompile) {
-      generatedCode = javascriptGenerator.workspaceToCode(blocklyWorkspace);
-      pureCode = generatedCode
+
+    const generatedCode = javascriptGenerator.workspaceToCode(blocklyWorkspace);
+    const codeBlocks = generatedCode.split("!!");
+    codeBlocks.shift();
+
+    codeBlocks.forEach((rawCodeBlock) => {
+      const block1 = rawCodeBlock
         .replaceAll("  ", "")
         .replaceAll("\n\n", "")
-        .replace("LOOP {", "")
-        .replace("}", "")
-        .replaceAll("\n", "");
-      instructions = pureCode.split(";");
-    }
-    recompile = false;
+        .replaceAll("\n", "")
+        .split(";");
+      const blockType = block1.shift();
+      if (blockType == "LOOP") {
+        genCode.loop.instructions = block1;
+      }
+    });
+  }
 
-    // console.log(instructions);
+  async function runCode(part: keyof typeof genCode) {
+    const instructions = genCode[part].instructions;
 
     for (const line in instructions) {
       const tokens = instructions[line]!.split(" ");
 
-      if (tokens[0] == "DELAY") {
-        await funcs.delay(Number(tokens[1]) * 1000);
-      } else if (tokens[0] == "LOOK_AT") {
+      if (tokens[0] == "LOOK_AT") {
         if (tokens[1] == "(EARTH_COORDS)") satellite.lookAt(earth.position);
       }
     }
@@ -81,9 +91,8 @@ async function run() {
     0
   );
 
-  game.setSkybox("skybox_space/skybox_space");
-
-  game.models?.ClearMap();
+  await game.models?.ClearMap();
+  game.setSkybox("starmap/starmap");
 
   const earth = (await utilsMeshes.earth.spawn())!;
   const satellite = (await utilsMeshes.satellite.spawn())!;
@@ -146,7 +155,7 @@ async function run() {
 
     globalForward.normalize(); // Ensure the vector is normalized
     // Define the length of the raycast
-    const rayLength = 150; // Adjust this value as needed
+    const rayLength = 120; // Adjust this value as needed
 
     // Calculate the end position
     const end = satellite.position.add(globalForward.scale(rayLength));
@@ -186,8 +195,6 @@ async function run() {
       orbitAngle -= 2 * Math.PI;
     }
 
-    compileCode();
+    runCode("loop");
   });
 }
-
-run();

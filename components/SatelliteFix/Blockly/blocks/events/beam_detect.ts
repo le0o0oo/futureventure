@@ -16,6 +16,7 @@ Blockly.common.defineBlocks({
 javascriptGenerator.forBlock["on_beam_detect"] = function (block, generator) {
   const statement_actions = generator.statementToCode(block, "actions");
 
-  const code = `${statement_actions}\n`;
+  const code = `!!BEAM_DETECT;
+  ${statement_actions}\n`;
   return code;
 };

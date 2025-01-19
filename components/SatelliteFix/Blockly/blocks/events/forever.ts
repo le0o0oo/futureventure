@@ -2,7 +2,7 @@ import * as Blockly from "blockly/core";
 import { javascriptGenerator } from "blockly/javascript";
 
 Blockly.common.defineBlocks({
-  on_poweron_: {
+  satellite_forever: {
     init: function () {
       this.appendDummyInput("").appendField("Ripeti per sempre");
       this.appendStatementInput("actions");
@@ -13,9 +13,13 @@ Blockly.common.defineBlocks({
   },
 });
 
-javascriptGenerator.forBlock["on_poweron_"] = function (block, generator) {
+javascriptGenerator.forBlock["satellite_forever"] = function (
+  block,
+  generator
+) {
   const statement_actions = generator.statementToCode(block, "actions");
 
-  const code = `${statement_actions}\n`;
+  const code = `!!LOOP;
+  ${statement_actions}\n`;
   return code;
 };
