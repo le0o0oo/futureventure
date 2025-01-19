@@ -6,7 +6,14 @@ import "babylonjs-loaders";
 import { eventBus } from "~/event-bus";
 import utilsMeshes from "~/utils/utilsMeshes";
 import { Howl } from "howler";
-import { Triangle, StopCircle } from "lucide-vue-next";
+import {
+  Triangle,
+  StopCircle,
+  Radiation,
+  ArrowUpDown,
+  Loader2,
+  ArrowRight,
+} from "lucide-vue-next";
 import { meshes as specialMeshes } from "~/utils/specialMeshes";
 
 //@ts-ignore
@@ -23,6 +30,8 @@ const loading = useLoadingStore();
 const gameStateStire = useGameStateStore();
 const finaltaskStore = useFinalTaskStore();
 const generalStore = useGeneralStore();
+
+const consoleDiv = ref();
 //const sharedData = useSharedData();
 
 const music = new Howl({
@@ -158,8 +167,24 @@ onMounted(async () => {
 
   loading.isLoading = false;
 
+  // if (generalStore.inDev)
+  //   setTimeout(() => {
+  //     devtools.hide();
+  //     sequences.final_task();
+  //   }, 800);
+
   if (!generalStore.inDev) sequences.all();
+
+  finaltaskStore.consoleElement = consoleDiv.value;
 });
+
+function runTest(type: "solarStorm" | "dataTransfer") {
+  finaltaskStore.testing.testing = true;
+  if (type === "solarStorm") finaltaskStore.testing.solarStorm = true;
+  else finaltaskStore.testing.dataTransfer = true;
+
+  eventBus.dispatchEvent(new CustomEvent("test_satellite", { detail: type }));
+}
 </script>
 
 <template>
@@ -174,7 +199,7 @@ onMounted(async () => {
       class="size-full flex flex-col gap-3"
       :class="cn(gameStateStire.smallEngine && 'w-[50%]')"
     >
-      <div v-if="gameStateStire.smallEngine">
+      <div v-if="gameStateStire.smallEngine && false">
         <Button
           @click="finaltaskStore.running = !finaltaskStore.running"
           v-if="!finaltaskStore.running"
@@ -184,7 +209,38 @@ onMounted(async () => {
           >Ferma <StopCircle
         /></Button>
       </div>
-      <div :class="cn('size-full')">
+      <div
+        v-if="gameStateStire.smallEngine && !finaltaskStore.inFinalTest"
+        class="flex items-center gap-2"
+      >
+        <div class="w-full flex items-center gap-2">
+          <Button
+            @click="runTest('solarStorm')"
+            :disabled="finaltaskStore.testing.testing"
+            class="bg-orange-800 hover:bg-orange-950 text-white/80"
+            >Tempesta solare
+            <Radiation v-if="!finaltaskStore.testing.solarStorm" />
+            <Loader2 v-else class="animate-spin" />
+          </Button>
+          <Button
+            @click="runTest('dataTransfer')"
+            :disabled="finaltaskStore.testing.testing"
+            class="bg-green-800 hover:bg-green-950 text-white/80"
+            >Trasferimento dati<ArrowUpDown
+              v-if="!finaltaskStore.testing.dataTransfer" /><Loader2
+              v-else
+              class="animate-spin"
+          /></Button>
+        </div>
+        <Button
+          :disabled="
+            finaltaskStore.testing.testing || !finaltaskStore.pointingEarth
+          "
+          @click="finaltaskStore.inFinalTest = true"
+          >Test finale <ArrowRight
+        /></Button>
+      </div>
+      <div :class="cn('size-full h-full')">
         <canvas
           ref="canvas"
           class="size-full"
@@ -193,9 +249,25 @@ onMounted(async () => {
       </div>
       <div
         v-if="gameStateStire.smallEngine"
-        class="w-full grid grid-cols-2 gap-2"
+        class="w-full grid grid-cols-2 gap-2 h-full"
       >
-        <div></div>
+        <div class="border-2 rounded-md">
+          <div class="p-2 dark:bg-black bg-white rounded-sm">Console</div>
+          <Separator class="my-2" />
+          <div class="overflow-y-auto flex flex-col gap-2 p-2" ref="consoleDiv">
+            <div
+              class="p-2 rounded-md flex items-center gap-3"
+              :class="
+                cn(i.type == 'error' ? 'bg-red-900' : 'dark:bg-black bg-white')
+              "
+              v-for="i in finaltaskStore.console"
+              :key="i.id"
+            >
+              {{ i.id }}<Separator orientation="vertical" class="bg-white/30" />
+              {{ i.msg }}
+            </div>
+          </div>
+        </div>
         <div class="size-full">
           <Table>
             <TableHeader>
@@ -217,6 +289,12 @@ onMounted(async () => {
                 <TableCell>Gestione trasferimento dati</TableCell>
                 <TableCell>
                   <CompletionIndicator :checked="finaltaskStore.data_tansfer" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Gestione tempeste solari</TableCell>
+                <TableCell>
+                  <CompletionIndicator :checked="finaltaskStore.solar_storms" />
                 </TableCell>
               </TableRow>
             </TableBody>

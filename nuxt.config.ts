@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     optimizeDeps: {
       exclude: ["@babylonjs/havok", "@babylonjs/loaders", "babylonjs-loaders"],
     },
+    build: {
+      minify: "terser",
+      terserOptions: {
+        keep_fnames: true,
+      },
+    },
   },
   css: [
     "~/assets/css/tailwind.css",

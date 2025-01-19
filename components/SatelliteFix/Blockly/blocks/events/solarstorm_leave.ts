@@ -2,13 +2,17 @@ import * as Blockly from "blockly/core";
 import { javascriptGenerator } from "blockly/javascript";
 
 Blockly.common.defineBlocks({
-  on_beam_detect: {
+  solarstorm_leave: {
     init: function () {
-      this.appendDummyInput("").appendField("Quando un faro viene rilevato");
+      this.appendDummyInput("").appendField(
+        "Quando esce da una tempesta solare"
+      );
       this.appendStatementInput("actions");
-      this.setTooltip("Esegue del codice quado un faro viene rilevato");
+      this.setTooltip(
+        "Esegue del codice quado il satellite rileva una tempesta solare"
+      );
       this.setHelpUrl("");
-      this.setColour("#47007d");
+      this.setColour("#b8a111");
 
       this.setDeletable(false);
       this.setEditable(false);
@@ -16,10 +20,10 @@ Blockly.common.defineBlocks({
   },
 });
 
-javascriptGenerator.forBlock["on_beam_detect"] = function (block, generator) {
+javascriptGenerator.forBlock["solarstorm_leave"] = function (block, generator) {
   const statement_actions = generator.statementToCode(block, "actions");
 
-  const code = `async function on_beam_detect() {
+  const code = `function solarstorm_leave() {
 ${statement_actions}}\n`;
   return code;
 };

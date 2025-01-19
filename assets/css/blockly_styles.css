@@ -3,6 +3,7 @@
 .blocklyTreeLabel {
   color: white;
 }
+
 /* Adds padding around the group of categories and separators. */
 .blocklyToolboxContents {
   padding: 0.5em;
@@ -13,10 +14,15 @@
   padding: 3px;
   border-radius: 4px;
   height: 32px;
+  width: 115px;
   display: flex;
   align-items: center;
   justify-content: left;
   @apply px-3;
+}
+.blocklyTreeRow input {
+  width: 95px;
+  color: black;
 }
 
 /* other styles */
