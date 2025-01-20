@@ -17,6 +17,8 @@ export default {
     loop: true,
   }),
 
+  playing: false,
+
   async playMusic(music: musicTypes) {
     if (!this[music]) throw new Error(`Music "${music}" not found.`);
 
@@ -24,15 +26,17 @@ export default {
       //this[currentlyPlaying as musicTypes].fade(1, 0, 1000, currentId);
 
       this[currentlyPlaying as musicTypes].stop();
+      this.playing = false;
       currentlyPlaying = null;
       currentId = null;
       await funcs.delay(1000);
     }
 
+    this.playing = true;
     currentId = this[music].play();
     currentlyPlaying = music;
-    (this[music] as Howl).on("end", () => {
-      currentlyPlaying = null;
-    });
+    // (this[music] as Howl).on("end", () => {
+    //   currentlyPlaying = null;
+    // });
   },
 };

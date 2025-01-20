@@ -7,6 +7,8 @@ export const useGeneralStore = defineStore({
     activeControls: true,
 
     inDev: false,
+
+    finished: false,
   }),
   actions: {},
 });

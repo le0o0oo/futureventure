@@ -1,13 +1,19 @@
 <script lang="ts" setup>
 import { Loader2 } from "lucide-vue-next";
 import { eventBus } from "~/event-bus";
+import { buttonVariants } from "../ui/button";
 
 const finaltaskStore = useFinalTaskStore();
+const generalStore = useGeneralStore();
+const gameStateStore = useGameStateStore();
+
 finaltaskStore.testing.solarStorm = false;
 finaltaskStore.testing.dataTransfer = true;
 
 let currentTest = ref(0);
 let loading = ref(true);
+
+const showExitDialog = ref(false);
 
 function runTest(type: "solarStorm" | "dataTransfer" | "both") {
   finaltaskStore.testing.testing = true;
@@ -40,6 +46,31 @@ onMounted(() => {
   finaltaskStore.every_task = false;
   runTest("dataTransfer");
 });
+
+onBeforeUnmount(() => {
+  gameStateStore.minigames.satellite_fix.point_earth.status = true;
+
+  gameStateStore.minigames.satellite_fix.data_transfer.status =
+    finaltaskStore.data_tansfer;
+  gameStateStore.minigames.satellite_fix.solarstorm_handle.status =
+    finaltaskStore.solar_storms;
+  gameStateStore.minigames.satellite_fix.every.status =
+    finaltaskStore.every_task;
+});
+
+function finish(force?: boolean) {
+  if (
+    (!finaltaskStore.data_tansfer ||
+      !finaltaskStore.solar_storms ||
+      !finaltaskStore.every_task) &&
+    !force
+  ) {
+    showExitDialog.value = true;
+    return;
+  }
+
+  generalStore.finished = true;
+}
 </script>
 
 <template>
@@ -119,8 +150,27 @@ onMounted(() => {
       <Button @click="finaltaskStore.inFinalTest = false" :disabled="loading"
         >Indietro</Button
       >
-      <Button>Completa 🎉</Button>
+      <Button :disabled="loading" @click="finish()">Completa 🎉</Button>
     </div>
+
+    <AlertDialog v-model:open="showExitDialog">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Sei sicuro?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Non hai passato tutti i test. Vuoi continuare lo stesso?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Annulla</AlertDialogCancel>
+          <AlertDialogAction
+            :class="buttonVariants({ variant: 'destructive' })"
+            @click="finish(true)"
+            >Continua</AlertDialogAction
+          >
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </div>
 </template>
 

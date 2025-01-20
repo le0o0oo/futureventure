@@ -176,6 +176,11 @@ onMounted(async () => {
   if (!generalStore.inDev) sequences.all();
 
   finaltaskStore.consoleElement = consoleDiv.value;
+
+  onBeforeUnmount(() => {
+    scene.dispose();
+    game.engine.dispose();
+  });
 });
 
 function runTest(type: "solarStorm" | "dataTransfer") {
