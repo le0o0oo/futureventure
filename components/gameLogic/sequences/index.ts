@@ -12,6 +12,7 @@ import fixed_antenna from "./fixed_antenna";
 
 import new_map_first from "./new_map_first";
 import final_task from "./final_task";
+import final_task_intro from "./final_task_into";
 class Sequences {
   engine: Engine;
 
@@ -56,6 +57,10 @@ class Sequences {
 
   async final_task() {
     await final_task(this.engine);
+  }
+
+  async final_task_intro() {
+    await final_task_intro(this.engine);
   }
 }
 

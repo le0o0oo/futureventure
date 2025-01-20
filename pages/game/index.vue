@@ -10,6 +10,7 @@ useHead({
 const showGame = ref(false);
 const loading = useLoadingStore();
 const config = useRuntimeConfig();
+const generalData = useGeneralStore();
 
 loading.isLoading = true;
 showGame.value = true;
@@ -24,5 +25,6 @@ showGame.value = true;
     v-if="!showGame"
     >Avvia</Button
   >
-  <Game v-else />
+  <Game v-else-if="!generalData.finished" />
+  <FinalScreen v-else />
 </template>

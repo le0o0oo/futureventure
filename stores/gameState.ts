@@ -38,6 +38,25 @@ export const useGameStateStore = defineStore({
           reward: 10,
         },
       },
+
+      satellite_fix: {
+        point_earth: {
+          status: false,
+          reward: 30,
+        },
+        solarstorm_handle: {
+          status: false,
+          reward: 50,
+        },
+        data_transfer: {
+          status: false,
+          reward: 45,
+        },
+        every: {
+          status: false,
+          reward: 70,
+        },
+      },
     },
     dialogs: {
       traffic_light: {

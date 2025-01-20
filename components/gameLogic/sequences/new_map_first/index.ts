@@ -23,19 +23,20 @@ function waitForProg(infoStore: any): Promise<void> {
 }
 
 async function sequence() {
-  const tasksStore = useTasksStore();
   const gameState = useGameStateStore();
-  const generalData = useGeneralStore();
-  const infoStore = useInfoStore();
-
-  const camera = game.getCamera() as FreeCamera;
-
-  // await funcs.delay(3000);
-
   if (gameState.currentMap != "nasa") {
     eventBus.dispatchEvent(new CustomEvent("to_nasa", { detail: sequence }));
     return;
   }
+
+  const tasksStore = useTasksStore();
+  const generalData = useGeneralStore();
+  const infoStore = useInfoStore();
+  const sharedData = useSharedData();
+
+  const camera = game.getCamera() as FreeCamera;
+
+  // await funcs.delay(3000);
 
   audioManager.playMusic("music2");
   infoStore.slideState = 1;
@@ -145,18 +146,12 @@ async function sequence() {
 
   await funcs.delay(2000);
 
-  assistant.say("Direi che è il momento per il tuo compito finale", {
-    duration: 4000,
-    icon: "normal",
-  });
-
-  await funcs.delay(2000);
-
-  eventBus.dispatchEvent(
-    new CustomEvent("runScene", {
-      detail: "final_task",
-    } as CustomEventInit)
-  );
+  if (sharedData.runAllScenes)
+    eventBus.dispatchEvent(
+      new CustomEvent("runScene", {
+        detail: "final_task_intro",
+      } as CustomEventInit)
+    );
 }
 
 export default async (cGame: Engine) => {
