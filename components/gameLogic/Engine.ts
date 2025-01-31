@@ -1,6 +1,6 @@
 import * as BABYLON from "babylonjs";
 import HavokPhysics from "@babylonjs/havok";
-import { type HavokPhysicsWithBindings } from "@babylonjs/havok";
+import {type HavokPhysicsWithBindings} from "@babylonjs/havok";
 import type Models from "./Models";
 
 class Engine {
@@ -46,7 +46,7 @@ class Engine {
     // Skybox
     var skybox = BABYLON.MeshBuilder.CreateBox(
       "skyBox",
-      { size: 1000.0 },
+      {size: 1000.0},
       this.scene
     );
     this.skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this.scene);
@@ -73,12 +73,14 @@ class Engine {
       canvas.focus();
     };
   }
+
   setSkybox(path: string) {
     this.skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
       `/textures/${path}`,
       this.scene
     );
   }
+
   initLighting() {
     this.scene.shadowsEnabled = true;
     this.scene.imageProcessingConfiguration.toneMappingEnabled = true;
@@ -184,6 +186,7 @@ class Engine {
     // );
     //this.scene.activeCameras?.push(camera);
   }
+
   getCamera(index: number = 0) {
     return this.cameras[0];
   }

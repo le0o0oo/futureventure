@@ -60,7 +60,9 @@ function finished() {
         <template v-if="cStep === 0">
           <h2 class="font-bold text-xl">[WORK IN PROGRESS]</h2>
           <div class="flex w-full justify-center mt-4">
-            <Button @click="cStep++" class="w-full max-w-lg">Inizia</Button>
+            <Button @click="cStep++" class="w-full max-w-lg hidden"
+              >Inizia</Button
+            >
             <Button @click="finished" class="w-full max-w-lg">Completa</Button>
           </div>
         </template>
