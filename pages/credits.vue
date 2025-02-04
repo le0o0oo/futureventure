@@ -75,7 +75,7 @@ const members = [
   },
   {
     name: "Buschix",
-    roles: ["Lore", "Modelli 3D"],
+    roles: ["Lore", "Modelli 3D", "Video & doppiaggio"],
     socials: [],
   },
   {
