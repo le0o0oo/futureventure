@@ -190,6 +190,8 @@ function runTest(type: "solarStorm" | "dataTransfer") {
 
   eventBus.dispatchEvent(new CustomEvent("test_satellite", { detail: type }));
 }
+
+const cucu = ref(false);
 </script>
 
 <template>
@@ -308,6 +310,18 @@ function runTest(type: "solarStorm" | "dataTransfer") {
       </div>
     </div>
   </div>
+
+  <Dialog v-model:open="cucu">
+    <DialogContent class="max-w-[80vw]">
+      <DialogHeader>
+        <DialogDescription>
+          <MinigamesAntennaFixStep1 />
+        </DialogDescription>
+      </DialogHeader>
+
+      <DialogFooter> Save changes </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <style>

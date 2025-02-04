@@ -146,6 +146,11 @@ function preloadVideos(
 }
 
 function randomInt(min: number, max: number) {
+  if (min > max) {
+    const temp = max;
+    max = min;
+    min = temp;
+  }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 

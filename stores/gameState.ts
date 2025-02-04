@@ -38,6 +38,16 @@ export const useGameStateStore = defineStore({
           reward: 10,
         },
       },
+      antenna_fix: {
+        ideal_frequency: {
+          status: false,
+          reward: 50,
+        },
+        normalized_signal: {
+          status: false,
+          reward: 30,
+        },
+      },
 
       satellite_fix: {
         point_earth: {

@@ -52,20 +52,30 @@ function finished() {
           /></Button>
         </CardTitle>
         <CardDescription>
-          <Progress v-model="cStep" :max="2" class="my-3 w-full" />
+          <Progress v-model="cStep" :max="3" class="my-3 w-full" />
         </CardDescription>
       </CardHeader>
       <CardContent class="h-[calc(100%-60px)]" v-auto-animate>
         <!-- Intro -->
         <template v-if="cStep === 0">
-          <h2 class="font-bold text-xl">[WORK IN PROGRESS]</h2>
+          <h2 class="font-bold text-xl">
+            Seleziona la frequenza ideale per i droni e calibra l'antenna
+            normalizzando il segnale ad essa
+          </h2>
           <div class="flex w-full justify-center mt-4">
-            <Button @click="cStep++" class="w-full max-w-lg hidden"
-              >Inizia</Button
-            >
-            <Button @click="finished" class="w-full max-w-lg">Completa</Button>
+            <Button @click="cStep++" class="w-full max-w-lg">Inizia</Button>
+            <!-- <Button @click="finished" class="w-full max-w-lg">Completa</Button> -->
           </div>
         </template>
+
+        <!-- frequency selector -->
+        <MinigamesAntennaFixStep1 v-else-if="cStep === 1" @done="cStep++" />
+
+        <!-- Frequency tuner -->
+        <MinigamesAntennaFixStep2 v-else-if="cStep === 2" @next="cStep++" />
+
+        <!-- Result -->
+        <MinigamesAntennaFixStep3 v-else-if="cStep === 3" />
       </CardContent>
     </Card>
   </div>
