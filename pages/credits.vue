@@ -59,6 +59,11 @@ let credits: { title: string; description?: string; link?: string }[] = [
     description: "Tool usato per generare la skybox",
     link: "https://tools.wwwtyro.net/space-3d/index.html#animationSpeed=1&fov=80&nebulae=true&pointStars=true&resolution=1024&seed=7fyce71d8sk0&stars=true&sun=true",
   },
+  {
+    title: "Icona",
+    description: "Icona del progetto (e modificata)",
+    link: "https://blog.designcrowd.fr/article/1937/88-gamer-logos-for-the-avid-players",
+  },
 ];
 
 const members = [
