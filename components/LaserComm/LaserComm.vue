@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { Info, Pause, Play } from "lucide-vue-next";
+import { Info, Pause, Play, ExternalLink } from "lucide-vue-next";
+import { buttonVariants } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const infoStore = useInfoStore();
 
@@ -74,6 +76,15 @@ onBeforeUnmount(() => {
         </div>
 
         <DialogDescription class="w-full" v-auto-animate>
+          <NuxtLink
+            v-if="infoStore.slideState >= 3"
+            :class="cn(buttonVariants({ variant: 'secondary' }), 'w-full my-2')"
+            to="https://youtu.be/MEXXI0j4Bz8?si=zPDGCi5H2q9g2u0s"
+            :external="true"
+            target="_blank"
+            >Fonte dati: TNO <ExternalLink
+          /></NuxtLink>
+
           <component :is="steps[infoStore.slideState - 1]?.component || null" />
         </DialogDescription>
       </DialogHeader>
