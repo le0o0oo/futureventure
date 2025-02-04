@@ -63,7 +63,9 @@ const disableBtn = ref(isMobileDevice());
                 ><Github />Codice sorgente</CoolBtn
               ></NuxtLink
             >
-            <CoolBtn variant="secondary"><NotepadText />Crediti</CoolBtn>
+            <NuxtLink to="/credits">
+              <CoolBtn variant="secondary"><NotepadText />Crediti</CoolBtn>
+            </NuxtLink>
           </div>
           <span class="text-center text-sm" v-if="disableBtn"
             >Ci dispiace, ma il gioco non è compatibile con il tuo
