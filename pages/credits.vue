@@ -70,7 +70,14 @@ const members = [
   {
     image: "https://avatars.githubusercontent.com/u/50551069?v=4",
     name: "Leo",
-    roles: ["Programmazione", "UI Design", "Game design", "Lore", "Modelli 3D"],
+    roles: [
+      "Programmazione",
+      "UI Design",
+      "Game design",
+      "Lore",
+      "Modelli 3D",
+      "Audio",
+    ],
     socials: [
       {
         icon: "mdi:github",
@@ -90,7 +97,7 @@ const members = [
   },
   {
     name: "Guti",
-    roles: ["Lore"],
+    roles: ["Lore", "Audio"],
     socials: [],
   },
 ];
