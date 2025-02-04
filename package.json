@@ -16,6 +16,7 @@
     "@blockly/theme-dark": "^7.0.10",
     "@blockly/toolbox-search": "^2.0.12",
     "@formkit/auto-animate": "^0.8.2",
+    "@iconify/vue": "^4.3.0",
     "@videojs-player/vue": "^1.0.0",
     "@vueuse/core": "^12.5.0",
     "babylonjs": "^7.43.0",

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ExternalLink } from "lucide-vue-next";
+import { Icon } from "@iconify/vue";
 import { buttonVariants } from "~/components/ui/button";
 
 let credits: { title: string; description?: string; link?: string }[] = [
@@ -7,6 +8,16 @@ let credits: { title: string; description?: string; link?: string }[] = [
     title: "Babylon.js",
     description: "L'engine 3D che ha reso possibile questo progetto",
     link: "https://www.babylonjs.com/",
+  },
+  {
+    title: "PIXI.js",
+    description: "Engine 2D usato per il minigioco del satellite",
+    link: "https://pixijs.com/",
+  },
+  {
+    title: "Blockly",
+    description: "Libreria per la programmazione a blocchi",
+    link: "https://developers.google.com/blockly",
   },
   {
     title: "TNO",
@@ -50,6 +61,35 @@ let credits: { title: string; description?: string; link?: string }[] = [
   },
 ];
 
+const members = [
+  {
+    image: "https://avatars.githubusercontent.com/u/50551069?v=4",
+    name: "Leo",
+    roles: ["Programmazione", "UI Design", "Game design", "Lore", "Modelli 3D"],
+    socials: [
+      {
+        icon: "mdi:github",
+        link: "https://github.com/lea0o0oo",
+      },
+    ],
+  },
+  {
+    name: "Buschix",
+    roles: ["Lore", "Modelli 3D"],
+    socials: [],
+  },
+  {
+    name: "Catins",
+    roles: ["Modelli 3D", "Mappa"],
+    socials: [],
+  },
+  {
+    name: "Guti",
+    roles: ["Lore"],
+    socials: [],
+  },
+];
+
 credits = credits.sort((a, b) => a.title.localeCompare(b.title));
 </script>
 
@@ -67,13 +107,59 @@ credits = credits.sort((a, b) => a.title.localeCompare(b.title));
       ></div>
     </div>
     <Container>
-      <div class="relative pt-36 ml-auto">
+      <div class="relative pt-36 ml-auto p-3">
         <div class="lg:w-2/3 text-center mx-auto">
           <h1
             class="text-gray-900 text-balance dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl"
           >
             Crediti
           </h1>
+          <Separator class="my-8" />
+
+          <div class="flex justify-center w-full">
+            <div
+              class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 w-full gap-3"
+            >
+              <Card
+                class="text-left w-full"
+                v-for="member in members"
+                :key="member.name"
+              >
+                <CardHeader>
+                  <CardTitle class="flex items-center gap-3"
+                    ><img
+                      v-if="member.image"
+                      :src="member.image"
+                      class="rounded-full size-7"
+                    />{{ member.name }}</CardTitle
+                  >
+                </CardHeader>
+                <CardContent class="h-[calc(100%-130px)]">
+                  <div class="size-full flex flex-col gap-1">
+                    <div
+                      class="border-border border-[1px] rounded-xl p-2 transition-all hover:border-secondary-foreground hover:shadow-2xl"
+                      v-for="role in member.roles"
+                    >
+                      {{ role }}
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <NuxtLink
+                    v-for="social in member.socials"
+                    :external="true"
+                    target="_blank"
+                    :to="social.link"
+                  >
+                    <Icon :icon="social.icon" class="size-8" />
+                  </NuxtLink>
+                </CardFooter>
+              </Card>
+            </div>
+          </div>
+
+          <Separator class="my-8" />
+
           <h2>Questo progetto non sarebbe stato possibile senza i seguenti:</h2>
           <div class="mt-8">
             <Accordion type="single" class="w-full" collapsible>
@@ -83,7 +169,7 @@ credits = credits.sort((a, b) => a.title.localeCompare(b.title));
                 :value="String(index)"
               >
                 <AccordionTrigger
-                  ><div class="flex items-center gap-3">
+                  ><div class="flex items-center gap-3 text-xl">
                     {{ item.title }}
                     <NuxtLink
                       v-if="item.link"
