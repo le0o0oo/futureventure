@@ -83,6 +83,10 @@ const members = [
         icon: "mdi:github",
         link: "https://github.com/lea0o0oo",
       },
+      {
+        icon: "mdi:instagram",
+        link: "https://www.instagram.com/lea0o0oo",
+      },
     ],
   },
   {
