@@ -86,19 +86,36 @@ const members = [
     ],
   },
   {
+    image: "/members/bushcaa.jpg",
     name: "Buschix",
     roles: ["Lore", "Modelli 3D", "Video & doppiaggio"],
-    socials: [],
+    socials: [
+      {
+        icon: "mdi:instagram",
+        link: "https://www.instagram.com/bushcaa_/",
+      },
+    ],
   },
   {
     name: "Catins",
     roles: ["Modelli 3D", "Mappa"],
-    socials: [],
+    socials: [
+      {
+        icon: "mdi:instagram",
+        link: "https://www.instagram.com/catino.mattia",
+      },
+    ],
   },
   {
+    image: "/members/guti.jpg",
     name: "Guti",
     roles: ["Lore", "Audio"],
-    socials: [],
+    socials: [
+      {
+        icon: "mdi:instagram",
+        link: "https://www.instagram.com/nick.gutii/",
+      },
+    ],
   },
 ];
 
